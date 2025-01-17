@@ -39,8 +39,7 @@ LMA_Phase phase = {
 #endif
     .p_gcalib = &gcalib_data,
     .calibrating = false,
-    .disable_acc = false,
-    .stop_reactive_acc = false};
+    .disable_acc = false};
 
 void Simulation(const simulation_params *const p_sim_params)
 {
