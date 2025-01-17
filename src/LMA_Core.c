@@ -135,6 +135,11 @@ void LMA_Calibrate(Calibration_args *const calib_args)
   }
 }
 
+void LMA_EnergySet(LMA_Phase *const p_phase, LMA_Energy *const p_energy)
+{
+  memcpy(&(p_phase->energy), p_energy, sizeof(LMA_Energy));
+}
+
 param_t LMA_VRMS_Get(const LMA_Phase *const p_phase)
 {
   return p_phase->voltage.v_rms;
@@ -240,7 +245,8 @@ void LMA_CB_ADC_Phase(LMA_Phase *const p_phase, const Samples *p_adc_samples)
         p_phase->energy.unit.act = (p_phase->energy.unit.act >= 0) ? p_phase->energy.unit.act : -p_phase->energy.unit.act;
         /* Reactive Energy*/
         p_phase->energy.unit.react = Param_div(p_phase->power.q, p_phase->p_gcalib->fs);
-        p_phase->energy.unit.react = (p_phase->energy.unit.react >= 0) ? p_phase->energy.unit.react : -p_phase->energy.unit.react;
+        p_phase->energy.unit.react =
+            (p_phase->energy.unit.react >= 0) ? p_phase->energy.unit.react : -p_phase->energy.unit.react;
         /* Apparent Energy*/
         p_phase->energy.unit.app = Param_div(p_phase->power.s, p_phase->p_gcalib->fs);
         p_phase->energy.unit.app = (p_phase->energy.unit.app >= 0) ? p_phase->energy.unit.app : -p_phase->energy.unit.app;
@@ -418,124 +424,100 @@ static void Phase_hard_reset(LMA_Phase *const p_phase)
 
 static void Phase_energy_accumulation(LMA_Phase *const p_phase)
 {
-  if(p_phase->power.p > 0 && p_phase->power.q <= 0)
+  if (p_phase->power.p > 0 && p_phase->power.q <= 0)
   {
     /* QIV - Active From Grid (Import) & Capacitive To Grid (Export) - Apparent From Grid (Import)*/
     p_phase->energy.accumulator.act_imp_ws += p_phase->energy.unit.act;
     p_phase->energy.accumulator.c_react_exp_ws += p_phase->energy.unit.react;
     p_phase->energy.accumulator.app_imp_ws += p_phase->energy.unit.app;
-
-    if(p_phase->energy.accumulator.act_imp_ws >= config.meter_constant)
-    {
-      p_phase->energy.accumulator.act_imp_ws -= config.meter_constant;
-      ++p_phase->energy.counter.act_imp;
-
-      /* TODO: Trigger Pulse*/
-    }
-
-    if(p_phase->energy.accumulator.c_react_exp_ws >= config.meter_constant)
-    {
-      p_phase->energy.accumulator.c_react_exp_ws -= config.meter_constant;
-      ++p_phase->energy.counter.c_react_exp;
-
-      /* TODO: Trigger Pulse*/
-    }
-
-    if(p_phase->energy.accumulator.app_imp_ws >= config.meter_constant)
-    {
-      p_phase->energy.accumulator.app_imp_ws -= config.meter_constant;
-      ++p_phase->energy.counter.app_imp;
-
-      /* TODO: Trigger Pulse*/
-    }
   }
-  else if(p_phase->power.p <= 0 && p_phase->power.q <= 0)
+  else if (p_phase->power.p <= 0 && p_phase->power.q <= 0)
   {
     /* QIII - Active To Grid (Export) & Inductive To Grid (Export) - Apparent To Grid (Export)*/
     p_phase->energy.accumulator.act_exp_ws += p_phase->energy.unit.act;
     p_phase->energy.accumulator.l_react_exp_ws += p_phase->energy.unit.react;
     p_phase->energy.accumulator.app_exp_ws += p_phase->energy.unit.app;
-
-    if(p_phase->energy.accumulator.act_exp_ws >= config.meter_constant)
-    {
-      p_phase->energy.accumulator.act_exp_ws -= config.meter_constant;
-      ++p_phase->energy.counter.act_exp;
-
-      /* TODO: Trigger Pulse*/
-    }
-
-    if(p_phase->energy.accumulator.l_react_exp_ws >= config.meter_constant)
-    {
-      p_phase->energy.accumulator.l_react_exp_ws -= config.meter_constant;
-      ++p_phase->energy.counter.l_react_exp;
-
-      /* TODO: Trigger Pulse*/
-    }
-
-    if(p_phase->energy.accumulator.app_exp_ws >= config.meter_constant)
-    {
-      p_phase->energy.accumulator.app_exp_ws -= config.meter_constant;
-      ++p_phase->energy.counter.app_exp;
-
-      /* TODO: Trigger Pulse*/
-    }
   }
-  else if(p_phase->power.p <= 0 && p_phase->power.q > 0)
+  else if (p_phase->power.p <= 0 && p_phase->power.q > 0)
   {
     /* QII - Active To Grid (Export) & Capacitive From Grid (Import) - Apparent To Grid (Export)*/
     p_phase->energy.accumulator.act_exp_ws += p_phase->energy.unit.act;
     p_phase->energy.accumulator.c_react_imp_ws += p_phase->energy.unit.react;
     p_phase->energy.accumulator.app_exp_ws += p_phase->energy.unit.app;
-
-    if(p_phase->energy.accumulator.act_exp_ws >= config.meter_constant)
-    {
-      p_phase->energy.accumulator.act_exp_ws -= config.meter_constant;
-      ++p_phase->energy.counter.act_exp;
-
-      /* TODO: Trigger Pulse*/
-    }
-
-    if(p_phase->energy.accumulator.c_react_imp_ws >= config.meter_constant)
-    {
-      p_phase->energy.accumulator.c_react_imp_ws -= config.meter_constant;
-      ++p_phase->energy.counter.c_react_imp;
-
-      /* TODO: Trigger Pulse*/
-    }
   }
-  else if(p_phase->power.p > 0 && p_phase->power.q > 0)
+  else if (p_phase->power.p > 0 && p_phase->power.q > 0)
   {
     /* QI - Active From Grid (Import) & Inductive To Grid (Import) - Apparent From Grid (Import)*/
     p_phase->energy.accumulator.act_imp_ws += p_phase->energy.unit.act;
     p_phase->energy.accumulator.l_react_imp_ws += p_phase->energy.unit.react;
     p_phase->energy.accumulator.app_imp_ws += p_phase->energy.unit.app;
-
-    if(p_phase->energy.accumulator.act_imp_ws >= config.meter_constant)
-    {
-      p_phase->energy.accumulator.act_imp_ws -= config.meter_constant;
-      ++p_phase->energy.counter.act_imp;
-
-      /* TODO: Trigger Pulse*/
-    }
-
-    if(p_phase->energy.accumulator.l_react_imp_ws >= config.meter_constant)
-    {
-      p_phase->energy.accumulator.l_react_imp_ws -= config.meter_constant;
-      ++p_phase->energy.counter.l_react_imp;
-
-      /* TODO: Trigger Pulse*/
-    }
-
-    if(p_phase->energy.accumulator.app_imp_ws >= config.meter_constant)
-    {
-      p_phase->energy.accumulator.app_imp_ws -= config.meter_constant;
-      ++p_phase->energy.counter.app_imp;
-
-      /* TODO: Trigger Pulse*/
-    }
   }
   else
   {
     /* Do Nothing - zero power*/
+  }
+
+  if (p_phase->energy.accumulator.act_imp_ws >= config.meter_constant)
+  {
+    p_phase->energy.accumulator.act_imp_ws -= config.meter_constant;
+    ++p_phase->energy.counter.act_imp;
+
+    /* TODO: Trigger Pulse*/
+  }
+
+  if (p_phase->energy.accumulator.act_exp_ws >= config.meter_constant)
+  {
+    p_phase->energy.accumulator.act_exp_ws -= config.meter_constant;
+    ++p_phase->energy.counter.act_exp;
+
+    /* TODO: Trigger Pulse*/
+  }
+
+  if (p_phase->energy.accumulator.l_react_imp_ws >= config.meter_constant)
+  {
+    p_phase->energy.accumulator.l_react_imp_ws -= config.meter_constant;
+    ++p_phase->energy.counter.l_react_imp;
+
+    /* TODO: Trigger Pulse*/
+  }
+
+  if (p_phase->energy.accumulator.l_react_exp_ws >= config.meter_constant)
+  {
+    p_phase->energy.accumulator.l_react_exp_ws -= config.meter_constant;
+    ++p_phase->energy.counter.l_react_exp;
+
+    /* TODO: Trigger Pulse*/
+  }
+
+  if (p_phase->energy.accumulator.c_react_imp_ws >= config.meter_constant)
+  {
+    p_phase->energy.accumulator.c_react_imp_ws -= config.meter_constant;
+    ++p_phase->energy.counter.c_react_imp;
+
+    /* TODO: Trigger Pulse*/
+  }
+
+  if (p_phase->energy.accumulator.c_react_exp_ws >= config.meter_constant)
+  {
+    p_phase->energy.accumulator.c_react_exp_ws -= config.meter_constant;
+    ++p_phase->energy.counter.c_react_exp;
+
+    /* TODO: Trigger Pulse*/
+  }
+
+  if (p_phase->energy.accumulator.app_imp_ws >= config.meter_constant)
+  {
+    p_phase->energy.accumulator.app_imp_ws -= config.meter_constant;
+    ++p_phase->energy.counter.app_imp;
+
+    /* TODO: Trigger Pulse*/
+  }
+
+  if (p_phase->energy.accumulator.app_exp_ws >= config.meter_constant)
+  {
+    p_phase->energy.accumulator.app_exp_ws -= config.meter_constant;
+    ++p_phase->energy.counter.app_exp;
+
+    /* TODO: Trigger Pulse*/
   }
 }

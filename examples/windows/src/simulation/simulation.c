@@ -67,6 +67,10 @@ void Simulation(const simulation_params *const p_sim_params)
   /* Wait for thread to start*/
   while (!driver_thread_running)
   {
+    const struct timespec ts = {
+        .tv_sec = 0, .tv_nsec = 50000000 /**< 50ms */
+    };
+    thrd_sleep(&ts, NULL);
   }
 
   Calibration_args ca = {
@@ -167,7 +171,7 @@ void Simulation(const simulation_params *const p_sim_params)
   LMA_Measurements_Get(&phase, &measurements);
 
 #if (FIXED_POINT_SUPPORT == 0U)
-    float p_err = 100.00f * (1 - (measurements.p) / (measurements.s));
+    float p_err = 100.00f * ((measurements.s / (p_g_sim_params->vrms * p_g_sim_params->irms)) - 1);
     float act_imp_energy_wh = ((phase.energy.counter.act_imp * config.meter_constant) + phase.energy.accumulator.act_imp_ws)/3600;
     float act_exp_energy_wh = ((phase.energy.counter.act_exp * config.meter_constant) + phase.energy.accumulator.act_exp_ws)/3600;
     float c_imp_energy_wh = ((phase.energy.counter.c_react_imp * config.meter_constant) + phase.energy.accumulator.c_react_imp_ws)/3600;
@@ -198,7 +202,15 @@ void Simulation(const simulation_params *const p_sim_params)
                      app_imp_energy_wh, app_exp_energy_wh);
 #else
     float p_err =
-        100.00f * ((PARAM_TO_FLOAT(LMA_ActivePower_Get(&phase)) / (p_g_sim_params->vrms * p_g_sim_params->irms)) - 1);
+        100.00f * ((PARAM_TO_FLOAT(measurements.s) / (p_g_sim_params->vrms * p_g_sim_params->irms)) - 1);
+    param_t act_imp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(phase.energy.counter.act_imp), config.meter_constant) + phase.energy.accumulator.act_imp_ws,PARAM_FROM_INT(3600));
+    param_t act_exp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(phase.energy.counter.act_exp), config.meter_constant) + phase.energy.accumulator.act_exp_ws,PARAM_FROM_INT(3600));
+    param_t c_imp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(phase.energy.counter.c_react_imp), config.meter_constant) + phase.energy.accumulator.c_react_imp_ws,PARAM_FROM_INT(3600));
+    param_t c_exp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(phase.energy.counter.c_react_exp), config.meter_constant) + phase.energy.accumulator.c_react_exp_ws,PARAM_FROM_INT(3600));
+    param_t l_imp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(phase.energy.counter.l_react_imp), config.meter_constant) + phase.energy.accumulator.l_react_imp_ws,PARAM_FROM_INT(3600));
+    param_t l_exp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(phase.energy.counter.l_react_exp), config.meter_constant) + phase.energy.accumulator.l_react_exp_ws,PARAM_FROM_INT(3600));
+    param_t app_imp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(phase.energy.counter.app_imp), config.meter_constant) + phase.energy.accumulator.app_imp_ws,PARAM_FROM_INT(3600));
+    param_t app_exp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(phase.energy.counter.app_exp), config.meter_constant) + phase.energy.accumulator.app_exp_ws,PARAM_FROM_INT(3600));
 
     str_len = printf("\t\tVrms:    %.4f[V]\n\r"
                      "\t\tIrms:    %.4f[A]\n\r"
@@ -206,10 +218,21 @@ void Simulation(const simulation_params *const p_sim_params)
                      "\t\tP:       %.4f[W]\n\r"
                      "\t\tQ:       %.4f[VAR]\n\r"
                      "\t\tS:       %.4f[VA]\n\r"
-                     "\t\tS Error: %.4f[%%]",
+                     "\t\tS Error: %.4f[%%]\n\r"
+                     "\t\tAct Imp: %.4f[Wh]\n\r"
+                     "\t\tAct Exp: %.4f[Wh]\n\r"
+                     "\t\tC Imp:   %.4f[Wh]\n\r"
+                     "\t\tC Exp:   %.4f[Wh]\n\r"
+                     "\t\tL Imp:   %.4f[Wh]\n\r"
+                     "\t\tL Exp:   %.4f[Wh]\n\r"
+                     "\t\tApp Imp: %.4f[Wh]\n\r"
+                     "\t\tApp Exp: %.4f[Wh]\n\r",
                      PARAM_TO_FLOAT(measurements.vrms), PARAM_TO_FLOAT(measurements.irms),
                      PARAM_TO_FLOAT(measurements.fline), PARAM_TO_FLOAT(measurements.p),
-                     PARAM_TO_FLOAT(measurements.q), PARAM_TO_FLOAT(measurements.s), p_err);
+                     PARAM_TO_FLOAT(measurements.q), PARAM_TO_FLOAT(measurements.s), p_err,
+                      PARAM_TO_FLOAT(act_imp_energy_wh),  PARAM_TO_FLOAT(act_exp_energy_wh),
+                      PARAM_TO_FLOAT(c_imp_energy_wh),  PARAM_TO_FLOAT(c_exp_energy_wh),  PARAM_TO_FLOAT(l_imp_energy_wh),
+                       PARAM_TO_FLOAT(l_exp_energy_wh), PARAM_TO_FLOAT(app_imp_energy_wh),  PARAM_TO_FLOAT(app_exp_energy_wh));
 #endif
   }
 

@@ -10,7 +10,7 @@
     calib: 0 = disabled calibration on startup, !0 = enable calibration on startup
 
     For example to invoke the executable:\
-    LMA-sim-windows ns=39060 fs=3906.25 fline=50.0 vrms=230.0 irms=10.0 ps=0.0 calib=0
+    .\LMA-sim-windows.exe ns=39060 fs=3906.25 fline=50.0 vrms=230.0 irms=10.0 ps=0.0 calib=0
 
     So the debug environment must replicate this.
 

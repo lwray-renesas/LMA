@@ -29,6 +29,12 @@ void LMA_Stop(void);
 */
 void LMA_Calibrate(Calibration_args * const calib_args);
 
+/** @brief Sets the energy data 
+* @param[inout] p_phase - pointer to the phase to set
+* @param[in] p_energy - pointer to the energy data structure to work on
+*/
+void LMA_EnergySet(LMA_Phase *const p_phase, LMA_Energy *const p_energy);
+
 
 /*****************************
 * Measurement API
