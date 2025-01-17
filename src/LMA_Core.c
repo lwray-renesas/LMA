@@ -12,19 +12,24 @@ typedef struct LMA_CalibFs
   LMA_Phase *p_phase;   /**< ointer to phase to work on */
 } LMA_CalibFs;
 
-/** @brief Handler for state: WAIT_FOR_ZERO_CROSS
- * @param[inout] p_zc_data - pointer to the zero cross data structure to handle context
+/** @brief Check for zero cross on given phase.
+ * @param[inout] p_phase - pointer to the phase block to update for zero cross.
  * @param[in] v_sample - copy of the current voltage sample to work on.
  * @return true if new zero cross detected - false otherwise.
  */
-static bool Zero_cross_detect(LMA_ZeroCross *const p_zc_data, const int32_t v_sample);
+static bool Phase_zero_cross(LMA_Phase *const p_phase, const int32_t v_sample);
 
 /** @brief Complete hard reset on a phase
  * @details Will reset the zero cross synch flag so we wait for the next full zero cross to be detected.
  * And resets all accumulators to zero.
- * @param[inout] p_phase - pointer to the phase block on to reset
+ * @param[inout] p_phase - pointer to the phase block to reset
  */
 static void Phase_hard_reset(LMA_Phase *const p_phase);
+
+/** @brief Updates the energy accumulators for the phase.
+ * @param[inout] p_phase - pointer to the phase block to update
+ */
+static void Phase_energy_accumulation(LMA_Phase *const p_phase);
 
 static LMA_Config config;    /**< Internal copy of the meter configuration */
 static LMA_CalibFs calib_fs; /**< Instance of the fs calibration data */
@@ -173,7 +178,7 @@ void LMA_Measurements_Get(LMA_Phase *const p_phase, LMA_Measurements *const p_me
 void LMA_CB_ADC_Phase(LMA_Phase *const p_phase, const Samples *p_adc_samples)
 {
   /* Zero cross - voltage*/
-  Zero_cross_detect(&p_phase->voltage.v_zc, p_adc_samples->voltage);
+  Phase_zero_cross(p_phase, p_adc_samples->voltage);
 
   /* Handle active & apparent component once synched with zero cross and accumulation is enabled */
   if (p_phase->voltage.v_zc.v_sync_zc && !p_phase->disable_acc)
@@ -188,6 +193,9 @@ void LMA_CB_ADC_Phase(LMA_Phase *const p_phase, const Samples *p_adc_samples)
     p_phase->power.p_acc = Accumulate_sample(p_phase->power.p_acc, p_adc_samples->voltage, p_adc_samples->current);
     /* Reactive Power (Q) - accumulation*/
     p_phase->power.q_acc = Accumulate_sample(p_phase->power.q_acc, p_adc_samples->voltage90, p_adc_samples->current);
+
+    /* Handle energy accumulation*/
+    Phase_energy_accumulation(p_phase);
 
     /* Line Frequency */
     ++p_phase->voltage.fline_acc;
@@ -227,6 +235,15 @@ void LMA_CB_ADC_Phase(LMA_Phase *const p_phase, const Samples *p_adc_samples)
         p_phase->power.q = Param_div(PARAM_FROM_ACC(p_phase->power.q_acc), p_phase->calib.p_coeff);
         /* Apparent Power (S)*/
         p_phase->power.s = Param_mul(p_phase->voltage.v_rms, p_phase->current.i_rms);
+        /* Active Energy*/
+        p_phase->energy.unit.act = Param_div(p_phase->power.p, p_phase->p_gcalib->fs);
+        p_phase->energy.unit.act = (p_phase->energy.unit.act >= 0) ? p_phase->energy.unit.act : -p_phase->energy.unit.act;
+        /* Reactive Energy*/
+        p_phase->energy.unit.react = Param_div(p_phase->power.q, p_phase->p_gcalib->fs);
+        p_phase->energy.unit.react = (p_phase->energy.unit.react >= 0) ? p_phase->energy.unit.react : -p_phase->energy.unit.react;
+        /* Apparent Energy*/
+        p_phase->energy.unit.app = Param_div(p_phase->power.s, p_phase->p_gcalib->fs);
+        p_phase->energy.unit.app = (p_phase->energy.unit.app >= 0) ? p_phase->energy.unit.app : -p_phase->energy.unit.app;
 
         /* Reset*/
         p_phase->voltage.v_acc = Accumulate_sample(0, p_adc_samples->voltage, p_adc_samples->voltage);
@@ -310,33 +327,6 @@ error the logic. ps_acc += sample_diff * degrees_per_sample;
 }
 
   */
-
-  /* For Phase Angle:
-  An inductive load coming from grid/source (import) is -270 to 0degree
-      This would take between 58.59 and 78.12 samples from peak V to peak I.
-      Meaning we can say anything from 58.59 to 78.12 samples is a inductive import (Q1)
-      Active > 0, Reactive > 0
-      Larger than 78.12 samples... uncalculable.
-
-  A capactive load going to the grid/source (export) is -180 to -270degree.
-      This would take between 39.06 and 58.59 samples from peak V to peak I.
-      Meaning we can say anything from 39.06 to 58.59 samples is a capactive export (Q2)
-      Active < 0, Reactive > 0
-
-  An inductive load going to the grid/source (export) is -90 to -180degree.
-      This would take between 19.53 and 39.06 samples from peak V to peak I.
-      Meaning we can say anything from 19.53 to 39.06 samples is an inductive export (Q3)
-      Active < 0, Reactive < 0
-
-  A capactive load coming from grid/source (import) is 0 to -90degree.
-      This would take between 0 and 19.53 samples from peak V to peak I.
-      Meaning we can say anything from 0 to 19.53 samples is a capactive import (Q4)
-      Active > 0, Reactive < 0
-
-  This can all be achieved with basic peak finding &/OR sign checking on the power measured.
-
-  Then update the import/export variables
-  */
 }
 
 void LMA_CB_RTC(void)
@@ -371,32 +361,32 @@ void LMA_CB_RTC(void)
   }
 }
 
-static bool Zero_cross_detect(LMA_ZeroCross *const p_zc_data, const int32_t v_sample)
+static bool Phase_zero_cross(LMA_Phase *const p_phase, const int32_t v_sample)
 {
-  if ((!p_zc_data->zero_cross_debounce) && (v_sample > 0) && (p_zc_data->last_voltage_sample <= 0))
+  if ((!p_phase->voltage.v_zc.zero_cross_debounce) && (p_phase->voltage.v_zc.last_voltage_sample <= 0) && (v_sample > 0))
   {
-    p_zc_data->zero_cross_debounce = true;
+    p_phase->voltage.v_zc.zero_cross_debounce = true;
 
-    if (p_zc_data->v_sync_zc)
+    if (p_phase->voltage.v_zc.v_sync_zc)
     {
       /* Only increment the counter if we are synch'd (already detected our first zero cross)*/
-      ++p_zc_data->zero_cross_counter;
+      ++p_phase->voltage.v_zc.zero_cross_counter;
     }
     else
     {
       /* Otherwise synch us up and reset the counter*/
-      p_zc_data->zero_cross_counter = 0;
-      p_zc_data->v_sync_zc = true;
+      p_phase->voltage.v_zc.zero_cross_counter = 0;
+      p_phase->voltage.v_zc.v_sync_zc = true;
     }
   }
   else
   {
-    p_zc_data->zero_cross_debounce = false;
+    p_phase->voltage.v_zc.zero_cross_debounce = false;
   }
 
-  p_zc_data->last_voltage_sample = v_sample;
+  p_phase->voltage.v_zc.last_voltage_sample = v_sample;
 
-  return p_zc_data->zero_cross_debounce;
+  return p_phase->voltage.v_zc.zero_cross_debounce;
 }
 
 static void Phase_hard_reset(LMA_Phase *const p_phase)
@@ -414,7 +404,138 @@ static void Phase_hard_reset(LMA_Phase *const p_phase)
   p_phase->power.q_acc = 0;
   p_phase->power.s_acc = 0;
 
+  p_phase->energy.accumulator.act_imp_ws = 0;
+  p_phase->energy.accumulator.act_exp_ws = 0;
+  p_phase->energy.accumulator.c_react_imp_ws = 0;
+  p_phase->energy.accumulator.c_react_exp_ws = 0;
+  p_phase->energy.accumulator.l_react_imp_ws = 0;
+  p_phase->energy.accumulator.l_react_exp_ws = 0;
+
   p_phase->disable_acc = false;
   p_phase->calibrating = false;
   p_phase->calibrating_fs = false;
+}
+
+static void Phase_energy_accumulation(LMA_Phase *const p_phase)
+{
+  if(p_phase->power.p > 0 && p_phase->power.q <= 0)
+  {
+    /* QIV - Active From Grid (Import) & Capacitive To Grid (Export) - Apparent From Grid (Import)*/
+    p_phase->energy.accumulator.act_imp_ws += p_phase->energy.unit.act;
+    p_phase->energy.accumulator.c_react_exp_ws += p_phase->energy.unit.react;
+    p_phase->energy.accumulator.app_imp_ws += p_phase->energy.unit.app;
+
+    if(p_phase->energy.accumulator.act_imp_ws >= config.meter_constant)
+    {
+      p_phase->energy.accumulator.act_imp_ws -= config.meter_constant;
+      ++p_phase->energy.counter.act_imp;
+
+      /* TODO: Trigger Pulse*/
+    }
+
+    if(p_phase->energy.accumulator.c_react_exp_ws >= config.meter_constant)
+    {
+      p_phase->energy.accumulator.c_react_exp_ws -= config.meter_constant;
+      ++p_phase->energy.counter.c_react_exp;
+
+      /* TODO: Trigger Pulse*/
+    }
+
+    if(p_phase->energy.accumulator.app_imp_ws >= config.meter_constant)
+    {
+      p_phase->energy.accumulator.app_imp_ws -= config.meter_constant;
+      ++p_phase->energy.counter.app_imp;
+
+      /* TODO: Trigger Pulse*/
+    }
+  }
+  else if(p_phase->power.p <= 0 && p_phase->power.q <= 0)
+  {
+    /* QIII - Active To Grid (Export) & Inductive To Grid (Export) - Apparent To Grid (Export)*/
+    p_phase->energy.accumulator.act_exp_ws += p_phase->energy.unit.act;
+    p_phase->energy.accumulator.l_react_exp_ws += p_phase->energy.unit.react;
+    p_phase->energy.accumulator.app_exp_ws += p_phase->energy.unit.app;
+
+    if(p_phase->energy.accumulator.act_exp_ws >= config.meter_constant)
+    {
+      p_phase->energy.accumulator.act_exp_ws -= config.meter_constant;
+      ++p_phase->energy.counter.act_exp;
+
+      /* TODO: Trigger Pulse*/
+    }
+
+    if(p_phase->energy.accumulator.l_react_exp_ws >= config.meter_constant)
+    {
+      p_phase->energy.accumulator.l_react_exp_ws -= config.meter_constant;
+      ++p_phase->energy.counter.l_react_exp;
+
+      /* TODO: Trigger Pulse*/
+    }
+
+    if(p_phase->energy.accumulator.app_exp_ws >= config.meter_constant)
+    {
+      p_phase->energy.accumulator.app_exp_ws -= config.meter_constant;
+      ++p_phase->energy.counter.app_exp;
+
+      /* TODO: Trigger Pulse*/
+    }
+  }
+  else if(p_phase->power.p <= 0 && p_phase->power.q > 0)
+  {
+    /* QII - Active To Grid (Export) & Capacitive From Grid (Import) - Apparent To Grid (Export)*/
+    p_phase->energy.accumulator.act_exp_ws += p_phase->energy.unit.act;
+    p_phase->energy.accumulator.c_react_imp_ws += p_phase->energy.unit.react;
+    p_phase->energy.accumulator.app_exp_ws += p_phase->energy.unit.app;
+
+    if(p_phase->energy.accumulator.act_exp_ws >= config.meter_constant)
+    {
+      p_phase->energy.accumulator.act_exp_ws -= config.meter_constant;
+      ++p_phase->energy.counter.act_exp;
+
+      /* TODO: Trigger Pulse*/
+    }
+
+    if(p_phase->energy.accumulator.c_react_imp_ws >= config.meter_constant)
+    {
+      p_phase->energy.accumulator.c_react_imp_ws -= config.meter_constant;
+      ++p_phase->energy.counter.c_react_imp;
+
+      /* TODO: Trigger Pulse*/
+    }
+  }
+  else if(p_phase->power.p > 0 && p_phase->power.q > 0)
+  {
+    /* QI - Active From Grid (Import) & Inductive To Grid (Import) - Apparent From Grid (Import)*/
+    p_phase->energy.accumulator.act_imp_ws += p_phase->energy.unit.act;
+    p_phase->energy.accumulator.l_react_imp_ws += p_phase->energy.unit.react;
+    p_phase->energy.accumulator.app_imp_ws += p_phase->energy.unit.app;
+
+    if(p_phase->energy.accumulator.act_imp_ws >= config.meter_constant)
+    {
+      p_phase->energy.accumulator.act_imp_ws -= config.meter_constant;
+      ++p_phase->energy.counter.act_imp;
+
+      /* TODO: Trigger Pulse*/
+    }
+
+    if(p_phase->energy.accumulator.l_react_imp_ws >= config.meter_constant)
+    {
+      p_phase->energy.accumulator.l_react_imp_ws -= config.meter_constant;
+      ++p_phase->energy.counter.l_react_imp;
+
+      /* TODO: Trigger Pulse*/
+    }
+
+    if(p_phase->energy.accumulator.app_imp_ws >= config.meter_constant)
+    {
+      p_phase->energy.accumulator.app_imp_ws -= config.meter_constant;
+      ++p_phase->energy.counter.app_imp;
+
+      /* TODO: Trigger Pulse*/
+    }
+  }
+  else
+  {
+    /* Do Nothing - zero power*/
+  }
 }

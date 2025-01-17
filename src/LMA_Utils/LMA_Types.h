@@ -24,37 +24,37 @@ typedef struct Samples
 /** @brief Runtime configuration data of the library*/
 typedef struct LMA_Config
 {
-  uint32_t update_interval;      /**< Number of V line cycles to between comutation updates. */
+  uint32_t update_interval;        /**< Number of V line cycles to between comutation updates. */
   param_t target_system_frequency; /**< Frequency of the target system */
-  param_t meter_constant; /**< imp/kwh ... translated to Ws/imp = 3,600,000 / [imp/kwh]*/
+  param_t meter_constant;          /**< Ws/imp ... translated Ws/imp = 3,600,000 / [imp/kwh]*/
 } LMA_Config;
 
 /** @brief zero cross detection struct */
 typedef struct LMA_ZeroCross
 {
   uint32_t zero_cross_counter; /**< running counter to count the number of zero cross */
-  spl_t last_voltage_sample; /**< Last voltage sample to check for zero cross */
+  spl_t last_voltage_sample;   /**< Last voltage sample to check for zero cross */
   bool zero_cross_debounce;    /**< zerocross debounce flag - disables zerocross after one has been detected for a single
                                   sample */
-  bool v_sync_zc;            /**< flag indicating we have already detected a zero cross (synch'd) */
-                                  
+  bool v_sync_zc;              /**< flag indicating we have already detected a zero cross (synch'd) */
+
 } LMA_ZeroCross;
 
 /** @brief Data related to voltage signal processing */
 typedef struct LMA_Voltage
 {
-  acc_t v_acc;           /**< Accumulated voltage signal */
-  param_t v_rms;         /**< Temporary value to store voltage computation [V] */
-  uint32_t fline_acc;    /**< accumulating counter to compute the line frequency */
-  param_t fline;         /**< Computed line frequency [Hz]*/
+  acc_t v_acc;               /**< Accumulated voltage signal */
+  param_t v_rms;             /**< Temporary value to store voltage computation [V] */
+  uint32_t fline_acc;        /**< accumulating counter to compute the line frequency */
+  param_t fline;             /**< Computed line frequency [Hz]*/
   uint32_t v_sample_counter; /**< counter to count the number of samples on the voltage*/
-  LMA_ZeroCross v_zc;  /**< Zero cross tracking variables for voltage */
+  LMA_ZeroCross v_zc;        /**< Zero cross tracking variables for voltage */
 } LMA_Voltage;
 
 /** @brief Data related to current signal processing */
 typedef struct LMA_Current
 {
-  acc_t i_acc; /**< Accumulated current signal */
+  acc_t i_acc;   /**< Accumulated current signal */
   param_t i_rms; /**< Temporary value to store current computation */
 } LMA_Current;
 
@@ -62,45 +62,67 @@ typedef struct LMA_Current
 typedef struct LMA_Power
 {
   acc_t p_acc; /**< Accumulated active power signal */
-  param_t p; /**< Temporary value to store active power consumption */
+  param_t p;   /**< Temporary value to store active power consumption */
   acc_t q_acc; /**< Accumulated reactive power signal */
-  param_t q; /**< Temporary value to store reactive power consumption */
+  param_t q;   /**< Temporary value to store reactive power consumption */
   acc_t s_acc; /**< Accumulated apparent power signal [UNUSED]*/
-  param_t s; /**< Temporary value to store apparent power consumption */
+  param_t s;   /**< Temporary value to store apparent power consumption */
 } LMA_Power;
 
 /** @brief Data related to energy computations */
 typedef struct LMA_Energy
 {
-  param_t active_import_tmp; /**< Variable used to accumulate Ws for impulse control (active import ... grid to home) */
-  param_t active_export_tmp; /**< Variable used to accumulate Ws for impulse control (active export ... home to grid) */
-  param_t cap_reactive_import_tmp; /**< Variable used to accumulate Ws for impulse control (capactive reactive import ... grid to home) */
-  param_t cap_reactive_export_tmp; /**< Variable used to accumulate Ws for impulse control (capactive reactive export ... home to load) */
-  param_t ind_reactive_import_tmp; /**< Variable used to accumulate Ws for impulse control (inductive reactive import ... grid to home) */
-  param_t ind_reactive_export_tmp; /**< Variable used to accumulate Ws for impulse control (inductive reactive export ... home to load) */
+  /** @brief Variables holding currently computed unit of enery per ADC interval */
+  struct unit
+  {
+    param_t act;
+    param_t react;
+    param_t app;
+  } unit;
 
-  param_t active_import_acc; /**< Variable used to accumulate the active import (grid to home) energy over meter lifetime*/
-  param_t active_export_acc; /**< Variable used to accumulate the active export (home to grid) energy over meter lifetime*/
-  param_t cap_reactive_import_acc; /**< Variable used to accumulate the capacitive reactive import (grid to home) energy over meter lifetime*/
-  param_t cap_reactive_export_acc; /**< Variable used to accumulate the capacitive reactive export (home to grid) energy over meter lifetime*/
-  param_t ind_reactive_import_acc; /**< Variable used to accumulate the inductive reactive import (grid to home) energy over meter lifetime*/
-  param_t ind_reactive_export_acc; /**< Variable used to accumulate the inductive reactive export (home to grid) energy over meter lifetime*/
-}LMA_Energy;
+  /** @brief Running energy accumulator for counting energy between pulses - Ws (Watt second)*/
+  struct accumulator
+  {
+    param_t act_imp_ws;     /**< Variable used to accumulate the active import (from grid) energy over meter lifetime*/
+    param_t act_exp_ws;     /**< Variable used to accumulate the active export (to grid) energy over meter lifetime*/
+    param_t c_react_imp_ws; /**< Variable used to accumulate the C reactive import (from grid) energy over meter lifetime*/
+    param_t c_react_exp_ws; /**< Variable used to accumulate the C reactive export (to grid) energy over meter lifetime*/
+    param_t l_react_imp_ws; /**< Variable used to accumulate the L reactive import (from grid) energy over meter lifetime*/
+    param_t l_react_exp_ws; /**< Variable used to accumulate the L reactive export (to grid) energy over meter lifetime*/
+    param_t app_imp_ws;     /**< Variable used to accumulate the apparent import (from grid) energy over meter lifetime*/
+    param_t app_exp_ws;     /**< Variable used to accumulate the apparent export (to grid) energy over meter lifetime*/
+  } accumulator;
+
+  /** @brief Total energy measured by meter in units of energy (pulses or kwh/imp)*/
+  struct counter
+  {
+    uint64_t act_imp;     /**< Variable used to accumulate units of energy (pulses) (active import ... from grid) */
+    uint64_t act_exp;     /**< Variable used to accumulate units of energy (pulses) (active export ... to grid) */
+    uint64_t c_react_imp; /**< Variable used to accumulate units of energy (pulses) (C reactive import ... from grid) */
+    uint64_t c_react_exp; /**< Variable used to accumulate units of energy (pulses) (C reactive export ... to grid) */
+    uint64_t l_react_imp; /**< Variable used to accumulate units of energy (pulses) (L reactive import ... from grid) */
+    uint64_t l_react_exp; /**< Variable used to accumulate units of energy (pulses) (L reactive export ... to grid) */
+    uint64_t app_imp;     /**< Variable used to accumulate units of energy (pulses) (active import ... from grid) */
+    uint64_t app_exp;     /**< Variable used to accumulate units of energy (pulses) (active export ... to grid) */
+  } counter;
+} LMA_Energy;
 
 /** @brief Data related to impulse controls */
 typedef struct LMA_Impulse
 {
-  void (*Active_imp_on)(void); /**< Callback to turn on active impulse LED */
-  void (*Active_imp_off)(void); /**< Callback to turn off active impulse LED */
-  void (*Reactive_imp_on)(void); /**< Callback to turn on reactive impulse LED */
+  void (*Active_imp_on)(void);    /**< Callback to turn on active impulse LED */
+  void (*Active_imp_off)(void);   /**< Callback to turn off active impulse LED */
+  void (*Reactive_imp_on)(void);  /**< Callback to turn on reactive impulse LED */
   void (*Reactive_imp_off)(void); /**< Callback to turn off reactive impulse LED */
-}LMA_Impulse;
+  void (*Apparent_imp_on)(void);  /**< Callback to turn on apparent impulse LED */
+  void (*Apparent_imp_off)(void); /**< Callback to turn off apparent impulse LED */
+} LMA_Impulse;
 
 /** @brief Data related to the calibration of the project */
 typedef struct LMA_GlobalCalibration
 {
-  param_t fs;                 /**< Sampling frequency*/
-  param_t fline_coeff;        /**< Line Frequency Coefficient*/
+  param_t fs;          /**< Sampling frequency*/
+  param_t fline_coeff; /**< Line Frequency Coefficient*/
 } LMA_GlobalCalibration;
 
 /** @brief Data related to the calibration of a phase pair */
@@ -122,15 +144,15 @@ typedef struct LMA_NeutralCalibration
 typedef struct LMA_Phase
 {
   LMA_PhaseCalibration calib;            /**< Instance of the phases calibration data block */
-  LMA_Voltage voltage;                /**< Voltage data processing block */
-  LMA_Current current;                /**< Current data processing block */
-  LMA_Power power;                    /**< Power data processing block */
-  LMA_Energy energy;                   /**< Energy processing block */
-  LMA_Impulse impulse;                 /**< Impulse output control block */
+  LMA_Voltage voltage;                   /**< Voltage data processing block */
+  LMA_Current current;                   /**< Current data processing block */
+  LMA_Power power;                       /**< Power data processing block */
+  LMA_Energy energy;                     /**< Energy processing block */
+  LMA_Impulse impulse;                   /**< Impulse output control block */
   LMA_GlobalCalibration *const p_gcalib; /**< Pointer to the global calibration data block */
-  bool calibrating;                     /**< Flag to indicate we are in calibration mode */
-  bool calibrating_fs;                     /**< Flag to indicate we are in calibration mode */
-  bool disable_acc;                /**< Flag to disable accumulation*/
+  bool calibrating;                      /**< Flag to indicate we are in calibration mode */
+  bool calibrating_fs;                   /**< Flag to indicate we are in calibration mode */
+  bool disable_acc;                      /**< Flag to disable accumulation*/
 } LMA_Phase;
 
 /** @brief Data related to neutral only signal processing (3PH4W connection only) */
@@ -138,33 +160,33 @@ typedef struct LMA_Neutral
 {
   LMA_NeutralCalibration calib;          /**< Instance of the neutral calibration data block */
   LMA_GlobalCalibration *const p_gcalib; /**< Pointer to the global calibration data block */
-  LMA_Current *const current;                /**< Pointer to current data processing block */
-  LMA_Voltage *const voltage;                /**< Pointer to voltage data processing block (for synch to zero cross)*/
+  LMA_Current *const current;            /**< Pointer to current data processing block */
+  LMA_Voltage *const voltage;            /**< Pointer to voltage data processing block (for synch to zero cross)*/
 } LMA_Neutral;
 
 /** @brief dedicated struct for calibration arguments */
 typedef struct Calibration_args
 {
-  Calibration_flags flags;               /**< flags describing the calibration to perform */
+  Calibration_flags flags;         /**< flags describing the calibration to perform */
   LMA_GlobalCalibration *p_gcalib; /**< Pointer to the global calibation data structure */
-  LMA_Phase *p_phase;         /**< Pointer to a phases targetting calibration */
-  param_t vrms_tgt;            /**< Vrms target calibration voltage */
-  param_t irms_tgt;            /**< Irms target calibration current */
-  param_t p_tgt;               /**< Active target calibration power*/
-  param_t rtc_period;         /**< period of the RTC for fs calibration */
-  uint32_t rtc_cycles;        /**< number of RTC periods to accumulate for frequency calibration */
-  uint32_t line_cycles;       /**< Line cycles to stabilise readings over */
+  LMA_Phase *p_phase;              /**< Pointer to a phases targetting calibration */
+  param_t vrms_tgt;                /**< Vrms target calibration voltage */
+  param_t irms_tgt;                /**< Irms target calibration current */
+  param_t p_tgt;                   /**< Active target calibration power*/
+  param_t rtc_period;              /**< period of the RTC for fs calibration */
+  uint32_t rtc_cycles;             /**< number of RTC periods to accumulate for frequency calibration */
+  uint32_t line_cycles;            /**< Line cycles to stabilise readings over */
 } Calibration_args;
 
 /** @brief Convenience type to get a full measurement dump */
 typedef struct LMA_Measurements
 {
-  param_t vrms; /**< RMS Voltage */
-  param_t irms; /**< RMS Current */
+  param_t vrms;  /**< RMS Voltage */
+  param_t irms;  /**< RMS Current */
   param_t fline; /**< Line Frequency */
-  param_t p; /**< Active Power */
-  param_t q; /**< Rective Power */
-  param_t s; /**< Apparent Power */
-}LMA_Measurements;
+  param_t p;     /**< Active Power */
+  param_t q;     /**< Rective Power */
+  param_t s;     /**< Apparent Power */
+} LMA_Measurements;
 
 #endif /* _LMA_TYPES_H */

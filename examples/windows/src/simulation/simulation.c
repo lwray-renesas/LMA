@@ -16,11 +16,12 @@ static thrd_t driver_thread;
 /* global pointer for the drvier thread to access sim params*/
 const simulation_params *p_g_sim_params;
 
-/* Configuration required for configuring the library*/
+/* Configuration required for configuring the library 4500 ws/imp = 800 imp/kwh*/
 #if (FIXED_POINT_SUPPORT == 0U)
-static LMA_Config config = {.update_interval = 25, .target_system_frequency = 50.00f};
+static LMA_Config config = {.update_interval = 25, .target_system_frequency = 50.00f, .meter_constant = 4500.00f};
 #else
-static LMA_Config config = {.update_interval = 25, .target_system_frequency = PARAM_FROM_FLOAT(50.00f)};
+static LMA_Config config = {.update_interval = 25, .target_system_frequency = PARAM_FROM_FLOAT(50.00f),
+.meter_constant = PARAM_FROM_FLOAT(4500.00f)};
 #endif
 
 /* Global Calibration Data */
@@ -141,6 +142,24 @@ void Simulation(const simulation_params *const p_sim_params)
                    "\e[1F"
                    "\e[2K"
                    "\e[1F"
+                   "\e[2K"
+                   "\e[1F"
+                   "\e[2K"
+                   "\e[1F"
+                   "\e[2K"
+                   "\e[1F"
+                   "\e[2K"
+                   "\e[1F"
+                   "\e[2K"
+                   "\e[1F"
+                   "\e[2K"
+                   "\e[1F"
+                   "\e[2K"
+                   "\e[1F"
+                   "\e[2K"
+                   "\e[1F"
+                   "\e[2K"
+                   "\e[1F"
                    "\e[2K");
     }
 
@@ -149,6 +168,14 @@ void Simulation(const simulation_params *const p_sim_params)
 
 #if (FIXED_POINT_SUPPORT == 0U)
     float p_err = 100.00f * (1 - (measurements.p) / (measurements.s));
+    float act_imp_energy_wh = ((phase.energy.counter.act_imp * config.meter_constant) + phase.energy.accumulator.act_imp_ws)/3600;
+    float act_exp_energy_wh = ((phase.energy.counter.act_exp * config.meter_constant) + phase.energy.accumulator.act_exp_ws)/3600;
+    float c_imp_energy_wh = ((phase.energy.counter.c_react_imp * config.meter_constant) + phase.energy.accumulator.c_react_imp_ws)/3600;
+    float c_exp_energy_wh = ((phase.energy.counter.c_react_exp * config.meter_constant) + phase.energy.accumulator.c_react_exp_ws)/3600;
+    float l_imp_energy_wh = ((phase.energy.counter.l_react_imp * config.meter_constant) + phase.energy.accumulator.l_react_imp_ws)/3600;
+    float l_exp_energy_wh = ((phase.energy.counter.l_react_exp * config.meter_constant) + phase.energy.accumulator.l_react_exp_ws)/3600;
+    float app_imp_energy_wh = ((phase.energy.counter.app_imp * config.meter_constant) + phase.energy.accumulator.app_imp_ws)/3600;
+    float app_exp_energy_wh = ((phase.energy.counter.app_exp * config.meter_constant) + phase.energy.accumulator.app_exp_ws)/3600;
 
     str_len = printf("\t\tVrms:    %.4f[V]\n\r"
                      "\t\tIrms:    %.4f[A]\n\r"
@@ -156,9 +183,19 @@ void Simulation(const simulation_params *const p_sim_params)
                      "\t\tP:       %.4f[W]\n\r"
                      "\t\tQ:       %.4f[VAR]\n\r"
                      "\t\tS:       %.4f[VA]\n\r"
-                     "\t\tS Error: %.4f[%%]",
+                     "\t\tS Error: %.4f[%%]\n\r"
+                     "\t\tAct Imp: %.4f[Wh]\n\r"
+                     "\t\tAct Exp: %.4f[Wh]\n\r"
+                     "\t\tC Imp:   %.4f[Wh]\n\r"
+                     "\t\tC Exp:   %.4f[Wh]\n\r"
+                     "\t\tL Imp:   %.4f[Wh]\n\r"
+                     "\t\tL Exp:   %.4f[Wh]\n\r"
+                     "\t\tApp Imp: %.4f[Wh]\n\r"
+                     "\t\tApp Exp: %.4f[Wh]\n\r",
                      measurements.vrms, measurements.irms, measurements.fline, measurements.p,
-                     measurements.q, measurements.s, p_err);
+                     measurements.q, measurements.s, p_err, act_imp_energy_wh, act_exp_energy_wh,
+                     c_imp_energy_wh, c_exp_energy_wh, l_imp_energy_wh, l_exp_energy_wh,
+                     app_imp_energy_wh, app_exp_energy_wh);
 #else
     float p_err =
         100.00f * ((PARAM_TO_FLOAT(LMA_ActivePower_Get(&phase)) / (p_g_sim_params->vrms * p_g_sim_params->irms)) - 1);
