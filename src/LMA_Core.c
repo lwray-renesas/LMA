@@ -416,6 +416,12 @@ static void Phase_hard_reset(LMA_Phase *const p_phase)
   p_phase->energy.accumulator.c_react_exp_ws = 0;
   p_phase->energy.accumulator.l_react_imp_ws = 0;
   p_phase->energy.accumulator.l_react_exp_ws = 0;
+  p_phase->energy.accumulator.app_imp_ws = 0;
+  p_phase->energy.accumulator.app_exp_ws = 0;
+
+  p_phase->energy.unit.act = 0;
+  p_phase->energy.unit.react = 0;
+  p_phase->energy.unit.app = 0;
 
   p_phase->disable_acc = false;
   p_phase->calibrating = false;
