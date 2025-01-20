@@ -7,14 +7,20 @@
 * Control API
 *****************************/
 /** @brief Initalises the Light-Weight Metrology for AC Framework according to the config.
-* @param[in] p_config - pointer to the configuration structure.
+* @param[in] p_config_arg - pointer to the configuration structure.
 */
-void LMA_Init(const LMA_Config *const p_config);
+void LMA_Init(LMA_Config *const p_config_arg);
 
-/** @brief Initalises a phase ready for computations.
+/** @brief Registers a phse to the library - once on power up.
 * @param[in] p_phase - pointer to the phase
 */
-void LMA_PhaseInit(LMA_Phase *const p_phase);
+void LMA_PhaseRegister(LMA_Phase *const p_phase);
+
+/** @brief Loads calibration data to a phase.
+* @param[inout] p_phase - pointer to the phase
+* @param[in] p_calib - pointer to the calibration data to load.
+*/
+void LMA_PhaseLoadCalibration(LMA_Phase *const p_phase, const LMA_PhaseCalibration *const p_calib);
 
 /** @brief Starts the metering state machine and all associated drivers.
 */
@@ -27,14 +33,28 @@ void LMA_Stop(void);
 /** @brief Performs a calibration command according to the flags passed.
 * @param[in] calib_args - Arguments and data structure use for a calibration.
 */
-void LMA_Calibrate(Calibration_args * const calib_args);
+void LMA_PhaseCalibrate(LMA_PhaseCalibArgs * const calib_args);
+
+/** @brief Performs a calibration command according to the flags passed.
+* @details - results stored in LMA_Config.gcalib
+*/
+void LMA_GlobalCalibrate(LMA_GlobalCalibArgs * const calib_args);
 
 /** @brief Sets the energy data 
-* @param[inout] p_phase - pointer to the phase to set
 * @param[in] p_energy - pointer to the energy data structure to work on
 */
-void LMA_EnergySet(LMA_Phase *const p_phase, LMA_Energy *const p_energy);
+void LMA_EnergySet(LMA_SystemEnergy *const p_energy);
 
+/** @brief Gets the energy data 
+* @param[in] p_energy - pointer to the energy data structure to work on
+*/
+void LMA_EnergyGet(LMA_SystemEnergy *const p_energy);
+
+/** @brief Gets copy of the current phase status using critical secrtions 
+* @param[inout] p_phase - pointer to the phase block on which to get status from.
+* @return LMA_Status of phase
+*/
+LMA_Status LMA_StatusGet(const LMA_Phase *const p_phase);
 
 /*****************************
 * Measurement API
@@ -79,23 +99,24 @@ param_t LMA_ApparentPower_Get(const LMA_Phase *const p_phase);
 * @param[inout] p_phase - pointer to the phase block on which to get measurements from.
 * @param[out] p_measurements - pointer to the measurement structure to populate.
 */
-void LMA_Measurements_Get(LMA_Phase *const p_phase, LMA_Measurements *const p_measurements);
+void LMA_MeasurementsGet(LMA_Phase *const p_phase, LMA_Measurements *const p_measurements);
 
 /*****************************
 * DRIVER CALLBACKS
 *****************************/
-/** @brief ADC CALLBACK - Processes the phase pair computations according to the new samples.
-* @param[inout] p_phase - pointer to the phase block on which to operate the samples on.
-* @param[in] p_adc_samples - pointer to the adc samples.
+/** @brief ADC CALLBACK - Processes the ADC samples (assumes a single phase system)
+* @param[in] p_samples - pointer to the samples to work on.
 */
-void LMA_CB_ADC_Phase(LMA_Phase *const p_phase, const Samples * p_adc_samples);
+void LMA_CB_ADC_SinglePhase(const LMA_Samples *p_samples);
 
-/** @brief ADC CALLBACK - Processes the energy accumulation and impulse LED control.
-* @param[inout] p_sys_energy - pointer to the system energy data.
-* @param[inout] p_phases - pointer to the array of phases to work with.
-* @param[in] phase_count - number of phases to work on.
+/** @brief ADC CALLBACK - Processes the ADC samples acording to the number of phases registered (multi phase system)
+* @param[in] p_sample_list_first - pointer to the first set of adc samples, formatted:
+* {v_1, i_1, v90_1}, <-- First phase registered with LMA_PhaseRegister
+* {v_2, i_2, v90_2}, <-- Second phase registered with LMA_PhaseRegister
+* {v_n, i_n, v90_n}, <-- nth phase registered with LMA_PhaseRegister
+* @param[in] p_sample_list_last - pointer to the last set of ADC samples in the list
 */
-void LMA_CB_ADC_Impulse(LMA_SystemEnergy *const p_sys_energy, LMA_Phase *const p_phases, const uint8_t phase_count);
+void LMA_CB_ADC_PolyPhase(const LMA_Samples *p_sample_list_first, const LMA_Samples *p_sample_list_last);
 
 /** @brief RTC CALLBACK - Process periodic rtc interrupt.
 * @details The RTC isr callling this should deally have nested interrupts enabled in which the ADC can interrupt us.

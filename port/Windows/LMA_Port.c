@@ -6,8 +6,6 @@
 #include <time.h>
 
 extern const simulation_params *p_g_sim_params;
-extern LMA_Phase phase;
-extern LMA_SystemEnergy system_energy;
 static bool adc_running = false;
 static bool rtc_running = false;
 bool driver_thread_running = false;
@@ -53,9 +51,39 @@ void LMA_RTC_Start(void)
   rtc_running = true;
 }
 
-void RTC_Stop(void)
+void LMA_RTC_Stop(void)
 {
   rtc_running = false;
+}
+
+void LMA_IMP_ActiveOn(void)
+{
+  printf("ACTIVE LED ON");
+}
+
+void LMA_IMP_ActiveOff(void)
+{
+  printf("ACTIVE LED OFF");
+}
+
+void LMA_IMP_ReactiveOn(void)
+{
+  printf("REACTIVE LED ON");
+}
+
+void LMA_IMP_ReactiveOff(void)
+{
+  printf("REACTIVE LED OFF");
+}
+
+void LMA_IMP_ApparentOn(void)
+{
+  printf("APPARENT LED ON");
+}
+
+void LMA_IMP_ApparentOff(void)
+{
+  printf("APPARENT LED OFF");
 }
 
 static int32_t Phase_shift_90deg(int32_t new_voltage)
@@ -138,14 +166,13 @@ static int Driver_thread(void *p_arg)
     /* ADC Handling*/
     if (adc_running)
     {
-      Samples sp;
+      LMA_Samples sp;
       /* We are removing the bottom 3 bits of noise*/
       sp.current = p_sim_params->current_samples[sample] >> 3;
       sp.voltage = p_sim_params->voltage_samples[sample] >> 3;
       sp.voltage90 = Phase_shift_90deg(sp.voltage);
 
-      LMA_CB_ADC_Phase(&phase, &sp);
-      LMA_CB_ADC_Impulse(&system_energy, &phase, 1);
+      LMA_CB_ADC_SinglePhase(&sp);
 
       ++sample;
     }

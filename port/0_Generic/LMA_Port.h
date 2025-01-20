@@ -199,4 +199,18 @@ void LMA_RTC_Start(void);
 /** @brief Starts the RTC running */
 void LMA_RTC_Start(void);
 
+
+/** @brief Callback to turn on active impulse LED */
+void LMA_IMP_ActiveOn(void);
+/** @brief Callback to turn off active impulse LED */
+void LMA_IMP_ActiveOff(void);
+/** @brief Callback to turn on reactive impulse LED */
+void LMA_IMP_ReactiveOn(void);
+/** @brief Callback to turn off reactive impulse LED */
+void LMA_IMP_ReactiveOff(void);
+/** @brief Callback to turn on apparent impulse LED */
+void LMA_IMP_ApparentOn(void);
+/** @brief Callback to turn off apparent impulse LED */
+void LMA_IMP_ApparentOff(void);
+
 #endif /* _LMA_PORT_H */

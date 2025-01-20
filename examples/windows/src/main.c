@@ -9,23 +9,6 @@
 #include "args_parser.h"
 #include "simulation.h"
 
-/* TODO:
-1. Read CSV Header
-    Infer how many voltage current pairs there are (ignore neutral for now).
-    CSV contains raw ADC readings as though straight from a DSADC.
-
-2. Then create arrays of Voltage and Current Samples for each phase.
-
-3. For the number of pairs, pass this to the "ADC callback" function for processing (testing the
-library)
-
-4. Periodically (every 0.5sec simulated) print the parameter snap shot
-
-5. Arguments to the application are:
-    - Path to the CSV.
-    - Timestep of the ADC.
-*/
-
 typedef enum APP_STATUS
 {
   APP_SUCCESS = 0,

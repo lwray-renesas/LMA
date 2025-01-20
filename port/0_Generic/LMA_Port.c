@@ -26,7 +26,37 @@ void LMA_RTC_Start(void)
     /* TODO: Populate*/
 }
 
-void RTC_Stop(void)
+void LMA_RTC_Stop(void)
+{
+    /* TODO: Populate*/
+}
+
+void LMA_IMP_ActiveOn(void)
+{
+    /* TODO: Populate*/
+}
+
+void LMA_IMP_ActiveOff(void)
+{
+    /* TODO: Populate*/
+}
+
+void LMA_IMP_ReactiveOn(void)
+{
+    /* TODO: Populate*/
+}
+
+void LMA_IMP_ReactiveOff(void)
+{
+    /* TODO: Populate*/
+}
+
+void LMA_IMP_ApparentOn(void)
+{
+    /* TODO: Populate*/
+}
+
+void LMA_IMP_ApparentOff(void)
 {
     /* TODO: Populate*/
 }
