@@ -182,20 +182,16 @@ static inline param_t Param_div(const param_t a, const param_t b)
 ******************/
 /** @brief Initialises ADC but doesn't start it */
 void LMA_ADC_Init(void);
-
 /** @brief Starts the ADC running */
 void LMA_ADC_Start(void);
-
 /** @brief Stops the ADC running */
 void LMA_ADC_Stop(void);
 
 
 /** @brief Initialises RTC but doesn't start it */
 void LMA_RTC_Init(void);
-
 /** @brief Starts the RTC running */
 void LMA_RTC_Start(void);
-
 /** @brief Starts the RTC running */
 void LMA_RTC_Start(void);
 
