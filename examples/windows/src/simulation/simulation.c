@@ -1,5 +1,6 @@
 #include "simulation.h"
 #include "LMA_Core.h"
+#include "LMA_Types.h"
 #include <stdio.h>
 #include <threads.h>
 
@@ -15,6 +16,31 @@ static thrd_t driver_thread;
 
 /* global pointer for the drvier thread to access sim params*/
 const simulation_params *p_g_sim_params;
+
+static void Active_impulse_on(void)
+{
+  printf("ACTIVE LED ON");
+}
+static void Active_impulse_off(void)
+{
+  printf("ACTIVE LED OFF");
+}
+static void Reactive_impulse_on(void)
+{
+  printf("REACTIVE LED ON");
+}
+static void Reactive_impulse_off(void)
+{
+  printf("REACTIVE LED OFF");
+}
+static void Apparent_impulse_on(void)
+{
+  printf("APPARENT LED ON");
+}
+static void Apparent_impulse_off(void)
+{
+  printf("APPARENT LED OFF");
+}
 
 /* Configuration required for configuring the library 4500 ws/imp = 800 imp/kwh*/
 #if (FIXED_POINT_SUPPORT == 0U)
@@ -41,6 +67,18 @@ LMA_Phase phase = {
     .p_gcalib = &gcalib_data,
     .calibrating = false,
     .disable_acc = false};
+
+/* Define our system energy struct*/
+LMA_SystemEnergy system_energy = {
+  .impulse = {
+    .Active_imp_on = Active_impulse_on,
+    .Active_imp_off = Active_impulse_off,
+    .Reactive_imp_on = Reactive_impulse_on,
+    .Reactive_imp_off = Reactive_impulse_off,
+    .Apparent_imp_on = Apparent_impulse_on,
+    .Apparent_imp_off = Apparent_impulse_off
+  }
+};
 
 void Simulation(const simulation_params *const p_sim_params)
 {
@@ -172,14 +210,14 @@ void Simulation(const simulation_params *const p_sim_params)
 
 #if (FIXED_POINT_SUPPORT == 0U)
     float p_err = 100.00f * ((measurements.s / (p_g_sim_params->vrms * p_g_sim_params->irms)) - 1);
-    float act_imp_energy_wh = ((phase.energy.counter.act_imp * config.meter_constant) + phase.energy.accumulator.act_imp_ws)/3600;
-    float act_exp_energy_wh = ((phase.energy.counter.act_exp * config.meter_constant) + phase.energy.accumulator.act_exp_ws)/3600;
-    float c_imp_energy_wh = ((phase.energy.counter.c_react_imp * config.meter_constant) + phase.energy.accumulator.c_react_imp_ws)/3600;
-    float c_exp_energy_wh = ((phase.energy.counter.c_react_exp * config.meter_constant) + phase.energy.accumulator.c_react_exp_ws)/3600;
-    float l_imp_energy_wh = ((phase.energy.counter.l_react_imp * config.meter_constant) + phase.energy.accumulator.l_react_imp_ws)/3600;
-    float l_exp_energy_wh = ((phase.energy.counter.l_react_exp * config.meter_constant) + phase.energy.accumulator.l_react_exp_ws)/3600;
-    float app_imp_energy_wh = ((phase.energy.counter.app_imp * config.meter_constant) + phase.energy.accumulator.app_imp_ws)/3600;
-    float app_exp_energy_wh = ((phase.energy.counter.app_exp * config.meter_constant) + phase.energy.accumulator.app_exp_ws)/3600;
+    float act_imp_energy_wh = ((system_energy.counter.act_imp * config.meter_constant) + system_energy.accumulator.act_imp_ws)/3600;
+    float act_exp_energy_wh = ((system_energy.counter.act_exp * config.meter_constant) + system_energy.accumulator.act_exp_ws)/3600;
+    float c_imp_energy_wh = ((system_energy.counter.c_react_imp * config.meter_constant) + system_energy.accumulator.c_react_imp_ws)/3600;
+    float c_exp_energy_wh = ((system_energy.counter.c_react_exp * config.meter_constant) + system_energy.accumulator.c_react_exp_ws)/3600;
+    float l_imp_energy_wh = ((system_energy.counter.l_react_imp * config.meter_constant) + system_energy.accumulator.l_react_imp_ws)/3600;
+    float l_exp_energy_wh = ((system_energy.counter.l_react_exp * config.meter_constant) + system_energy.accumulator.l_react_exp_ws)/3600;
+    float app_imp_energy_wh = ((system_energy.counter.app_imp * config.meter_constant) + system_energy.accumulator.app_imp_ws)/3600;
+    float app_exp_energy_wh = ((system_energy.counter.app_exp * config.meter_constant) + system_energy.accumulator.app_exp_ws)/3600;
 
     str_len = printf("\t\tVrms:    %.4f[V]\n\r"
                      "\t\tIrms:    %.4f[A]\n\r"
@@ -203,14 +241,14 @@ void Simulation(const simulation_params *const p_sim_params)
 #else
     float p_err =
         100.00f * ((PARAM_TO_FLOAT(measurements.s) / (p_g_sim_params->vrms * p_g_sim_params->irms)) - 1);
-    param_t act_imp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(phase.energy.counter.act_imp), config.meter_constant) + phase.energy.accumulator.act_imp_ws,PARAM_FROM_INT(3600));
-    param_t act_exp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(phase.energy.counter.act_exp), config.meter_constant) + phase.energy.accumulator.act_exp_ws,PARAM_FROM_INT(3600));
-    param_t c_imp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(phase.energy.counter.c_react_imp), config.meter_constant) + phase.energy.accumulator.c_react_imp_ws,PARAM_FROM_INT(3600));
-    param_t c_exp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(phase.energy.counter.c_react_exp), config.meter_constant) + phase.energy.accumulator.c_react_exp_ws,PARAM_FROM_INT(3600));
-    param_t l_imp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(phase.energy.counter.l_react_imp), config.meter_constant) + phase.energy.accumulator.l_react_imp_ws,PARAM_FROM_INT(3600));
-    param_t l_exp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(phase.energy.counter.l_react_exp), config.meter_constant) + phase.energy.accumulator.l_react_exp_ws,PARAM_FROM_INT(3600));
-    param_t app_imp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(phase.energy.counter.app_imp), config.meter_constant) + phase.energy.accumulator.app_imp_ws,PARAM_FROM_INT(3600));
-    param_t app_exp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(phase.energy.counter.app_exp), config.meter_constant) + phase.energy.accumulator.app_exp_ws,PARAM_FROM_INT(3600));
+    param_t act_imp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(system_energy.counter.act_imp), config.meter_constant) + system_energy.accumulator.act_imp_ws,PARAM_FROM_INT(3600));
+    param_t act_exp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(system_energy.counter.act_exp), config.meter_constant) + system_energy.accumulator.act_exp_ws,PARAM_FROM_INT(3600));
+    param_t c_imp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(system_energy.counter.c_react_imp), config.meter_constant) + system_energy.accumulator.c_react_imp_ws,PARAM_FROM_INT(3600));
+    param_t c_exp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(system_energy.counter.c_react_exp), config.meter_constant) + system_energy.accumulator.c_react_exp_ws,PARAM_FROM_INT(3600));
+    param_t l_imp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(system_energy.counter.l_react_imp), config.meter_constant) + system_energy.accumulator.l_react_imp_ws,PARAM_FROM_INT(3600));
+    param_t l_exp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(system_energy.counter.l_react_exp), config.meter_constant) + system_energy.accumulator.l_react_exp_ws,PARAM_FROM_INT(3600));
+    param_t app_imp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(system_energy.counter.app_imp), config.meter_constant) + system_energy.accumulator.app_imp_ws,PARAM_FROM_INT(3600));
+    param_t app_exp_energy_wh = Param_div(Param_mul(PARAM_FROM_INT(system_energy.counter.app_exp), config.meter_constant) + system_energy.accumulator.app_exp_ws,PARAM_FROM_INT(3600));
 
     str_len = printf("\t\tVrms:    %.4f[V]\n\r"
                      "\t\tIrms:    %.4f[A]\n\r"

@@ -7,6 +7,7 @@
 
 extern const simulation_params *p_g_sim_params;
 extern LMA_Phase phase;
+extern LMA_SystemEnergy system_energy;
 static bool adc_running = false;
 static bool rtc_running = false;
 bool driver_thread_running = false;
@@ -144,6 +145,7 @@ static int Driver_thread(void *p_arg)
       sp.voltage90 = Phase_shift_90deg(sp.voltage);
 
       LMA_CB_ADC_Phase(&phase, &sp);
+      LMA_CB_ADC_Impulse(&system_energy, &phase, 1);
 
       ++sample;
     }

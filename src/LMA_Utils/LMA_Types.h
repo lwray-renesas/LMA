@@ -69,54 +69,13 @@ typedef struct LMA_Power
   param_t s;   /**< Temporary value to store apparent power consumption */
 } LMA_Power;
 
-/** @brief Data related to energy computations */
+/** @brief Data related to energy accumulation per phase */
 typedef struct LMA_Energy
 {
-  /** @brief Variables holding currently computed unit of enery per ADC interval */
-  struct unit
-  {
-    param_t act;
-    param_t react;
-    param_t app;
-  } unit;
-
-  /** @brief Running energy accumulator for counting energy between pulses - Ws (Watt second)*/
-  struct accumulator
-  {
-    param_t act_imp_ws;     /**< Variable used to accumulate the active import (from grid) energy over meter lifetime*/
-    param_t act_exp_ws;     /**< Variable used to accumulate the active export (to grid) energy over meter lifetime*/
-    param_t c_react_imp_ws; /**< Variable used to accumulate the C reactive import (from grid) energy over meter lifetime*/
-    param_t c_react_exp_ws; /**< Variable used to accumulate the C reactive export (to grid) energy over meter lifetime*/
-    param_t l_react_imp_ws; /**< Variable used to accumulate the L reactive import (from grid) energy over meter lifetime*/
-    param_t l_react_exp_ws; /**< Variable used to accumulate the L reactive export (to grid) energy over meter lifetime*/
-    param_t app_imp_ws;     /**< Variable used to accumulate the apparent import (from grid) energy over meter lifetime*/
-    param_t app_exp_ws;     /**< Variable used to accumulate the apparent export (to grid) energy over meter lifetime*/
-  } accumulator;
-
-  /** @brief Total energy measured by meter in units of energy (pulses or kwh/imp)*/
-  struct counter
-  {
-    uint64_t act_imp;     /**< Variable used to accumulate units of energy (pulses) (active import ... from grid) */
-    uint64_t act_exp;     /**< Variable used to accumulate units of energy (pulses) (active export ... to grid) */
-    uint64_t c_react_imp; /**< Variable used to accumulate units of energy (pulses) (C reactive import ... from grid) */
-    uint64_t c_react_exp; /**< Variable used to accumulate units of energy (pulses) (C reactive export ... to grid) */
-    uint64_t l_react_imp; /**< Variable used to accumulate units of energy (pulses) (L reactive import ... from grid) */
-    uint64_t l_react_exp; /**< Variable used to accumulate units of energy (pulses) (L reactive export ... to grid) */
-    uint64_t app_imp;     /**< Variable used to accumulate units of energy (pulses) (active import ... from grid) */
-    uint64_t app_exp;     /**< Variable used to accumulate units of energy (pulses) (active export ... to grid) */
-  } counter;
+  param_t act_unit; /**< Currently computed unit of active energy per ADC interval*/
+  param_t react_unit; /**< Currently computed unit of reactive energy per ADC interval*/
+  param_t app_unit; /**< Currently computed unit of apparent energy per ADC interval*/
 } LMA_Energy;
-
-/** @brief Data related to impulse controls */
-typedef struct LMA_Impulse
-{
-  void (*Active_imp_on)(void);    /**< Callback to turn on active impulse LED */
-  void (*Active_imp_off)(void);   /**< Callback to turn off active impulse LED */
-  void (*Reactive_imp_on)(void);  /**< Callback to turn on reactive impulse LED */
-  void (*Reactive_imp_off)(void); /**< Callback to turn off reactive impulse LED */
-  void (*Apparent_imp_on)(void);  /**< Callback to turn on apparent impulse LED */
-  void (*Apparent_imp_off)(void); /**< Callback to turn off apparent impulse LED */
-} LMA_Impulse;
 
 /** @brief Data related to the calibration of the project */
 typedef struct LMA_GlobalCalibration
@@ -148,7 +107,6 @@ typedef struct LMA_Phase
   LMA_Current current;                   /**< Current data processing block */
   LMA_Power power;                       /**< Power data processing block */
   LMA_Energy energy;                     /**< Energy processing block */
-  LMA_Impulse impulse;                   /**< Impulse output control block */
   LMA_GlobalCalibration *const p_gcalib; /**< Pointer to the global calibration data block */
   bool calibrating;                      /**< Flag to indicate we are in calibration mode */
   bool calibrating_fs;                   /**< Flag to indicate we are in calibration mode */
@@ -163,6 +121,55 @@ typedef struct LMA_Neutral
   LMA_Current *const current;            /**< Pointer to current data processing block */
   LMA_Voltage *const voltage;            /**< Pointer to voltage data processing block (for synch to zero cross)*/
 } LMA_Neutral;
+
+/** @brief Data related to energy computations */
+typedef struct LMA_SystemEnergy
+{
+  /** @brief Variables holding currently computed unit of energy per ADC interval of whole system*/
+  struct unit
+  {
+    param_t act; /**< Currently computed unit of active energy per ADC interval*/
+    param_t react; /**< Currently computed unit of reactive energy per ADC interval*/
+    param_t app; /**< Currently computed unit of apparent energy per ADC interval*/
+  } unit;
+
+  /** @brief Running energy accumulator for counting energy between pulses - Ws (Watt second)*/
+  struct accumulator
+  {
+    param_t act_imp_ws;     /**< Variable used to accumulate the active import (from grid) energy over meter lifetime*/
+    param_t act_exp_ws;     /**< Variable used to accumulate the active export (to grid) energy over meter lifetime*/
+    param_t c_react_imp_ws; /**< Variable used to accumulate the C reactive import (from grid) energy over meter lifetime*/
+    param_t c_react_exp_ws; /**< Variable used to accumulate the C reactive export (to grid) energy over meter lifetime*/
+    param_t l_react_imp_ws; /**< Variable used to accumulate the L reactive import (from grid) energy over meter lifetime*/
+    param_t l_react_exp_ws; /**< Variable used to accumulate the L reactive export (to grid) energy over meter lifetime*/
+    param_t app_imp_ws;     /**< Variable used to accumulate the apparent import (from grid) energy over meter lifetime*/
+    param_t app_exp_ws;     /**< Variable used to accumulate the apparent export (to grid) energy over meter lifetime*/
+  } accumulator;
+
+  /** @brief Total energy measured by meter in units of energy (pulses or kwh/imp)*/
+  struct counter
+  {
+    uint64_t act_imp;     /**< Variable used to accumulate units of energy (pulses) (active import ... from grid) */
+    uint64_t act_exp;     /**< Variable used to accumulate units of energy (pulses) (active export ... to grid) */
+    uint64_t c_react_imp; /**< Variable used to accumulate units of energy (pulses) (C reactive import ... from grid) */
+    uint64_t c_react_exp; /**< Variable used to accumulate units of energy (pulses) (C reactive export ... to grid) */
+    uint64_t l_react_imp; /**< Variable used to accumulate units of energy (pulses) (L reactive import ... from grid) */
+    uint64_t l_react_exp; /**< Variable used to accumulate units of energy (pulses) (L reactive export ... to grid) */
+    uint64_t app_imp;     /**< Variable used to accumulate units of energy (pulses) (active import ... from grid) */
+    uint64_t app_exp;     /**< Variable used to accumulate units of energy (pulses) (active export ... to grid) */
+  } counter;
+
+  /** @brief Data related to impulse controls */
+  struct impulse
+  {
+    void (*Active_imp_on)(void);    /**< Callback to turn on active impulse LED */
+    void (*Active_imp_off)(void);   /**< Callback to turn off active impulse LED */
+    void (*Reactive_imp_on)(void);  /**< Callback to turn on reactive impulse LED */
+    void (*Reactive_imp_off)(void); /**< Callback to turn off reactive impulse LED */
+    void (*Apparent_imp_on)(void);  /**< Callback to turn on apparent impulse LED */
+    void (*Apparent_imp_off)(void); /**< Callback to turn off apparent impulse LED */
+  } impulse;
+} LMA_SystemEnergy;
 
 /** @brief dedicated struct for calibration arguments */
 typedef struct Calibration_args

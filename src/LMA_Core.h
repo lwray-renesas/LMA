@@ -90,6 +90,13 @@ void LMA_Measurements_Get(LMA_Phase *const p_phase, LMA_Measurements *const p_me
 */
 void LMA_CB_ADC_Phase(LMA_Phase *const p_phase, const Samples * p_adc_samples);
 
+/** @brief ADC CALLBACK - Processes the energy accumulation and impulse LED control.
+* @param[inout] p_sys_energy - pointer to the system energy data.
+* @param[inout] p_phases - pointer to the array of phases to work with.
+* @param[in] phase_count - number of phases to work on.
+*/
+void LMA_CB_ADC_Impulse(LMA_SystemEnergy *const p_sys_energy, LMA_Phase *const p_phases, const uint8_t phase_count);
+
 /** @brief RTC CALLBACK - Process periodic rtc interrupt.
 * @details The RTC isr callling this should deally have nested interrupts enabled in which the ADC can interrupt us.
 */
