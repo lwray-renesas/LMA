@@ -608,7 +608,7 @@ LMA_Status LMA_StatusGet(const LMA_Phase *const p_phase)
 {
   LMA_Status temp = LMA_OK;
   LMA_CRITICAL_SECTION_PREPARE();
-  
+
   LMA_CRITICAL_SECTION_ENTER();
   temp = p_phase->status;
   LMA_CRITICAL_SECTION_EXIT();
@@ -616,32 +616,32 @@ LMA_Status LMA_StatusGet(const LMA_Phase *const p_phase)
   return temp;
 }
 
-param_t LMA_VRMS_Get(const LMA_Phase *const p_phase)
+param_t LMA_VrmsGet(const LMA_Phase *const p_phase)
 {
   return p_phase->voltage.v_rms;
 }
 
-param_t LMA_IRMS_Get(const LMA_Phase *const p_phase)
+param_t LMA_IrmsGet(const LMA_Phase *const p_phase)
 {
   return p_phase->current.i_rms;
 }
 
-param_t LMA_FLine_Get(const LMA_Phase *const p_phase)
+param_t LMA_FLineGet(const LMA_Phase *const p_phase)
 {
   return p_phase->voltage.fline;
 }
 
-param_t LMA_ActivePower_Get(const LMA_Phase *const p_phase)
+param_t LMA_ActivePowerGet(const LMA_Phase *const p_phase)
 {
   return p_phase->power.p;
 }
 
-param_t LMA_ReactivePower_Get(const LMA_Phase *const p_phase)
+param_t LMA_ReactivePowerGet(const LMA_Phase *const p_phase)
 {
   return p_phase->power.q;
 }
 
-param_t LMA_ApparentPower_Get(const LMA_Phase *const p_phase)
+param_t LMA_ApparentPowerGet(const LMA_Phase *const p_phase)
 {
   return p_phase->power.s;
 }

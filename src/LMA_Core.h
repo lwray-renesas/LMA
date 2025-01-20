@@ -63,37 +63,37 @@ LMA_Status LMA_StatusGet(const LMA_Phase *const p_phase);
 * @param[inout] p_phase - pointer to the phase block on which to get vrms from.
 * @return phase vrms
 */
-param_t LMA_VRMS_Get(const LMA_Phase *const p_phase);
+param_t LMA_VrmsGet(const LMA_Phase *const p_phase);
 
 /** @brief Returns IRMS of particular phase
 * @param[inout] p_phase - pointer to the phase block on which to get irms from.
 * @return phase irms
 */
-param_t LMA_IRMS_Get(const LMA_Phase *const p_phase);
+param_t LMA_IrmsGet(const LMA_Phase *const p_phase);
 
 /** @brief Returns Line Frequency of particular phase
 * @param[inout] p_phase - pointer to the phase block on which to get fline from.
 * @return phase line frequency
 */
-param_t LMA_FLine_Get(const LMA_Phase *const p_phase);
+param_t LMA_FLineGet(const LMA_Phase *const p_phase);
 
 /** @brief Returns Active Power of particular phase
 * @param[inout] p_phase - pointer to the phase block on which to get active power from.
 * @return phase active power
 */
-param_t LMA_ActivePower_Get(const LMA_Phase *const p_phase);
+param_t LMA_ActivePowerGet(const LMA_Phase *const p_phase);
 
 /** @brief Returns Reactive Power of particular phase
 * @param[inout] p_phase - pointer to the phase block on which to get reactive power from.
 * @return phase reactive power
 */
-param_t LMA_ReactivePower_Get(const LMA_Phase *const p_phase);
+param_t LMA_ReactivePowerGet(const LMA_Phase *const p_phase);
 
 /** @brief Returns Apparent Power of particular phase
 * @param[inout] p_phase - pointer to the phase block on which to get apparent power from.
 * @return phase apparent power
 */
-param_t LMA_ApparentPower_Get(const LMA_Phase *const p_phase);
+param_t LMA_ApparentPowerGet(const LMA_Phase *const p_phase);
 
 /** @brief Outputs current sna shot of measurement set
 * @param[inout] p_phase - pointer to the phase block on which to get measurements from.
