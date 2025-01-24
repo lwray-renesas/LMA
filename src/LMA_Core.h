@@ -63,37 +63,31 @@ LMA_Status LMA_StatusGet(const LMA_Phase *const p_phase);
 * @param[inout] p_phase - pointer to the phase block on which to get vrms from.
 * @return phase vrms
 */
-param_t LMA_VrmsGet(const LMA_Phase *const p_phase);
+float LMA_VrmsGet(LMA_Phase *const p_phase);
 
 /** @brief Returns IRMS of particular phase
 * @param[inout] p_phase - pointer to the phase block on which to get irms from.
 * @return phase irms
 */
-param_t LMA_IrmsGet(const LMA_Phase *const p_phase);
+float LMA_IrmsGet(LMA_Phase *const p_phase);
 
 /** @brief Returns Line Frequency of particular phase
 * @param[inout] p_phase - pointer to the phase block on which to get fline from.
 * @return phase line frequency
 */
-param_t LMA_FLineGet(const LMA_Phase *const p_phase);
+float LMA_FLineGet(LMA_Phase *const p_phase);
 
 /** @brief Returns Active Power of particular phase
 * @param[inout] p_phase - pointer to the phase block on which to get active power from.
 * @return phase active power
 */
-param_t LMA_ActivePowerGet(const LMA_Phase *const p_phase);
+float LMA_ActivePowerGet(const LMA_Phase *const p_phase);
 
 /** @brief Returns Reactive Power of particular phase
 * @param[inout] p_phase - pointer to the phase block on which to get reactive power from.
 * @return phase reactive power
 */
-param_t LMA_ReactivePowerGet(const LMA_Phase *const p_phase);
-
-/** @brief Returns Apparent Power of particular phase
-* @param[inout] p_phase - pointer to the phase block on which to get apparent power from.
-* @return phase apparent power
-*/
-param_t LMA_ApparentPowerGet(const LMA_Phase *const p_phase);
+float LMA_ReactivePowerGet(const LMA_Phase *const p_phase);
 
 /** @brief Outputs current sna shot of measurement set
 * @param[inout] p_phase - pointer to the phase block on which to get measurements from.
@@ -105,18 +99,12 @@ void LMA_MeasurementsGet(LMA_Phase *const p_phase, LMA_Measurements *const p_mea
 * DRIVER CALLBACKS
 *****************************/
 /** @brief ADC CALLBACK - Processes the ADC samples (assumes a single phase system)
-* @param[in] p_samples - pointer to the samples to work on.
 */
-void LMA_CB_ADC_SinglePhase(const LMA_Samples *p_samples);
+void LMA_CB_ADC_SinglePhase(void);
 
 /** @brief ADC CALLBACK - Processes the ADC samples acording to the number of phases registered (multi phase system)
-* @param[in] p_sample_list_first - pointer to the first set of adc samples, formatted:
-* {v_1, i_1, v90_1}, <-- First phase registered with LMA_PhaseRegister
-* {v_2, i_2, v90_2}, <-- Second phase registered with LMA_PhaseRegister
-* {v_n, i_n, v90_n}, <-- nth phase registered with LMA_PhaseRegister
-* @param[in] p_sample_list_last - pointer to the last set of ADC samples in the list
 */
-void LMA_CB_ADC_PolyPhase(const LMA_Samples *p_sample_list_first, const LMA_Samples *p_sample_list_last);
+void LMA_CB_ADC_PolyPhase(void);
 
 /** @brief RTC CALLBACK - Process periodic rtc interrupt.
 * @details The RTC isr callling this should deally have nested interrupts enabled in which the ADC can interrupt us.

@@ -4,13 +4,14 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include "hal_data.h"
 
 /** @brief macros used to red current interrupt state */
-#define LMA_CRITICAL_SECTION_PREPARE()
+#define LMA_CRITICAL_SECTION_PREPARE() uint32_t interrupt_save =  __get_PRIMASK()
 /** @brief macro used to disable interrupts*/
-#define LMA_CRITICAL_SECTION_ENTER()
+#define LMA_CRITICAL_SECTION_ENTER() __disable_irq()
 /** @brief macro used to restore interrupt state*/
-#define LMA_CRITICAL_SECTION_EXIT()
+#define LMA_CRITICAL_SECTION_EXIT() __set_PRIMASK(interrupt_save)
 
 /** @brief Defines the raw ADC sample type */
 typedef int32_t spl_t;
