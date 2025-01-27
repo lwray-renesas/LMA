@@ -641,7 +641,7 @@ float LMA_IrmsGet(LMA_Phase *const p_phase)
     LMA_CRITICAL_SECTION_EXIT();
 
     p_phase->current.i_rms = (0 == i_acc_tmp) ? 0.0f :
-            LMA_FPDiv_Fast(LMA_FPSqrt_Fast(LMA_FPDiv_Fast(LMA_AccToFloat(i_acc_tmp), sc_tmp)), p_phase->calib.vrms_coeff);
+            LMA_FPDiv_Fast(LMA_FPSqrt_Fast(LMA_FPDiv_Fast(LMA_AccToFloat(i_acc_tmp), sc_tmp)), p_phase->calib.irms_coeff);
 
     return p_phase->current.i_rms;
 }
