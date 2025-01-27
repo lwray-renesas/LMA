@@ -147,21 +147,20 @@ static inline void Phase_process(LMA_Phase *const p_phase)
             {
                 if(p_phase->voltage.fline_acc < p_config->gcalib.fline_acc_tol_high && p_phase->voltage.fline_acc > p_config->gcalib.fline_acc_tol_low)
                 {
+                    const float power_divisor = LMA_FPMul_Fast(p_phase->voltage.v_sample_counter_fp, p_phase->calib.p_coeff);
                     /* Update local accumulators*/
                     LMA_AccGet(&(p_phase->ws));
                     p_phase->voltage.fline_latch = p_phase->voltage.fline_acc;
 
                     /* Active Power (P)*/
-                    p_phase->power.p = LMA_FPDiv_Fast(LMA_AccToFloat(p_phase->power.p_acc),
-                            LMA_FPMul_Fast(p_phase->voltage.v_sample_counter_fp, p_phase->calib.p_coeff));
+                    p_phase->power.p = LMA_FPDiv_Fast(LMA_AccToFloat(p_phase->power.p_acc), power_divisor);
 
                     /* Reactive Power (Q)*/
-                    p_phase->power.q = LMA_FPDiv_Fast(LMA_AccToFloat(p_phase->power.q_acc),
-                            LMA_FPMul_Fast(p_phase->voltage.v_sample_counter_fp, p_phase->calib.p_coeff));
+                    p_phase->power.q = LMA_FPDiv_Fast(LMA_AccToFloat(p_phase->power.q_acc), power_divisor);
 
                     /* Apparent Power (S)*/
                     p_phase->power.s = LMA_FPDiv_Fast(LMA_FPSqrt_Fast(LMA_FPMul_Fast(LMA_AccToFloat(p_phase->current.i_acc), LMA_AccToFloat(p_phase->voltage.v_acc))),
-                            LMA_FPMul_Fast(p_phase->voltage.v_sample_counter_fp, p_phase->calib.p_coeff));
+                                                      power_divisor);
 
                     /* Active Power (P) & Energy*/
                     if (LMA_FPAbs_Fast(p_phase->power.p) < p_config->no_load_p)
