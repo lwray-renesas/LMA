@@ -130,6 +130,7 @@ float LMA_AccToFloat(acc_t acc)
     volatile uint32_t result = (uint32_t) ((*((uint32_t*)(&acc)+1)) & ACC_SIGN_MASK);
     volatile uint32_t shift_count;
 
+    /* Handle Sign*/
     if(result > 0)
     {
         *((uint32_t*)(&acc)+1) ^= 0xFFFFFFFF;
@@ -220,7 +221,6 @@ float LMA_FPDiv_Fast(float a, float b)
 
 float LMA_FPSqrt_Fast(float a)
 {
-    /* TODO: Populate*/
     uint32_t approx = 0x1fbd3f7d + ((*(uint32_t*)&a) >> 1);
 
     /* Newton-Rapson iteration
