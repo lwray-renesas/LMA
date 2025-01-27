@@ -87,7 +87,13 @@ float LMA_ActivePowerGet(const LMA_Phase *const p_phase);
 * @param[inout] p_phase - pointer to the phase block on which to get reactive power from.
 * @return phase reactive power
 */
-float LMA_ReactivePowerGet(const LMA_Phase *const p_phase);
+float LMA_ReactivePowerGet(const LMA_Phase *const p_phase);;
+
+/** @brief Returns Apparent Power of particular phase
+* @param[inout] p_phase - pointer to the phase block on which to get reactive power from.
+* @return phase apparent power
+*/
+float LMA_ApparentPowerGet(const LMA_Phase *const p_phase);
 
 /** @brief Outputs current sna shot of measurement set
 * @param[inout] p_phase - pointer to the phase block on which to get measurements from.

@@ -53,7 +53,7 @@ float LMA_AccToFloat(acc_t acc);
  * @param b - second operand.
  * @return a * b
  */
-float LMA_Fast_FPMul(float a, float b);
+float LMA_FPMul_Fast(float a, float b);
 
 /** Divides two floating ppint numbers.
  * @details - does not handle special cases ! NaN, denorm and norm etc.
@@ -61,19 +61,19 @@ float LMA_Fast_FPMul(float a, float b);
  * @param b - second operand.
  * @return a / b
  */
-float LMA_Fast_FPDiv(float a, float b);
+float LMA_FPDiv_Fast(float a, float b);
 
 /** Retusn the sqaure root of the float passed
  * @param a - number to be sqrt.
  * @return sqrt(a)
  */
-float LMA_Fast_FPSqrt(float a);
+float LMA_FPSqrt_Fast(float a);
 
 /** Retusn the absolute of the float passed
  * @param a - number to be absoluted.
  * @return abs(a)
  */
-float LMA_Fast_FPAbs(float a);
+float LMA_FPAbs_Fast(float a);
 
 /** @brief handles sample reset between cycles.
  * @details Performs:
@@ -144,4 +144,9 @@ void LMA_IMP_ActiveOff(void);
 void LMA_IMP_ReactiveOn(void);
 /** @brief Callback to turn off reactive impulse LED */
 void LMA_IMP_ReactiveOff(void);
+/** @brief Callback to turn on apparent impulse LED */
+void LMA_IMP_ApparentOn(void);
+/** @brief Callback to turn off apparent impulse LED */
+void LMA_IMP_ApparentOff(void);
+
 #endif /* _LMA_PORT_H */

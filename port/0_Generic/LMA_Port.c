@@ -13,22 +13,22 @@ float LMA_AccToFloat(acc_t acc)
   return (float)((double)acc);
 }
 
-float LMA_Fast_FPMul(float a, float b)
+float LMA_FPMul_Fast(float a, float b)
 {
   return a * b;
 }
 
-float LMA_Fast_FPDiv(float a, float b)
+float LMA_FPDiv_Fast(float a, float b)
 {
   return a / b;
 }
 
-float LMA_Fast_FPSqrt(float a)
+float LMA_FPSqrt_Fast(float a)
 {
     return sqrtf(a);
 }
 
-float LMA_Fast_FPAbs(float a)
+float LMA_FPAbs_Fast(float a)
 {
     return *(uint32_t*)(&a) & 0x7FFFFFFF;
 }
@@ -142,4 +142,14 @@ void LMA_IMP_ReactiveOn(void)
 void LMA_IMP_ReactiveOff(void)
 {
   /* TODO: Populate*/
+}
+
+void LMA_IMP_ApparentOn(void)
+{
+    /* TODO: Populate*/
+}
+
+void LMA_IMP_ApparentOff(void)
+{
+    /* TODO: Populate*/
 }

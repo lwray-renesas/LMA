@@ -11,6 +11,10 @@
 #define FLOAT_EXP_SHIFT ((uint32_t)(23))
 #define FLOAT_MANTISSA_BITS ((uint32_t)(23))
 
+/** @brief Counts leading zeroes uint32_t type
+ * @param num - number to compute leading zeroes on.
+ * @return number of leading zeroes.
+ */
 static inline uint32_t LMA_CLZ(uint32_t num)
 {
     static const uint8_t clz_table[256] = {
@@ -180,7 +184,7 @@ float LMA_AccToFloat(acc_t acc)
     return *((float*)&result);
 }
 
-float LMA_Fast_FPMul(float a, float b)
+float LMA_FPMul_Fast(float a, float b)
 {
     uint32_t result = ((*(uint32_t*)&a) & FLOAT_SIGN_MASK) ^ ((*(uint32_t*)&b) & FLOAT_SIGN_MASK);
     result |= ((*(uint32_t*)&a) & FLOAT_EXP_MASK) + ((*(uint32_t*)&b) & FLOAT_EXP_MASK) - (127 << FLOAT_EXP_SHIFT);
@@ -209,12 +213,12 @@ float LMA_Fast_FPMul(float a, float b)
     return *((float*)&result);
 }
 
-float LMA_Fast_FPDiv(float a, float b)
+float LMA_FPDiv_Fast(float a, float b)
 {
-    return LMA_Fast_FPMul(a, LMA_FloatReciprocal(*(uint32_t*)&b));
+    return LMA_FPMul_Fast(a, LMA_FloatReciprocal(*(uint32_t*)&b));
 }
 
-float LMA_Fast_FPSqrt(float a)
+float LMA_FPSqrt_Fast(float a)
 {
     /* TODO: Populate*/
     uint32_t approx = 0x1fbd3f7d + ((*(uint32_t*)&a) >> 1);
@@ -222,10 +226,12 @@ float LMA_Fast_FPSqrt(float a)
     /* Newton-Rapson iteration
      * approx = (((approx * approx) + a)/(approx)) * 0.5;
      */
-    return LMA_Fast_FPMul(LMA_Fast_FPDiv(LMA_Fast_FPMul(*(float*)&approx, *(float*)&approx) + a, *(float*)&approx), 0.5f);
+    float f_approx = LMA_FPMul_Fast(LMA_FPDiv_Fast(LMA_FPMul_Fast(*(float*)&approx, *(float*)&approx) + a, *(float*)&approx), 0.5f);
+    //f_approx = LMA_FPMul_Fast(LMA_FPDiv_Fast(LMA_FPMul_Fast(f_approx, f_approx) + a, f_approx), 0.5f);
+    return f_approx;
 }
 
-float LMA_Fast_FPAbs(float a)
+float LMA_FPAbs_Fast(float a)
 {
     uint32_t tmp = *(uint32_t*)(&a) & 0x7FFFFFFF;
     return *(float*)&tmp;
@@ -315,93 +321,6 @@ void LMA_AccGet(LMA_Workspace *const p_ws)
     *((uint32_t*)(p_ws->p_vacc)+1) = R_MACL->MULR3.MULRH;
 }
 
-void LMA_AccMultiply(acc_ext_t *res, acc_t a, acc_t b)
-{
-    R_MACL->MULC_b.MACMODE = 0;
-    R_MACL->MULC_b.MULSM = 0;
-    R_MACL->MUL32U = *((uint32_t*)&(a)); /* aLow*/
-    R_MACL->MULB4 = *((uint32_t*)&(b)); /* aLow x bLow*/
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    R_MACL->MULB5 = *((uint32_t*)&(b)+1); /* aLow x bHigh*/
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-
-    R_MACL->MUL32U = *((uint32_t*)&(a)+1); /* aHigh*/
-    R_MACL->MULB6 = *((uint32_t*)&(b)); /* aHigh x bLow*/
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    R_MACL->MULB7 = *((uint32_t*)&(b)+1); /* aHigh x bHigh*/
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-
-    /* Carry = aLowbLow_high + aLowbHigh_low + aHighblow_low*/
-    R_MACL->MULR8.MULRH = 0;
-    R_MACL->MULR8.MULRL = R_MACL->MULR4.MULRH;
-    R_MACL->MULC_b.MACMODE = 1;
-    R_MACL->MAC32U = 1;
-    R_MACL->MULB8 = R_MACL->MULR5.MULRL;
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    R_MACL->MULB8 = R_MACL->MULR6.MULRL;
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-
-    *((uint32_t *) &(res->lower)+1) = R_MACL->MULR8.MULRL;
-    *(uint32_t *) &(res->lower) = R_MACL->MULR4.MULRL;
-
-    *((uint32_t *) &(res->upper)+1) = R_MACL->MULR7.MULRH;
-    *(uint32_t *) &(res->upper) = R_MACL->MULR7.MULRL;
-    res->upper += R_MACL->MULR5.MULRH + R_MACL->MULR6.MULRH + R_MACL->MULR8.MULRH;
-}
-
-acc_t LMA_AccSqrt(acc_t val)
-{
-    acc_t x = val, c = 0;
-    if (val > 0)
-    {
-        acc_t d = (acc_t)1 << (acc_t)62;
-
-        while (d > val)
-        {
-            d >>= 2;
-        }
-
-        while (d != 0)
-        {
-            if (x >= c + d)
-            {
-                x -= c + d;
-                c = (c >> 1) + d;
-            }
-            else
-            {
-                c >>= 1;
-            }
-            d >>= 2;
-        }
-    }
-    return c;
-}
-
 void LMA_ADC_Init(void)
 {
     R_SDADC_B_Open(&g_adc0_ctrl, &g_adc0_cfg);
@@ -459,6 +378,16 @@ void LMA_IMP_ReactiveOn(void)
 }
 
 void LMA_IMP_ReactiveOff(void)
+{
+    /* TODO: Populate*/
+}
+
+void LMA_IMP_ApparentOn(void)
+{
+    /* TODO: Populate*/
+}
+
+void LMA_IMP_ApparentOff(void)
 {
     /* TODO: Populate*/
 }

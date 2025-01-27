@@ -54,7 +54,7 @@ float LMA_AccToFloat(acc_t acc);
  * @param b - second operand.
  * @return a * b
  */
-float LMA_Fast_FPMul(float a, float b);
+float LMA_FPMul_Fast(float a, float b);
 
 /** Divides two floating ppint numbers.
  * @details - does not handle special cases ! NaN, denorm and norm etc.
@@ -62,19 +62,19 @@ float LMA_Fast_FPMul(float a, float b);
  * @param b - second operand.
  * @return a / b
  */
-float LMA_Fast_FPDiv(float a, float b);
+float LMA_FPDiv_Fast(float a, float b);
 
 /** Retusn the sqaure root of the float passed
  * @param a - number to be sqrt.
  * @return sqrt(a)
  */
-float LMA_Fast_FPSqrt(float a);
+float LMA_FPSqrt_Fast(float a);
 
 /** Retusn the absolute of the float passed
  * @param a - number to be absoluted.
  * @return abs(a)
  */
-float LMA_Fast_FPAbs(float a);
+float LMA_FPAbs_Fast(float a);
 
 /** @brief handles sample reset between cycles.
  * @details Performs:
@@ -100,22 +100,6 @@ void LMA_AccRun(LMA_Workspace *const p_ws);
  * @param[inout] pointer to data to work with.
  */
 void LMA_AccGet(LMA_Workspace *const p_ws);
-
-/** @brief Multiples a and b and stores the result in result
- * @details - MUST BE POSITIVE A AND B.
- * @param res - pointer to location to store result.
- * @param a - first operand
- * @param b - second operand.
- */
-void LMA_AccMultiply(acc_ext_t *res, acc_t a, acc_t b);
-
-/** @brief Fast square root algorithm
- * @details We make this available here for potential device/platform optimisations.
- * @details https://en.wikipedia.org/wiki/Methods_of_computing_square_roots
- * @param[in] val - value to be square rooted
- * @return square root of val
- */
-acc_t LMA_AccSqrt(acc_t val);
 
 
 /******************
@@ -145,4 +129,9 @@ void LMA_IMP_ActiveOff(void);
 void LMA_IMP_ReactiveOn(void);
 /** @brief Callback to turn off reactive impulse LED */
 void LMA_IMP_ReactiveOff(void);
+/** @brief Callback to turn on apparent impulse LED */
+void LMA_IMP_ApparentOn(void);
+/** @brief Callback to turn off apparent impulse LED */
+void LMA_IMP_ApparentOff(void);
+
 #endif /* _LMA_PORT_H */

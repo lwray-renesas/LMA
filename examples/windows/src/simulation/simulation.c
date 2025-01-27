@@ -18,7 +18,7 @@ static thrd_t driver_thread;
 const simulation_params *p_g_sim_params;
 
 /* Configuration required for configuring the library 4500 ws/imp = 800 imp/kwh*/
-static LMA_Config config = {.gcalib = {.fs = 3906.25f, .fline_coeff = 97650.0000f},
+static LMA_Config config = {.gcalib = {.fs = 3906.25f, .fline_coeff = 97650.0000f, .fline_acc_tol_low = 976, .fline_acc_tol_high = 2929},
                             .update_interval = 25,
                             .target_system_frequency = 50.00f,
                             .meter_constant = 4500.00f,
@@ -135,6 +135,12 @@ void Simulation(const simulation_params *const p_sim_params)
                    "\e[1F"
                    "\e[2K"
                    "\e[1F"
+                   "\e[2K"
+                   "\e[1F"
+                   "\e[2K"
+                   "\e[1F"
+                   "\e[2K"
+                   "\e[1F"
                    "\e[2K");
     }
 
@@ -146,6 +152,10 @@ void Simulation(const simulation_params *const p_sim_params)
         ((system_energy.energy.counter.act_imp * config.meter_constant) + system_energy.energy.accumulator.act_imp_ws) / 3600;
     float act_exp_energy_wh =
         ((system_energy.energy.counter.act_exp * config.meter_constant) + system_energy.energy.accumulator.act_exp_ws) / 3600;
+    float app_imp_energy_wh =
+        ((system_energy.energy.counter.app_imp * config.meter_constant) + system_energy.energy.accumulator.app_imp_ws) / 3600;
+    float app_exp_energy_wh =
+        ((system_energy.energy.counter.app_exp * config.meter_constant) + system_energy.energy.accumulator.app_exp_ws) / 3600;
     float c_imp_energy_wh =
         ((system_energy.energy.counter.c_react_imp * config.meter_constant) + system_energy.energy.accumulator.c_react_imp_ws) /
         3600;
@@ -164,14 +174,17 @@ void Simulation(const simulation_params *const p_sim_params)
                      "\t\tFline:   %.4f[Hz]\n\r"
                      "\t\tP:       %.4f[W]\n\r"
                      "\t\tQ:       %.4f[VAR]\n\r"
+                     "\t\tS:       %.4f[VA]\n\r"
                      "\t\tAct Imp: %.4f[Wh]\n\r"
                      "\t\tAct Exp: %.4f[Wh]\n\r"
+                     "\t\tApp Imp: %.4f[Wh]\n\r"
+                     "\t\tApp Exp: %.4f[Wh]\n\r"
                      "\t\tC Imp:   %.4f[Wh]\n\r"
                      "\t\tC Exp:   %.4f[Wh]\n\r"
                      "\t\tL Imp:   %.4f[Wh]\n\r"
                      "\t\tL Exp:   %.4f[Wh]\n\r",
-                     measurements.vrms, measurements.irms, measurements.fline, measurements.p, measurements.q,
-                     act_imp_energy_wh, act_exp_energy_wh, c_imp_energy_wh, c_exp_energy_wh, l_imp_energy_wh, l_exp_energy_wh);
+                     measurements.vrms, measurements.irms, measurements.fline, measurements.p, measurements.q, measurements.s,
+                     act_imp_energy_wh, act_exp_energy_wh, app_imp_energy_wh, app_exp_energy_wh, c_imp_energy_wh, c_exp_energy_wh, l_imp_energy_wh, l_exp_energy_wh);
   }
 
   /************************
