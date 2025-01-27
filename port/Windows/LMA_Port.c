@@ -250,8 +250,8 @@ static int Driver_thread(void *p_arg)
     if (adc_running)
     {
       /* We are removing the bottom 3 bits of noise*/
-      phase.samples.voltage = p_sim_params->current_samples[sample];
-      phase.samples.current = p_sim_params->voltage_samples[sample];
+      phase.samples.voltage = p_sim_params->voltage_samples[sample];
+      phase.samples.current = p_sim_params->current_samples[sample];
       phase.samples.voltage90 = Phase_shift_90deg(phase.samples.voltage);
 
       LMA_CB_ADC_SinglePhase();

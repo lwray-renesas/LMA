@@ -30,7 +30,7 @@ static LMA_Config config = {.gcalib = {.fs = 3906.25f, .fline_coeff = 97650.0000
 /* Now define our phase pointing to our data structure*/
 LMA_Phase phase;
 
-LMA_PhaseCalibration default_calib = {.vrms_coeff = 2334.1467f, .irms_coeff = 487075.6562f, .p_coeff = 1136906112.0000};
+LMA_PhaseCalibration default_calib = {.vrms_coeff = 21177.2051f, .irms_coeff = 53685.3828f, .p_coeff = 1136906368.0000f};
 
 /* Define our system energy struct*/
 LMA_SystemEnergy system_energy = {.impulse = {.led_on_count = 39, /* 10ms at 3906 Hz sampling frequency*/
