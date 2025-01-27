@@ -99,7 +99,7 @@ static inline float LMA_FloatReciprocal(uint32_t a)
     y = (uint32_t)-(int32_t)(y * a); /* y = 1 - arg * approx */
 
     /* y = y * y + y */
-    R_MACL->MULC = 0;
+    R_MACL->MULC = 0; /* Multiply Only, Unsigned Integer*/
     R_MACL->MUL32U = y;
     R_MACL->MULB4 = y;
     __NOP();
@@ -190,7 +190,7 @@ float LMA_FPMul_Fast(float a, float b)
     uint32_t result = ((*(uint32_t*)&a) & FLOAT_SIGN_MASK) ^ ((*(uint32_t*)&b) & FLOAT_SIGN_MASK);
     result |= ((*(uint32_t*)&a) & FLOAT_EXP_MASK) + ((*(uint32_t*)&b) & FLOAT_EXP_MASK) - (127 << FLOAT_EXP_SHIFT);
 
-    R_MACL->MULC = 0;
+    R_MACL->MULC = 0; /* Multiply Only, Unsigned Integer*/
     R_MACL->MUL32U = (*((uint32_t*)&(a)) & FLOAT_MANTISSA_MASK) | (1 << FLOAT_MANTISSA_BITS);
     R_MACL->MULB4 = (*((uint32_t*)&(b)) & FLOAT_MANTISSA_MASK) | (1 << FLOAT_MANTISSA_BITS);
     __NOP();
@@ -239,7 +239,7 @@ float LMA_FPAbs_Fast(float a)
 
 void LMA_AccReset(LMA_Workspace *const p_ws)
 {
-    R_MACL->MULC = 3;
+    R_MACL->MULC = 0xC0; /* MAC, Signed Integer*/
     R_MACL->MAC32S = *((uint32_t*)&(p_ws->p_samples->current));
     R_MACL->MULR0.MULRL = 0;
     R_MACL->MULR0.MULRH = 0;
@@ -280,7 +280,7 @@ void LMA_AccReset(LMA_Workspace *const p_ws)
 
 void LMA_AccRun(LMA_Workspace *const p_ws)
 {
-    R_MACL->MULC = 3;
+    R_MACL->MULC = 3; /* MAC, Signed Integer*/
     R_MACL->MAC32S = *((uint32_t*)&(p_ws->p_samples->current));
     R_MACL->MULB0 = *((uint32_t*)&(p_ws->p_samples->current));
     __NOP();
