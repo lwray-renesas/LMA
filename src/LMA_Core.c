@@ -1,6 +1,4 @@
 #include "LMA_Core.h"
-#include "LMA_Port.h"
-#include <stdbool.h>
 #include <string.h>
 
 /* Locally Used Types*/
