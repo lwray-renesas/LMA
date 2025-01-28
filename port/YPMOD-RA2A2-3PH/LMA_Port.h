@@ -17,29 +17,29 @@
 typedef int32_t spl_t;
 /** @brief Defines the accumulator type (generally double the bit-width of the sample) */
 typedef int64_t acc_t;
-/** @brief Defines extended accumulator type for apparent power*/
-typedef struct acc_ext_t
-{
-    uint64_t upper; /**< Upper part of extended accumulator*/
-    uint64_t lower; /**< Lower part of extended accumulator*/
-}acc_ext_t;
 
-/** @brief dedicated struct for a sample set */
-typedef struct LMA_Samples
+/** @brief accumulators for accumulating samples*/
+typedef struct LMA_Accumulators
 {
-  spl_t voltage;   /**< Voltage ADC sample */
-  spl_t current;   /**< Current ADC sample */
-  spl_t voltage90; /**< Sample used to contain the phase shifted voltage signal */
-} LMA_Samples;
+    acc_t vacc; /**< Voltage accumulator*/
+    acc_t iacc; /**< Current accumulator*/
+    acc_t pacc; /**< Power accumulator*/
+    acc_t qacc; /**< Reactive accumulator*/
+    uint32_t sample_count; /**< line frequency accumulator*/
+} LMA_Accumulators;
 
 /** @brief Some glue logic between the phases and porting layer to enable work on a phase between systems*/
 typedef struct LMA_Workspace
 {
-    LMA_Samples *p_samples; /**< Pointer to current sample set*/
-    acc_t * p_vacc; /**< Pointer to voltage accumulator*/
-    acc_t * p_iacc; /**< Pointer to current accumulator*/
-    acc_t * p_pacc; /**< Pointer to power accumulator*/
-    acc_t * p_qacc; /**< Pointer to reactive accumulator*/
+    /** @brief dedicated struct for a sample set */
+    struct LMA_Samples
+    {
+      spl_t voltage;   /**< Voltage ADC sample */
+      spl_t current;   /**< Current ADC sample */
+      spl_t voltage90; /**< Sample used to contain the phase shifted voltage signal */
+    } samples;
+
+    LMA_Accumulators accs; /**< Block of accumulators to work with*/
 }LMA_Workspace;
 
 /** Converts an accumulator type to a floating point type.
@@ -83,8 +83,9 @@ float LMA_FPAbs_Fast(float a);
  * pacc = i_sample * v_sample
  * qacc = i_sample * v90_sample
  * @param[inout] pointer to data to work with.
+ * @param[in] phase_id - phase identifier for managing porting resources.
  */
-void LMA_AccReset(LMA_Workspace *const p_ws);
+void LMA_AccReset(LMA_Workspace *const p_ws, const uint32_t phase_id);
 
 /** @brief handles sample accumulation
  * @details Performs:
@@ -93,13 +94,16 @@ void LMA_AccReset(LMA_Workspace *const p_ws);
  * pacc += i_sample * v_sample
  * qacc += i_sample * v90_sample
  * @param[inout] pointer to data to work with.
+ * @param[in] phase_id - phase identifier for managing porting resources.
  */
-void LMA_AccRun(LMA_Workspace *const p_ws);
+void LMA_AccRun(LMA_Workspace *const p_ws, const uint32_t phase_id);
 
-/** @brief Gets internal accumulators into workspace variables.
+/** @brief Loads the accumulators into the workspace.
  * @param[inout] pointer to data to work with.
+ * @param[inout] pointer to accumulators to copy results to.
+ * @param[in] phase_id - phase identifier for managing porting resources.
  */
-void LMA_AccGet(LMA_Workspace *const p_ws);
+void LMA_AccLoad(LMA_Workspace *const p_ws, LMA_Accumulators *const p_accs, const uint32_t phase_id);
 
 
 /******************
@@ -112,6 +116,12 @@ void LMA_ADC_Start(void);
 /** @brief Stops the ADC running */
 void LMA_ADC_Stop(void);
 
+/** @brief Initialises TMR but doesn't start it */
+void LMA_TMR_Init(void);
+/** @brief Starts the TMR running */
+void LMA_TMR_Start(void);
+/** @brief Stops the TMR running */
+void LMA_TMR_Stop(void);
 
 /** @brief Initialises RTC but doesn't start it */
 void LMA_RTC_Init(void);

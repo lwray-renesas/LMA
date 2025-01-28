@@ -26,41 +26,32 @@ typedef struct LMA_ZeroCross
 /** @brief Data related to voltage signal processing */
 typedef struct LMA_Voltage
 {
-  acc_t v_acc;               /**< Accumulated voltage signal */
   float v_rms;             /**< Temporary value to store voltage computation [V] */
-  uint32_t fline_acc;        /**< accumulating counter to compute line frequency */
-  uint32_t fline_latch;        /**< accumulating counter to compute line frequency */
   float fline;             /**< Computed line frequency [Hz]*/
-  uint32_t v_sample_counter; /**< counter to count the number of samples on the voltage*/
-  float v_sample_counter_fp; /**< counter to count the number of samples on the voltage converted to float for computations*/
   LMA_ZeroCross v_zc;        /**< Zero cross tracking variables for voltage */
 } LMA_Voltage;
 
 /** @brief Data related to current signal processing */
 typedef struct LMA_Current
 {
-  acc_t i_acc;   /**< Accumulated current signal */
   float i_rms; /**< Temporary value to store current computation */
 } LMA_Current;
 
 /** @brief Data related to power (P, Q & S) signal processing */
 typedef struct LMA_Power
 {
-  acc_t p_acc; /**< Accumulated active power signal */
   float p;   /**< Variable to store active power consumption */
-  acc_t q_acc; /**< Accumulated reactive power signal */
   float q;   /**< Variable to store reactive power consumption */
-  acc_ext_t s_acc; /**< Accumulated apparent power signal (unused currently) */
   float s;   /**< Variable to store apparent power consumption */
 } LMA_Power;
 
-/** @brief Data related to energy accumulation per phase */
-typedef struct LMA_Energy
+/** @brief Data related to energy accumulation per phase, per ADC sample */
+typedef struct LMA_EnergyUnit
 {
-  float act_unit;   /**< Currently computed unit of active energy per ADC interval*/
-  float app_unit; /**< Currently computed unit of apparent energy per ADC interval*/
-  float react_unit; /**< Currently computed unit of reactive energy per ADC interval*/
-} LMA_Energy;
+  float act;   /**< Currently computed unit of active energy per ADC interval*/
+  float app; /**< Currently computed unit of apparent energy per ADC interval*/
+  float react; /**< Currently computed unit of reactive energy per ADC interval*/
+} LMA_EnergyUnit;
 
 /** @brief Data related to the calibration of the project */
 typedef struct LMA_GlobalCalibration
@@ -68,8 +59,8 @@ typedef struct LMA_GlobalCalibration
   float fs;          /**< Sampling frequency*/
   float deltat;      /**< 1 / Sampling frequency*/
   float fline_coeff; /**< Line Frequency Coefficient*/
-  uint32_t fline_acc_tol_low; /**< Low tolerance for valid input AC signal according to accumulator (default = ((fs/fline) * line_count) / 2 )*/
-  uint32_t fline_acc_tol_high; /**< High tolerance for valid input AC signal according to accumulator (default = ((fs/fline) * line_count) + ((fs/fline) * line_count) / 2) )*/
+  uint32_t fline_tol_low; /**< Low tolerance for valid input AC signal according to accumulator (default = ((fs/fline) * line_count) / 2 )*/
+  uint32_t fline_tol_high; /**< High tolerance for valid input AC signal according to accumulator (default = ((fs/fline) * line_count) + ((fs/fline) * line_count) / 2) )*/
 } LMA_GlobalCalibration;
 
 /** @brief Data related to the calibration of a phase pair */
@@ -81,6 +72,12 @@ typedef struct LMA_PhaseCalibration
   float p_coeff;             /**< Power coeffcicent*/
 } LMA_PhaseCalibration;
 
+/** @brief Struct for signalling between LMA components*/
+typedef struct LMA_Signals
+{
+    bool accumulators_ready;   /**< Flag to indicate our accumulators are ready for update */
+}LMA_Signals;
+
 /** @brief Data related to phase (V & I pair) signal processing */
 typedef struct LMA_Phase
 {
@@ -89,12 +86,12 @@ typedef struct LMA_Phase
   LMA_Voltage voltage;                   /**< Voltage data processing block */
   LMA_Current current;                   /**< Current data processing block */
   LMA_Power power;                       /**< Power data processing block */
-  LMA_Energy energy;                     /**< Energy processing block */
-  LMA_Samples samples;                   /**< Sample structure*/
-  LMA_Workspace ws;                      /**< Porting glue*/
+  LMA_EnergyUnit energy_units;                     /**< Energy processing block */
+  LMA_Workspace ws;                      /**< Porting glue - contains samples!*/
+  LMA_Accumulators accs;                 /**< snapshot of last updated accumulators*/
   LMA_Status status;                     /**< Phase status */
-  bool calibrating;                      /**< Flag to indicate we are in calibration mode */
-  bool disable_acc;                      /**< Flag to disable accumulation*/
+  LMA_Signals signals;                   /**< Phase signals */
+  uint32_t phase_number;                 /**< zero indexed phase number for identification*/
 } LMA_Phase;
 
 /** @brief Data related to energy computations and impulse control */
