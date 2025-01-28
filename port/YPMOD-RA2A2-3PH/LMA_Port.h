@@ -42,13 +42,13 @@ typedef struct LMA_Workspace
     LMA_Accumulators accs; /**< Block of accumulators to work with*/
 }LMA_Workspace;
 
-/** Converts an accumulator type to a floating point type.
+/** @brief Converts an accumulator type to a floating point type.
  * @param acc - accumulator for conversion.
  * @return floating point representation.
  */
 float LMA_AccToFloat(acc_t acc);
 
-/** Multiplies two floating ppint numbers.
+/** @brief Multiplies two floating point numbers.
  * @details - does not handle special cases ! NaN, denorm and norm etc.
  * @param a - first operand.
  * @param b - second operand.
@@ -56,7 +56,7 @@ float LMA_AccToFloat(acc_t acc);
  */
 float LMA_FPMul_Fast(float a, float b);
 
-/** Divides two floating ppint numbers.
+/** @brief Divides two floating point numbers.
  * @details - does not handle special cases ! NaN, denorm and norm etc.
  * @param a - first operand.
  * @param b - second operand.
@@ -64,13 +64,13 @@ float LMA_FPMul_Fast(float a, float b);
  */
 float LMA_FPDiv_Fast(float a, float b);
 
-/** Retusn the sqaure root of the float passed
+/** @brief Returns the square root of the float passed.
  * @param a - number to be sqrt.
  * @return sqrt(a)
  */
 float LMA_FPSqrt_Fast(float a);
 
-/** Retusn the absolute of the float passed
+/** @brief Returns the absolute of the float passed
  * @param a - number to be absoluted.
  * @return abs(a)
  */
@@ -98,12 +98,25 @@ void LMA_AccReset(LMA_Workspace *const p_ws, const uint32_t phase_id);
  */
 void LMA_AccRun(LMA_Workspace *const p_ws, const uint32_t phase_id);
 
-/** @brief Loads the accumulators into the workspace.
+/** @brief Loads the accumulators into the accumulator structure.
  * @param[inout] pointer to data to work with.
  * @param[inout] pointer to accumulators to copy results to.
  * @param[in] phase_id - phase identifier for managing porting resources.
  */
 void LMA_AccLoad(LMA_Workspace *const p_ws, LMA_Accumulators *const p_accs, const uint32_t phase_id);
+
+/** @brief phase shifts voltage signal
+ * @details
+ * - 50Hz signal is 20ms.
+ * - 50Hz signal being 360degree of period, to get 90degree we divide by 4.
+ * - 20ms divided by 4 = 5ms.
+ * - to delay 5ms with a 3906Hz clock we can do 0.005/(1/3906) = 19.53 samples - so we do 20
+ * samples.
+ *
+ * @param[in] new_voltage - new voltage to store in the buffer
+ * @return voltage sample 90degree (20 samples) ago.
+ */
+spl_t LMA_PhaseShift90(spl_t new_voltage);
 
 
 /******************

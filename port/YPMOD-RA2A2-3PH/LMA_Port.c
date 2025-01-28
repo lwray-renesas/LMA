@@ -340,6 +340,38 @@ void LMA_AccLoad(LMA_Workspace *const p_ws, LMA_Accumulators *const p_accs, cons
     p_accs->sample_count = p_ws->accs.sample_count;
 }
 
+spl_t LMA_PhaseShift90(spl_t new_voltage)
+{
+    static spl_t voltage_buffer[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    static uint8_t buffer_index = 0;
+
+    uint8_t buffer_index_19 = buffer_index + 2;
+    uint8_t buffer_index_20 = buffer_index + 1;
+
+    if(buffer_index_19 > 21)
+    {
+        buffer_index_19 -= 21;
+    }
+
+    if(buffer_index_20 > 21)
+    {
+        buffer_index_20 -= 21;
+    }
+
+    /* Append new voltage*/
+    voltage_buffer[buffer_index] = new_voltage;
+
+    /* Interpolate 19.53 samples - just take the mid point*/
+    int32_t interpolated_value =
+            ((voltage_buffer[buffer_index_19] * 60) >> 7) + ((voltage_buffer[buffer_index_20] * 68) >> 7);
+
+    buffer_index = buffer_index_20;
+
+    /* Convert back to its 32b value*/
+    return interpolated_value;
+}
+
 void LMA_ADC_Init(void)
 {
     R_SDADC_B_Open(&g_adc0_ctrl, &g_adc0_cfg);
@@ -425,4 +457,3 @@ void LMA_IMP_ApparentOff(void)
 {
     /* TODO: Populate*/
 }
-

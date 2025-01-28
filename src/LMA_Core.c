@@ -189,11 +189,9 @@ static inline void Phase_compute(LMA_Phase *const p_phase)
       const float iacc_fp = LMA_AccToFloat(p_phase->accs.iacc);
 
       /* Vrms*/
-      p_phase->voltage.v_rms =
-          LMA_FPDiv_Fast(LMA_FPSqrt_Fast(LMA_FPDiv_Fast(vacc_fp, sample_count_fp)), p_phase->calib.vrms_coeff);
+      p_phase->voltage.v_rms = LMA_FPDiv_Fast(LMA_FPSqrt_Fast(LMA_FPDiv_Fast(vacc_fp, sample_count_fp)), p_phase->calib.vrms_coeff);
       /* Irms*/
-      p_phase->current.i_rms =
-          LMA_FPDiv_Fast(LMA_FPSqrt_Fast(LMA_FPDiv_Fast(iacc_fp, sample_count_fp)), p_phase->calib.irms_coeff);
+      p_phase->current.i_rms = LMA_FPDiv_Fast(LMA_FPSqrt_Fast(LMA_FPDiv_Fast(iacc_fp, sample_count_fp)), p_phase->calib.irms_coeff);
       /* Active Power (P)*/
       p_phase->power.p = LMA_FPDiv_Fast(LMA_AccToFloat(p_phase->accs.pacc), power_divisor);
       /* Reactive Power (Q)*/
@@ -531,70 +529,6 @@ void LMA_PhaseCalibrate(LMA_PhaseCalibArgs *const calib_args)
 
   LMA_TMR_Start();
   LMA_ADC_Start();
-
-  /* pseudo code
-
-void Phase_angle_compute(void)
-{
-    static pa_state state = WAIT_FOR_CURRENT_ZERO_CROSS;
-
-    static const param_t degrees_per_sample = (360.00 * fline_tgt) / fs = (360.00 * 50.00) / 3906.25 = 4.608 [deg/sample
-
-    if(WAIT_FOR_CURRENT_ZERO_CROSS == state)
-    {
-            izc = sample [i] > 0 && sample [i-1] <= 0
-            if(izc)
-            {
-                    i_fraction = sample [i] / (sample [i] - sample [i-1])
-                    state = WAIT_FOR_VOLTAGE_ZERO_CROSS
-            }
-    }
-
-    if(WAIT_FOR_VOLTAGE_ZERO_CROSS == state)
-    {
-            vzc = sample [v] > 0 && sample [v-1] <= 0
-            if(vzc)
-            {
-                    v_fraction = sample [v] / (sample [v] - sample [v-1])
-                    state = COMPUTE
-            }
-            else
-            {
-                    ++v_integer;
-            }
-    }
-
-    if(COMPUTE == state)
-    {
-            sample_diff = (v_integer + v_fraction) - i_fraction; // might be (1-i_fraction) - can't be arsed just trial and
-error the logic. ps_acc += sample_diff * degrees_per_sample;
-            ++line_cycle;
-            if(line_cycle == enough)
-            {
-                    state = FINALISE
-            }
-            else
-            {
-                    state = WAIT_FOR_CURRENT_ZERO_CROSS;
-            }
-    }
-
-    if(FINALISE == state)
-    {
-            ps = ps_acc / line_cycle;
-
-            if(ps approx 180.00)
-                    V and I switched (or neutral sampling).
-            else if(ps approx 90 || ps approx 270)
-                    Reactive load set - must be UPF.
-            else
-                    maybe some more validity checks
-
-            state = DONE;
-    }
-}
-
-   */
 }
 
 void LMA_GlobalCalibrate(LMA_GlobalCalibArgs *const calib_args)
