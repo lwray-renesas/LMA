@@ -160,8 +160,12 @@ static inline void Phase_accumulate(LMA_Phase *const p_phase)
             /* Copy the accumulators across*/
             LMA_AccLoad(&(p_phase->ws), &(p_phase->accs), p_phase->phase_number);
 
+            /* Signal Accumulators are ready*/
+            p_phase->signals.accumulators_ready = true;
+
             /* Reset*/
             LMA_AccReset(&(p_phase->ws), p_phase->phase_number);
+
             /* Reset Zerocross counter to continue*/
             p_phase->voltage.v_zc.zero_cross_counter = 0;
 
@@ -177,13 +181,16 @@ static inline void Phase_compute(LMA_Phase *const p_phase)
 {
     if(p_phase->signals.accumulators_ready)
     {
+        const float sample_count_fp = LMA_AccToFloat((acc_t)p_phase->accs.sample_count);
         p_phase->signals.accumulators_ready = false;
 
+        /* Frequency*/
+        p_phase->voltage.fline = LMA_FPDiv_Fast(p_config->gcalib.fline_coeff, sample_count_fp);
+
         /* Check for valid frequency input*/
-        if(     p_phase->accs.sample_count < p_config->gcalib.fline_tol_high &&
-                p_phase->accs.sample_count > p_config->gcalib.fline_tol_low)
+        if(p_phase->voltage.fline < p_config->fline_tol_high &&
+           p_phase->voltage.fline > p_config->fline_tol_low)
         {
-            const float sample_count_fp = LMA_AccToFloat((acc_t)p_phase->accs.sample_count);
             const float power_divisor = LMA_FPMul_Fast(sample_count_fp, p_phase->calib.p_coeff);
             const float vacc_fp = LMA_AccToFloat(p_phase->accs.vacc);
             const float iacc_fp = LMA_AccToFloat(p_phase->accs.iacc);
@@ -192,8 +199,6 @@ static inline void Phase_compute(LMA_Phase *const p_phase)
             p_phase->voltage.v_rms = LMA_FPDiv_Fast(LMA_FPSqrt_Fast(LMA_FPDiv_Fast(vacc_fp, sample_count_fp)), p_phase->calib.vrms_coeff);
             /* Irms*/
             p_phase->current.i_rms = LMA_FPDiv_Fast(LMA_FPSqrt_Fast(LMA_FPDiv_Fast(iacc_fp, sample_count_fp)), p_phase->calib.irms_coeff);
-            /* Frequency*/
-            p_phase->voltage.fline = LMA_FPDiv_Fast(p_config->gcalib.fline_coeff, sample_count_fp);
             /* Active Power (P)*/
             p_phase->power.p = LMA_FPDiv_Fast(LMA_AccToFloat(p_phase->accs.pacc), power_divisor);
             /* Reactive Power (Q)*/
@@ -482,6 +487,7 @@ void LMA_Stop(void)
 void LMA_PhaseCalibrate(LMA_PhaseCalibArgs *const calib_args)
 {
     uint32_t backup_update_interval = p_config->update_interval;
+    float sample_count_fp;
 
     LMA_ADC_Stop();
     LMA_TMR_Stop();
@@ -498,13 +504,13 @@ void LMA_PhaseCalibrate(LMA_PhaseCalibArgs *const calib_args)
 
     LMA_ADC_Stop();
 
+    sample_count_fp = (float)calib_args->p_phase->accs.sample_count;
+
     /* Update Coefficients*/
     calib_args->p_phase->calib.vrms_coeff =
-            LMA_FPSqrt_Fast((float)calib_args->p_phase->accs.vacc / (float)calib_args->p_phase->accs.sample_count) /
-            calib_args->vrms_tgt;
+            LMA_FPSqrt_Fast((float)calib_args->p_phase->accs.vacc / sample_count_fp) / calib_args->vrms_tgt;
     calib_args->p_phase->calib.irms_coeff =
-            LMA_FPSqrt_Fast((float)calib_args->p_phase->accs.iacc / (float)calib_args->p_phase->accs.sample_count) /
-            calib_args->irms_tgt;
+            LMA_FPSqrt_Fast((float)calib_args->p_phase->accs.iacc / sample_count_fp) / calib_args->irms_tgt;
     calib_args->p_phase->calib.p_coeff = calib_args->p_phase->calib.vrms_coeff * calib_args->p_phase->calib.irms_coeff;
 
     /* Restore operation*/
@@ -581,7 +587,6 @@ error the logic. ps_acc += sample_diff * degrees_per_sample;
 
 void LMA_GlobalCalibrate(LMA_GlobalCalibArgs *const calib_args)
 {
-    float fline_typ_count = 0.0f;
     LMA_CRITICAL_SECTION_PREPARE();
 
     LMA_ADC_Stop();
@@ -609,13 +614,7 @@ void LMA_GlobalCalibrate(LMA_GlobalCalibArgs *const calib_args)
 
     /* Care more about accuracy here than speed*/
     p_config->gcalib.fs = (float)calib_fs.adc_counter / ((float)calib_args->rtc_period * (float)calib_args->rtc_cycles);
-    p_config->gcalib.deltat = 1.00f / p_config->gcalib.fs;
     p_config->gcalib.fline_coeff = p_config->gcalib.fs * (float)p_config->update_interval;
-
-    /* TODO: Needs to be done at init, so we can check the line frequency for validity in this routine*/
-    fline_typ_count = (p_config->gcalib.fs / p_config->target_system_frequency) * (float)p_config->update_interval;
-    p_config->gcalib.fline_tol_high = (uint32_t) (fline_typ_count + (fline_typ_count / 2.00f));
-    p_config->gcalib.fline_tol_low = (uint32_t) (fline_typ_count / 2.00f);
 
     LMA_TMR_Start();
     LMA_ADC_Start();

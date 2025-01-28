@@ -18,9 +18,11 @@ static thrd_t driver_thread;
 const simulation_params *p_g_sim_params;
 
 /* Configuration required for configuring the library 4500 ws/imp = 800 imp/kwh*/
-static LMA_Config config = {.gcalib = {.fs = 3906.25f, .fline_coeff = 97650.0000f, .fline_acc_tol_low = 976, .fline_acc_tol_high = 2929},
+static LMA_Config config = {.gcalib = {.fs = 3906.25f, .fline_coeff = 97650.0000f},
                             .update_interval = 25,
-                            .target_system_frequency = 50.00f,
+                            .fline_target = 50.00f,
+                            .fline_tol_low = 25.00f,
+                            .fline_tol_high = 75.00f,
                             .meter_constant = 4500.00f,
                             .no_load_i = 0.01f,
                             .no_load_p = 2.00f,

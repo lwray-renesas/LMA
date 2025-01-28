@@ -57,10 +57,7 @@ typedef struct LMA_EnergyUnit
 typedef struct LMA_GlobalCalibration
 {
   float fs;          /**< Sampling frequency*/
-  float deltat;      /**< 1 / Sampling frequency*/
   float fline_coeff; /**< Line Frequency Coefficient*/
-  uint32_t fline_tol_low; /**< Low tolerance for valid input AC signal according to accumulator (default = ((fs/fline) * line_count) / 2 )*/
-  uint32_t fline_tol_high; /**< High tolerance for valid input AC signal according to accumulator (default = ((fs/fline) * line_count) + ((fs/fline) * line_count) / 2) )*/
 } LMA_GlobalCalibration;
 
 /** @brief Data related to the calibration of a phase pair */
@@ -169,7 +166,9 @@ typedef struct LMA_Config
 {
   LMA_GlobalCalibration gcalib;    /**< Global calibration data block */
   uint32_t update_interval;        /**< Number of V line cycles to between computation updates. */
-  float target_system_frequency; /**< Frequency of the target system */
+  float fline_target; /**< Frequency of the target system */
+  float fline_tol_low; /**< Lower tolerance of system frequency*/
+  float fline_tol_high; /**< Upper tolerance of system frequency*/
   float meter_constant;          /**< Ws/imp ... translated Ws/imp = 3,600,000 / [imp/kwh]*/
   float no_load_i;  /**< No load current value */
   float no_load_p;  /**< No active/reactive power load value */

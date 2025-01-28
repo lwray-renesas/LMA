@@ -130,7 +130,6 @@ void LMA_RTC_Start(void);
 /** @brief Stops the RTC running */
 void LMA_RTC_Stop(void);
 
-
 /** @brief Callback to turn on active impulse LED */
 void LMA_IMP_ActiveOn(void);
 /** @brief Callback to turn off active impulse LED */

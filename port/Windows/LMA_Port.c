@@ -8,14 +8,10 @@
 
 extern const simulation_params *p_g_sim_params;
 extern LMA_Phase phase;
+static bool tmr_running = false;
 static bool adc_running = false;
 static bool rtc_running = false;
 bool driver_thread_running = false;
-
-static acc_t l_i_acc = 0;
-static acc_t l_p_acc = 0;
-static acc_t l_q_acc = 0;
-static acc_t l_v_acc = 0;
 
 /** @brief thread to emulate drivers running asynch to main thread
  * @param[inout] pointer to args for thread - passing simulation_params for controlling the sim
@@ -61,65 +57,31 @@ float LMA_FPAbs_Fast(float a)
     return *(float*)&tmp;
 }
 
-void LMA_AccReset(LMA_Workspace *const p_ws)
+void LMA_AccReset(LMA_Workspace *const p_ws, const uint32_t phase_id)
 {
-  l_i_acc = (acc_t)p_ws->p_samples->current * (acc_t)p_ws->p_samples->current;
-  l_p_acc = (acc_t)p_ws->p_samples->current * (acc_t)p_ws->p_samples->voltage;
-  l_q_acc = (acc_t)p_ws->p_samples->current * (acc_t)p_ws->p_samples->voltage90;
-  l_v_acc = (acc_t)p_ws->p_samples->voltage * (acc_t)p_ws->p_samples->voltage;
+  p_ws->accs.iacc = ((acc_t)p_ws->samples.current * (acc_t)p_ws->samples.current);
+  p_ws->accs.pacc = ((acc_t)p_ws->samples.current * (acc_t)p_ws->samples.voltage);
+  p_ws->accs.qacc = ((acc_t)p_ws->samples.current * (acc_t)p_ws->samples.voltage90);
+  p_ws->accs.vacc = ((acc_t)p_ws->samples.voltage * (acc_t)p_ws->samples.voltage);
+  p_ws->accs.sample_count = 1;
 }
 
-void LMA_AccRun(LMA_Workspace *const p_ws)
+void LMA_AccRun(LMA_Workspace *const p_ws, const uint32_t phase_id)
 {
-  l_i_acc += ((acc_t)p_ws->p_samples->current * (acc_t)p_ws->p_samples->current);
-  l_p_acc += ((acc_t)p_ws->p_samples->current * (acc_t)p_ws->p_samples->voltage);
-  l_q_acc += ((acc_t)p_ws->p_samples->current * (acc_t)p_ws->p_samples->voltage90);
-  l_v_acc += ((acc_t)p_ws->p_samples->voltage * (acc_t)p_ws->p_samples->voltage);
+  p_ws->accs.iacc += ((acc_t)p_ws->samples.current * (acc_t)p_ws->samples.current);
+  p_ws->accs.pacc += ((acc_t)p_ws->samples.current * (acc_t)p_ws->samples.voltage);
+  p_ws->accs.qacc += ((acc_t)p_ws->samples.current * (acc_t)p_ws->samples.voltage90);
+  p_ws->accs.vacc += ((acc_t)p_ws->samples.voltage * (acc_t)p_ws->samples.voltage);
+  ++p_ws->accs.sample_count;
 }
 
-void LMA_AccGet(LMA_Workspace *const p_ws)
+void LMA_AccLoad(LMA_Workspace *const p_ws, LMA_Accumulators *const p_accs, const uint32_t phase_id)
 {
-  *p_ws->p_iacc = l_i_acc;
-  *p_ws->p_pacc = l_p_acc;
-  *p_ws->p_qacc = l_q_acc;
-  *p_ws->p_vacc = l_v_acc;
-}
-
-void LMA_AccMultiply(acc_ext_t *res, acc_t a, acc_t b)
-{
-  (void)a;
-  (void)b;
-  (void)res;
-  /* TODO: Populate*/
-}
-
-acc_t LMA_AccSqrt(acc_t val)
-{
-  acc_t x = val, c = 0;
-  if (val > 0)
-  {
-    acc_t d = (acc_t)1 << (acc_t)62;
-
-    while (d > val)
-    {
-      d >>= 2;
-    }
-
-    while (d != 0)
-    {
-      if (x >= c + d)
-      {
-        x -= c + d;
-        c = (c >> 1) + d;
-      }
-      else
-      {
-        c >>= 1;
-      }
-      d >>= 2;
-    }
-  }
-  return c;
+  p_accs->iacc = p_ws->accs.iacc;
+  p_accs->pacc = p_ws->accs.pacc;
+  p_accs->qacc = p_ws->accs.qacc;
+  p_accs->vacc = p_ws->accs.vacc;
+  p_accs->sample_count = p_ws->accs.sample_count;
 }
 
 void LMA_ADC_Init(void)
@@ -134,6 +96,21 @@ void LMA_ADC_Start(void)
 void LMA_ADC_Stop(void)
 {
   adc_running = false;
+}
+
+void LMA_TMR_Init(void)
+{
+
+}
+
+void LMA_TMR_Start(void)
+{
+  tmr_running = true;
+}
+
+void LMA_TMR_Stop(void)
+{
+  tmr_running = false;
 }
 
 void LMA_RTC_Init(void)
@@ -221,8 +198,8 @@ static int32_t Phase_shift_90deg(int32_t new_voltage)
 /* The easy way*/
 #if 1
   /* Interpolate 19.53 samples - just take the mid point*/
-  int32_t interpolated_value =
-      ((voltage_buffer[buffer_index_19] * 480) >> 10) + ((voltage_buffer[buffer_index_20] * 544) >> 10);
+    int32_t interpolated_value =
+            ((voltage_buffer[buffer_index_19] * 60) >> 7) + ((voltage_buffer[buffer_index_20] * 68) >> 7);
 #endif
 
   buffer_index = buffer_index_20;
@@ -235,9 +212,11 @@ static int Driver_thread(void *p_arg)
 {
   size_t sample = 0;
   size_t rtc_counter = 0;
+  size_t tmr_counter = 0;
   size_t sleep_counter = 0;
   const simulation_params *const p_sim_params = (simulation_params *)p_arg;
   const uint32_t one_sec = (uint32_t)(p_sim_params->fs);
+  const uint32_t ten_msec = (uint32_t)(p_sim_params->fs) / 40;
   driver_thread_running = true;
 
   /* Keep running while there are samples available in the simulation*/
@@ -256,15 +235,28 @@ static int Driver_thread(void *p_arg)
       }
     }
 
+    /* TMR Handling*/
+    if (tmr_running)
+    {
+      ++tmr_counter;
+
+      /* Every 10msec in ADC samples - simulate TMR callback*/
+      if (tmr_counter >= ten_msec)
+      {
+        tmr_counter = 0;
+        LMA_CB_TMR();
+      }
+    }
+
     /* ADC Handling*/
     if (adc_running)
     {
       /* We are removing the bottom 3 bits of noise*/
-      phase.samples.voltage = p_sim_params->voltage_samples[sample];
-      phase.samples.current = p_sim_params->current_samples[sample];
-      phase.samples.voltage90 = Phase_shift_90deg(phase.samples.voltage);
+      phase.ws.samples.voltage = p_sim_params->voltage_samples[sample];
+      phase.ws.samples.current = p_sim_params->current_samples[sample];
+      phase.ws.samples.voltage90 = Phase_shift_90deg(phase.ws.samples.voltage);
 
-      LMA_CB_ADC_SinglePhase();
+      LMA_CB_ADC();
 
       ++sample;
     }

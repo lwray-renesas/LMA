@@ -227,7 +227,7 @@ float LMA_FPSqrt_Fast(float a)
      * approx = (((approx * approx) + a)/(approx)) * 0.5;
      */
     float f_approx = LMA_FPMul_Fast(LMA_FPDiv_Fast(LMA_FPMul_Fast(*(float*)&approx, *(float*)&approx) + a, *(float*)&approx), 0.5f);
-    //f_approx = LMA_FPMul_Fast(LMA_FPDiv_Fast(LMA_FPMul_Fast(f_approx, f_approx) + a, f_approx), 0.5f);
+    f_approx = LMA_FPMul_Fast(LMA_FPDiv_Fast(LMA_FPMul_Fast(f_approx, f_approx) + a, f_approx), 0.5f);
     return f_approx;
 }
 
