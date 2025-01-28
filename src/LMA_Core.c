@@ -159,11 +159,6 @@ static inline void Phase_accumulate(LMA_Phase *const p_phase)
         {
             /* Copy the accumulators across*/
             LMA_AccLoad(&(p_phase->ws), &(p_phase->accs), p_phase->phase_number);
-            p_phase->accs.iacc = p_phase->ws.accs.iacc;
-            p_phase->accs.vacc = p_phase->ws.accs.vacc;
-            p_phase->accs.pacc = p_phase->ws.accs.pacc;
-            p_phase->accs.qacc = p_phase->ws.accs.qacc;
-            p_phase->accs.sample_count = p_phase->ws.accs.sample_count;
 
             /* Reset*/
             LMA_AccReset(&(p_phase->ws), p_phase->phase_number);
