@@ -101,7 +101,7 @@ static inline float LMA_FloatReciprocal(uint32_t a)
     /* y = y * y + y */
     R_MACL->MULC = 0; /* Multiply Only, Unsigned Integer*/
     R_MACL->MUL32U = y;
-    R_MACL->MULB4 = y;
+    R_MACL->MULB23 = y;
     __NOP();
     __NOP();
     __NOP();
@@ -110,17 +110,17 @@ static inline float LMA_FloatReciprocal(uint32_t a)
 
     /* approx = y * approx + approx */
     a <<= 15;
-    R_MACL->MUL32U = R_MACL->MULR4.MULRH + y;
-    R_MACL->MULR4.MULRL = 0;
-    R_MACL->MULR4.MULRH = 0;
-    R_MACL->MULB4 = a;
+    R_MACL->MUL32U = R_MACL->MULR23.MULRH + y;
+    R_MACL->MULR23.MULRL = 0;
+    R_MACL->MULR23.MULRH = 0;
+    R_MACL->MULB23 = a;
     __NOP();
     __NOP();
     __NOP();
     __NOP();
     __NOP();
 
-    result |= (R_MACL->MULR4.MULRH + a);
+    result |= (R_MACL->MULR23.MULRH + a);
 
     return *(float*)&result;
 }
@@ -192,23 +192,23 @@ float LMA_FPMul_Fast(float a, float b)
 
     R_MACL->MULC = 0; /* Multiply Only, Unsigned Integer*/
     R_MACL->MUL32U = (*((uint32_t*)&(a)) & FLOAT_MANTISSA_MASK) | (1 << FLOAT_MANTISSA_BITS);
-    R_MACL->MULB4 = (*((uint32_t*)&(b)) & FLOAT_MANTISSA_MASK) | (1 << FLOAT_MANTISSA_BITS);
+    R_MACL->MULB23 = (*((uint32_t*)&(b)) & FLOAT_MANTISSA_MASK) | (1 << FLOAT_MANTISSA_BITS);
     __NOP();
     __NOP();
     __NOP();
     __NOP();
     __NOP();
 
-    if (R_MACL->MULR4.MULRH >= 0x8000)
+    if (R_MACL->MULR23.MULRH >= 0x8000)
     {
         /* Take least significant 16bits from High & most significant 8 bits from Low */
-        result |= (((R_MACL->MULR4.MULRH & 0xFFFF) << 8) | ((R_MACL->MULR4.MULRL & 0xFF000000) >> 24)) & 0x7FFFFF;
+        result |= (((R_MACL->MULR23.MULRH & 0xFFFF) << 8) | ((R_MACL->MULR23.MULRL & 0xFF000000) >> 24)) & 0x7FFFFF;
         result += (1 << FLOAT_EXP_SHIFT);
     }
     else
     {
         /* Take least significant 15bits from High & most significant 9 bits from Low */
-        result |= (((R_MACL->MULR4.MULRH & 0x7FFF) << 9) | ((R_MACL->MULR4.MULRL & 0xFF800000) >> 23)) & 0x7FFFFF;
+        result |= (((R_MACL->MULR23.MULRH & 0x7FFF) << 9) | ((R_MACL->MULR23.MULRL & 0xFF800000) >> 23)) & 0x7FFFFF;
     }
 
     return *((float*)&result);
@@ -327,6 +327,7 @@ void LMA_AccRun(LMA_Workspace *const p_ws, const uint32_t phase_id)
 void LMA_AccLoad(LMA_Workspace *const p_ws, LMA_Accumulators *const p_accs, const uint32_t phase_id)
 {
     (void)p_ws;
+    (void)phase_id;
     *((uint32_t*)(&p_accs->iacc)) = R_MACL->MULR0.MULRL;
     *((uint32_t*)(&p_accs->iacc)+1) = R_MACL->MULR0.MULRH;
     *((uint32_t*)(&p_accs->pacc)) = R_MACL->MULR1.MULRL;
