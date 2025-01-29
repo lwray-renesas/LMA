@@ -276,6 +276,8 @@ static inline void Phase_compute(LMA_Phase *const p_phase)
       /* Apparent Energy*/
       p_phase->energy_units.app = 0;
     }
+
+    p_phase->signals.measurements_ready = true;
   }
 }
 /* END OF FUNCTION*/
@@ -566,12 +568,18 @@ void LMA_GlobalCalibrate(LMA_GlobalCalibArgs *const calib_args)
 
 void LMA_EnergySet(LMA_SystemEnergy *const p_energy)
 {
+    LMA_CRITICAL_SECTION_PREPARE();
+    LMA_CRITICAL_SECTION_ENTER();
   memcpy(&sys_energy, p_energy, sizeof(LMA_SystemEnergy));
+  LMA_CRITICAL_SECTION_EXIT();
 }
 
 void LMA_EnergyGet(LMA_SystemEnergy *const p_energy)
 {
+    LMA_CRITICAL_SECTION_PREPARE();
+    LMA_CRITICAL_SECTION_ENTER();
   memcpy(p_energy, &sys_energy, sizeof(LMA_SystemEnergy));
+  LMA_CRITICAL_SECTION_EXIT();
 }
 
 LMA_Status LMA_StatusGet(const LMA_Phase *const p_phase)
@@ -666,6 +674,47 @@ void LMA_MeasurementsGet(LMA_Phase *const p_phase, LMA_Measurements *const p_mea
   p_measurements->p = LMA_ActivePowerGet(p_phase);
   p_measurements->q = LMA_ReactivePowerGet(p_phase);
   p_measurements->s = LMA_ApparentPowerGet(p_phase);
+}
+
+void LMA_EnergyConsumedConvert(const LMA_SystemEnergy *const p_se, LMA_EnergyConsumed *const p_ec)
+{
+    p_ec->act_imp_energy_wh =
+            (((float)p_se->energy.counter.act_imp * p_config->meter_constant) +
+                    p_se->energy.accumulator.act_imp_ws) / 3600.00f;
+    p_ec->act_exp_energy_wh =
+            (((float)p_se->energy.counter.act_exp * p_config->meter_constant) +
+                    p_se->energy.accumulator.act_exp_ws) / 3600.00f;
+    p_ec->app_imp_energy_wh =
+            (((float)p_se->energy.counter.app_imp * p_config->meter_constant) +
+                    p_se->energy.accumulator.app_imp_ws) / 3600.00f;
+    p_ec->app_exp_energy_wh =
+            (((float)p_se->energy.counter.app_exp * p_config->meter_constant) +
+                    p_se->energy.accumulator.app_exp_ws) / 3600.00f;
+    p_ec->c_imp_energy_wh =
+            (((float)p_se->energy.counter.c_react_imp * p_config->meter_constant) +
+                    p_se->energy.accumulator.c_react_imp_ws) / 3600.00f;
+    p_ec->c_exp_energy_wh =
+            (((float)p_se->energy.counter.c_react_exp * p_config->meter_constant) +
+                    p_se->energy.accumulator.c_react_exp_ws) / 3600.00f;
+    p_ec->l_imp_energy_wh =
+            (((float)p_se->energy.counter.l_react_imp * p_config->meter_constant) +
+                    p_se->energy.accumulator.l_react_imp_ws) / 3600.00f;
+    p_ec->l_exp_energy_wh =
+            (((float)p_se->energy.counter.l_react_exp * p_config->meter_constant) +
+                    p_se->energy.accumulator.l_react_exp_ws) / 3600.00f;
+}
+
+bool LMA_MeasurementsReady(LMA_Phase *const p_phase)
+{
+    bool tmp;
+    LMA_CRITICAL_SECTION_PREPARE();
+
+    LMA_CRITICAL_SECTION_ENTER();
+    tmp = p_phase->signals.measurements_ready;
+    p_phase->signals.measurements_ready = false;
+    LMA_CRITICAL_SECTION_EXIT();
+
+    return tmp;
 }
 
 void LMA_CB_ADC(void)

@@ -87,7 +87,7 @@ float LMA_ActivePowerGet(const LMA_Phase *const p_phase);
 * @param[inout] p_phase - pointer to the phase block on which to get reactive power from.
 * @return phase reactive power
 */
-float LMA_ReactivePowerGet(const LMA_Phase *const p_phase);;
+float LMA_ReactivePowerGet(const LMA_Phase *const p_phase);
 
 /** @brief Returns Apparent Power of particular phase
 * @param[inout] p_phase - pointer to the phase block on which to get reactive power from.
@@ -95,11 +95,24 @@ float LMA_ReactivePowerGet(const LMA_Phase *const p_phase);;
 */
 float LMA_ApparentPowerGet(const LMA_Phase *const p_phase);
 
-/** @brief Outputs current sna shot of measurement set
+/** @brief Outputs current snap shot of measurement set
 * @param[inout] p_phase - pointer to the phase block on which to get measurements from.
 * @param[out] p_measurements - pointer to the measurement structure to populate.
 */
 void LMA_MeasurementsGet(LMA_Phase *const p_phase, LMA_Measurements *const p_measurements);
+
+/** @brief Converts current snap shot of energy consumed by the meter in Wh.
+ * @details Must call LMA_EnergyGet first.
+* @param[in] p_ec - pointer to the energy consumption structure to populate.
+* @param[out] p_ec - pointer to the energy consumption structure to populate.
+*/
+void LMA_EnergyConsumedConvert(const LMA_SystemEnergy *const p_se, LMA_EnergyConsumed *const p_ec);
+
+/** @brief Checks whether measurements are ready.
+ * @param p_phase - pointer to the phase to check.
+ * @return true if new measurements are ready, false otherwise.
+ */
+bool LMA_MeasurementsReady(LMA_Phase *const p_phase);
 
 /*****************************
 * DRIVER CALLBACKS

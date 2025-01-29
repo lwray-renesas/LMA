@@ -72,10 +72,8 @@ void Simulation(const simulation_params *const p_sim_params)
     thrd_sleep(&ts, NULL);
   }
 
-  LMA_PhaseCalibArgs ca = {.p_phase = &phase,
-                           .vrms_tgt = p_g_sim_params->vrms,
-                           .irms_tgt = p_g_sim_params->irms,
-                           .line_cycles = 100};
+  LMA_PhaseCalibArgs ca = {
+      .p_phase = &phase, .vrms_tgt = p_g_sim_params->vrms, .irms_tgt = p_g_sim_params->irms, .line_cycles = 100};
 
   LMA_GlobalCalibArgs gca = {
       .rtc_period = 1.00,
@@ -113,80 +111,73 @@ void Simulation(const simulation_params *const p_sim_params)
     };
     thrd_sleep(&ts, NULL);
 
-    if (0 != str_len)
+    static LMA_Measurements measurements;
+    static LMA_EnergyConsumed energy_consumed;
+
+    /* Check if there are measurements ready, if so read them and update energy readings*/
+    if (LMA_MeasurementsReady(&phase))
     {
-      (void)printf("\e[2K"
-                   "\e[1F"
-                   "\e[2K"
-                   "\e[1F"
-                   "\e[2K"
-                   "\e[1F"
-                   "\e[2K"
-                   "\e[1F"
-                   "\e[2K"
-                   "\e[1F"
-                   "\e[2K"
-                   "\e[1F"
-                   "\e[2K"
-                   "\e[1F"
-                   "\e[2K"
-                   "\e[1F"
-                   "\e[2K"
-                   "\e[1F"
-                   "\e[2K"
-                   "\e[1F"
-                   "\e[2K"
-                   "\e[1F"
-                   "\e[2K"
-                   "\e[1F"
-                   "\e[2K"
-                   "\e[1F"
-                   "\e[2K"
-                   "\e[1F"
-                   "\e[2K");
+      /* Get current snapshot of measurements*/
+      LMA_MeasurementsGet(&phase, &measurements);
+
+      /* Get current snapshot of system energy*/
+      LMA_EnergyGet(&system_energy);
+
+      /* Convert system energy to energy consumed*/
+      LMA_EnergyConsumedConvert(&system_energy, &energy_consumed);
+
+      if (0 != str_len)
+      {
+        (void)printf("\e[2K"
+                     "\e[1F"
+                     "\e[2K"
+                     "\e[1F"
+                     "\e[2K"
+                     "\e[1F"
+                     "\e[2K"
+                     "\e[1F"
+                     "\e[2K"
+                     "\e[1F"
+                     "\e[2K"
+                     "\e[1F"
+                     "\e[2K"
+                     "\e[1F"
+                     "\e[2K"
+                     "\e[1F"
+                     "\e[2K"
+                     "\e[1F"
+                     "\e[2K"
+                     "\e[1F"
+                     "\e[2K"
+                     "\e[1F"
+                     "\e[2K"
+                     "\e[1F"
+                     "\e[2K"
+                     "\e[1F"
+                     "\e[2K"
+                     "\e[1F"
+                     "\e[2K");
+      }
+
+      str_len = printf("\t\tVrms:    %.4f[V]\n\r"
+                       "\t\tIrms:    %.4f[A]\n\r"
+                       "\t\tFline:   %.4f[Hz]\n\r"
+                       "\t\tP:       %.4f[W]\n\r"
+                       "\t\tQ:       %.4f[VAR]\n\r"
+                       "\t\tS:       %.4f[VA]\n\r"
+                       "\t\tAct Imp: %.4f[Wh]\n\r"
+                       "\t\tAct Exp: %.4f[Wh]\n\r"
+                       "\t\tApp Imp: %.4f[Wh]\n\r"
+                       "\t\tApp Exp: %.4f[Wh]\n\r"
+                       "\t\tC Imp:   %.4f[Wh]\n\r"
+                       "\t\tC Exp:   %.4f[Wh]\n\r"
+                       "\t\tL Imp:   %.4f[Wh]\n\r"
+                       "\t\tL Exp:   %.4f[Wh]\n\r",
+                       measurements.vrms, measurements.irms, measurements.fline, measurements.p, measurements.q, measurements.s,
+                       energy_consumed.act_imp_energy_wh, energy_consumed.act_exp_energy_wh, energy_consumed.app_imp_energy_wh,
+                       energy_consumed.app_exp_energy_wh, energy_consumed.c_imp_energy_wh, energy_consumed.c_exp_energy_wh,
+                       energy_consumed.l_imp_energy_wh, energy_consumed.l_exp_energy_wh);
     }
-
-    LMA_Measurements measurements;
-    LMA_MeasurementsGet(&phase, &measurements);
-    LMA_EnergyGet(&system_energy);
-
-    float act_imp_energy_wh =
-        ((system_energy.energy.counter.act_imp * config.meter_constant) + system_energy.energy.accumulator.act_imp_ws) / 3600;
-    float act_exp_energy_wh =
-        ((system_energy.energy.counter.act_exp * config.meter_constant) + system_energy.energy.accumulator.act_exp_ws) / 3600;
-    float app_imp_energy_wh =
-        ((system_energy.energy.counter.app_imp * config.meter_constant) + system_energy.energy.accumulator.app_imp_ws) / 3600;
-    float app_exp_energy_wh =
-        ((system_energy.energy.counter.app_exp * config.meter_constant) + system_energy.energy.accumulator.app_exp_ws) / 3600;
-    float c_imp_energy_wh =
-        ((system_energy.energy.counter.c_react_imp * config.meter_constant) + system_energy.energy.accumulator.c_react_imp_ws) /
-        3600;
-    float c_exp_energy_wh =
-        ((system_energy.energy.counter.c_react_exp * config.meter_constant) + system_energy.energy.accumulator.c_react_exp_ws) /
-        3600;
-    float l_imp_energy_wh =
-        ((system_energy.energy.counter.l_react_imp * config.meter_constant) + system_energy.energy.accumulator.l_react_imp_ws) /
-        3600;
-    float l_exp_energy_wh =
-        ((system_energy.energy.counter.l_react_exp * config.meter_constant) + system_energy.energy.accumulator.l_react_exp_ws) /
-        3600;
-
-    str_len = printf("\t\tVrms:    %.4f[V]\n\r"
-                     "\t\tIrms:    %.4f[A]\n\r"
-                     "\t\tFline:   %.4f[Hz]\n\r"
-                     "\t\tP:       %.4f[W]\n\r"
-                     "\t\tQ:       %.4f[VAR]\n\r"
-                     "\t\tS:       %.4f[VA]\n\r"
-                     "\t\tAct Imp: %.4f[Wh]\n\r"
-                     "\t\tAct Exp: %.4f[Wh]\n\r"
-                     "\t\tApp Imp: %.4f[Wh]\n\r"
-                     "\t\tApp Exp: %.4f[Wh]\n\r"
-                     "\t\tC Imp:   %.4f[Wh]\n\r"
-                     "\t\tC Exp:   %.4f[Wh]\n\r"
-                     "\t\tL Imp:   %.4f[Wh]\n\r"
-                     "\t\tL Exp:   %.4f[Wh]\n\r",
-                     measurements.vrms, measurements.irms, measurements.fline, measurements.p, measurements.q, measurements.s,
-                     act_imp_energy_wh, act_exp_energy_wh, app_imp_energy_wh, app_exp_energy_wh, c_imp_energy_wh, c_exp_energy_wh, l_imp_energy_wh, l_exp_energy_wh);
   }
 
   /************************

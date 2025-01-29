@@ -45,6 +45,19 @@ typedef struct LMA_Power
   float s;   /**< Variable to store apparent power consumption */
 } LMA_Power;
 
+/** @brief Utility struct to read energy data from library into Wh consumed over meter lifetime*/
+typedef struct LMA_EnergyConsumed
+{
+    float act_imp_energy_wh; /**< active energy imported in Wh*/
+    float act_exp_energy_wh; /**< active energy exported in Wh*/
+    float app_imp_energy_wh; /**< apparent energy imported in Wh*/
+    float app_exp_energy_wh; /**< apparent energy exported in Wh*/
+    float c_imp_energy_wh; /**< reactive (capacitive) energy imported in Wh*/
+    float c_exp_energy_wh; /**< reactive (capacitive) energy exported in Wh*/
+    float l_imp_energy_wh; /**< reactive (inductive) energy imported in Wh*/
+    float l_exp_energy_wh; /**< reactive (inductive) energy exported in Wh*/
+}LMA_EnergyConsumed;
+
 /** @brief Data related to energy accumulation per phase, per ADC sample */
 typedef struct LMA_EnergyUnit
 {
@@ -73,6 +86,7 @@ typedef struct LMA_PhaseCalibration
 typedef struct LMA_Signals
 {
     bool accumulators_ready;   /**< Flag to indicate our accumulators are ready for update */
+    bool measurements_ready;   /**< Flag to indicate a new measurement set is ready */
 }LMA_Signals;
 
 /** @brief Data related to phase (V & I pair) signal processing */
