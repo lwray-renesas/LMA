@@ -46,7 +46,7 @@ typedef struct LMA_Power
 } LMA_Power;
 
 /** @brief Utility struct to read energy data from library into Wh consumed over meter lifetime*/
-typedef struct LMA_EnergyConsumed
+typedef struct LMA_ConsumptionData
 {
     float act_imp_energy_wh; /**< active energy imported in Wh*/
     float act_exp_energy_wh; /**< active energy exported in Wh*/
@@ -56,7 +56,7 @@ typedef struct LMA_EnergyConsumed
     float c_exp_energy_wh; /**< reactive (capacitive) energy exported in Wh*/
     float l_imp_energy_wh; /**< reactive (inductive) energy imported in Wh*/
     float l_exp_energy_wh; /**< reactive (inductive) energy exported in Wh*/
-}LMA_EnergyConsumed;
+}LMA_ConsumptionData;
 
 /** @brief Data related to energy accumulation per phase, per ADC sample */
 typedef struct LMA_EnergyUnit

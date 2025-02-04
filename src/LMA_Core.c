@@ -676,7 +676,7 @@ void LMA_MeasurementsGet(LMA_Phase *const p_phase, LMA_Measurements *const p_mea
   p_measurements->s = LMA_ApparentPowerGet(p_phase);
 }
 
-void LMA_EnergyConsumedConvert(const LMA_SystemEnergy *const p_se, LMA_EnergyConsumed *const p_ec)
+void LMA_ConsumptionDataGet(const LMA_SystemEnergy *const p_se, LMA_ConsumptionData *const p_ec)
 {
     p_ec->act_imp_energy_wh =
             (((float)p_se->energy.counter.act_imp * p_config->meter_constant) +

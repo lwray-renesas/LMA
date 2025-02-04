@@ -112,7 +112,7 @@ void Simulation(const simulation_params *const p_sim_params)
     thrd_sleep(&ts, NULL);
 
     static LMA_Measurements measurements;
-    static LMA_EnergyConsumed energy_consumed;
+    static LMA_ConsumptionData energy_consumed;
 
     /* Check if there are measurements ready, if so read them and update energy readings*/
     if (LMA_MeasurementsReady(&phase))
@@ -124,7 +124,7 @@ void Simulation(const simulation_params *const p_sim_params)
       LMA_EnergyGet(&system_energy);
 
       /* Convert system energy to energy consumed*/
-      LMA_EnergyConsumedConvert(&system_energy, &energy_consumed);
+      LMA_ConsumptionDataGet(&system_energy, &energy_consumed);
 
       if (0 != str_len)
       {

@@ -106,7 +106,7 @@ void LMA_MeasurementsGet(LMA_Phase *const p_phase, LMA_Measurements *const p_mea
 * @param[in] p_ec - pointer to the energy consumption structure to populate.
 * @param[out] p_ec - pointer to the energy consumption structure to populate.
 */
-void LMA_EnergyConsumedConvert(const LMA_SystemEnergy *const p_se, LMA_EnergyConsumed *const p_ec);
+void LMA_ConsumptionDataGet(const LMA_SystemEnergy *const p_se, LMA_ConsumptionData *const p_ec);
 
 /** @brief Checks whether measurements are ready.
  * @param p_phase - pointer to the phase to check.
