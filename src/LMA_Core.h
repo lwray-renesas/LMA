@@ -31,6 +31,10 @@ void LMA_Start(void);
 void LMA_Stop(void);
 
 /** @brief Performs a calibration command according to the flags passed.
+* @details - for calibration of the phase angle error - the result is stored in each phases
+* phase.calib.vi_phase_correction.
+* Because it depends on whether your ADC supports phase correction in hardware, it is left to the programmer
+* to use this parameter as they see fit.
 * @param[in] calib_args - Arguments and data structure use for a calibration.
 */
 void LMA_PhaseCalibrate(LMA_PhaseCalibArgs * const calib_args);

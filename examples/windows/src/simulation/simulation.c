@@ -18,7 +18,7 @@ static thrd_t driver_thread;
 const simulation_params *p_g_sim_params;
 
 /* Configuration required for configuring the library 4500 ws/imp = 800 imp/kwh*/
-static LMA_Config config = {.gcalib = {.fs = 3906.25f, .fline_coeff = 97650.0000f},
+static LMA_Config config = {.gcalib = {.fs = 3906.25f, .fline_coeff = 97650.0000f, .deg_per_sample = 4.608f},
                             .update_interval = 25,
                             .fline_target = 50.00f,
                             .fline_tol_low = 25.00f,
@@ -32,7 +32,8 @@ static LMA_Config config = {.gcalib = {.fs = 3906.25f, .fline_coeff = 97650.0000
 /* Now define our phase pointing to our data structure*/
 LMA_Phase phase;
 
-LMA_PhaseCalibration default_calib = {.vrms_coeff = 21177.2051f, .irms_coeff = 53685.3828f, .p_coeff = 1136906368.0000f};
+LMA_PhaseCalibration default_calib = {.vrms_coeff = 21177.2051f, .irms_coeff = 53685.3828f,
+ .vi_phase_correction = 0.0f, .p_coeff = 1136906368.0000f};
 
 /* Define our system energy struct*/
 LMA_SystemEnergy system_energy = {.impulse = {.led_on_count = 39, /* 10ms at 3906 Hz sampling frequency*/
@@ -93,9 +94,10 @@ void Simulation(const simulation_params *const p_sim_params)
                  "\t\tPower Coeffient:    %.4f\n\r"
                  "\t\tPhase Correction:   %.4f\n\r"
                  "\t\tSampling Frequency: %.4f\n\r"
+                 "\t\tDegrees Per Sample: %.4f\n\r"
                  "\t\tFline Coeffient: %.4f\n\r\n\r",
                  ca.p_phase->calib.vrms_coeff, ca.p_phase->calib.irms_coeff, ca.p_phase->calib.p_coeff,
-                 ca.p_phase->calib.vi_phase_correction, config.gcalib.fs, config.gcalib.fline_coeff);
+                 ca.p_phase->calib.vi_phase_correction, config.gcalib.fs, config.gcalib.deg_per_sample, config.gcalib.fline_coeff);
   }
 
   /************************

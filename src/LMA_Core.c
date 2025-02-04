@@ -63,33 +63,32 @@ static LMA_SystemEnergy sys_energy =   /**< Instance of the fs calibration data 
  * @param[inout] p_phase - pointer to the phase block to update for zero cross.
  * @return true if new zero cross detected - false otherwise.
  */
-static inline bool Phase_zero_cross(LMA_Phase *const p_phase)
+static inline bool Phase_zero_cross(LMA_ZeroCross *const p_zc, const spl_t new_spl)
 {
-  if ((!p_phase->voltage.v_zc.zero_cross_debounce) && (p_phase->voltage.v_zc.last_voltage_sample <= 0) &&
-      (p_phase->ws.samples.voltage > 0))
+  if ((!p_zc->zero_cross_debounce) && (p_zc->last_sample <= 0) && (new_spl > 0))
   {
-    p_phase->voltage.v_zc.zero_cross_debounce = true;
+    p_zc->zero_cross_debounce = true;
 
-    if (p_phase->voltage.v_zc.v_sync_zc)
+    if (p_zc->sync_zc)
     {
       /* Only increment the counter if we are synch'd (already detected our first zero cross)*/
-      ++p_phase->voltage.v_zc.zero_cross_counter;
+      ++p_zc->zero_cross_counter;
     }
     else
     {
       /* Otherwise synch us up and reset the counter*/
-      p_phase->voltage.v_zc.zero_cross_counter = 0;
-      p_phase->voltage.v_zc.v_sync_zc = true;
+      p_zc->zero_cross_counter = 0;
+      p_zc->sync_zc = true;
     }
   }
   else
   {
-    p_phase->voltage.v_zc.zero_cross_debounce = false;
+    p_zc->zero_cross_debounce = false;
   }
 
-  p_phase->voltage.v_zc.last_voltage_sample = p_phase->ws.samples.voltage;
+  p_zc->last_sample = new_spl;
 
-  return p_phase->voltage.v_zc.zero_cross_debounce;
+  return p_zc->zero_cross_debounce;
 }
 /* END OF FUNCTION*/
 
@@ -100,10 +99,10 @@ static inline bool Phase_zero_cross(LMA_Phase *const p_phase)
  */
 static inline void Phase_hard_reset(LMA_Phase *const p_phase)
 {
-  p_phase->voltage.v_zc.zero_cross_counter = 0;
-  p_phase->voltage.v_zc.last_voltage_sample = 0;
-  p_phase->voltage.v_zc.zero_cross_debounce = false;
-  p_phase->voltage.v_zc.v_sync_zc = false;
+  p_phase->voltage.zc.zero_cross_counter = 0;
+  p_phase->voltage.zc.last_sample = 0;
+  p_phase->voltage.zc.zero_cross_debounce = false;
+  p_phase->voltage.zc.sync_zc = false;
 
   p_phase->accs.vacc = 0;
   p_phase->accs.iacc = 0;
@@ -118,6 +117,13 @@ static inline void Phase_hard_reset(LMA_Phase *const p_phase)
   p_phase->energy_units.act = 0;
   p_phase->energy_units.react = 0;
   p_phase->energy_units.app = 0;
+
+  p_phase->pa_error.i_fraction = 0L;
+  p_phase->pa_error.v_fraction = 0L;
+  p_phase->pa_error.status = LMA_CALIB_OK;
+  p_phase->pa_error.sample_counter = 0;
+  p_phase->pa_error.i_last_sample = 0;
+  p_phase->pa_error.v_last_sample = 0;
 
   LMA_AccReset(&(p_phase->ws), p_phase->phase_number);
 
@@ -140,15 +146,15 @@ static inline void Phase_hard_reset(LMA_Phase *const p_phase)
 static inline void Phase_accumulate(LMA_Phase *const p_phase)
 {
   /* Zero cross - voltage*/
-  Phase_zero_cross(p_phase);
+  Phase_zero_cross(&(p_phase->voltage.zc), p_phase->ws.samples.voltage);
 
   /* Handle active & apparent component once synched with zero cross and accumulation is enabled */
-  if (p_phase->voltage.v_zc.v_sync_zc)
+  if (p_phase->voltage.zc.sync_zc)
   {
     LMA_AccRun(&(p_phase->ws), p_phase->phase_number);
 
     /* If appropriate number of line cycles have passed - process results*/
-    if (p_phase->voltage.v_zc.zero_cross_counter >= p_config->update_interval)
+    if (p_phase->voltage.zc.zero_cross_counter >= p_config->update_interval)
     {
       /* Copy the accumulators across*/
       LMA_AccLoad(&(p_phase->ws), &(p_phase->accs), p_phase->phase_number);
@@ -160,7 +166,7 @@ static inline void Phase_accumulate(LMA_Phase *const p_phase)
       LMA_AccReset(&(p_phase->ws), p_phase->phase_number);
 
       /* Reset Zerocross counter to continue*/
-      p_phase->voltage.v_zc.zero_cross_counter = 0;
+      p_phase->voltage.zc.zero_cross_counter = 0;
     }
   }
 }
@@ -187,9 +193,11 @@ static inline void Phase_compute(LMA_Phase *const p_phase)
       const float iacc_fp = LMA_AccToFloat(p_phase->accs.iacc);
 
       /* Vrms*/
-      p_phase->voltage.v_rms = LMA_FPDiv_Fast(LMA_FPSqrt_Fast(LMA_FPDiv_Fast(vacc_fp, sample_count_fp)), p_phase->calib.vrms_coeff);
+      p_phase->voltage.v_rms =
+          LMA_FPDiv_Fast(LMA_FPSqrt_Fast(LMA_FPDiv_Fast(vacc_fp, sample_count_fp)), p_phase->calib.vrms_coeff);
       /* Irms*/
-      p_phase->current.i_rms = LMA_FPDiv_Fast(LMA_FPSqrt_Fast(LMA_FPDiv_Fast(iacc_fp, sample_count_fp)), p_phase->calib.irms_coeff);
+      p_phase->current.i_rms =
+          LMA_FPDiv_Fast(LMA_FPSqrt_Fast(LMA_FPDiv_Fast(iacc_fp, sample_count_fp)), p_phase->calib.irms_coeff);
       /* Active Power (P)*/
       p_phase->power.p = LMA_FPDiv_Fast(LMA_AccToFloat(p_phase->accs.pacc), power_divisor);
       /* Reactive Power (Q)*/
@@ -213,7 +221,7 @@ static inline void Phase_compute(LMA_Phase *const p_phase)
         p_phase->status &= ~LMA_VOLTAGE_SAG;
         p_phase->status &= ~LMA_VOLTAGE_SWELL;
       }
-      
+
       /* Active Power (P) & Energy*/
       if (LMA_FPAbs_Fast(p_phase->power.p) < p_config->no_load_p)
       {
@@ -279,6 +287,66 @@ static inline void Phase_compute(LMA_Phase *const p_phase)
 
     p_phase->signals.measurements_ready = true;
   }
+}
+/* END OF FUNCTION*/
+
+/** @brief Processes phase angle error calibration
+ * @param[inout] p_phase - pointer to the phase block to work on
+ */
+static inline void Phase_calibrate_angle_error(LMA_Phase *const p_phase)
+{
+  bool izc = (p_phase->ws.samples.current > 0 && p_phase->pa_error.i_last_sample <= 0);
+  bool vzc = (p_phase->ws.samples.voltage > 0 && p_phase->pa_error.v_last_sample <= 0);
+
+  if (izc && vzc)
+  {
+    /* Edge case*/
+    if (0 == p_phase->pa_error.i_last_sample)
+    {
+      p_phase->pa_error.i_fraction += 0.0f;
+    }
+    else
+    {
+      p_phase->pa_error.i_fraction +=
+          (float)(p_phase->ws.samples.current) / (float)(p_phase->ws.samples.current - p_phase->pa_error.i_last_sample);
+    }
+
+    /* Edge case*/
+    if (0 == p_phase->pa_error.v_last_sample)
+    {
+      p_phase->pa_error.v_fraction += 0.0f;
+    }
+    else
+    {
+      p_phase->pa_error.v_fraction +=
+          (float)(p_phase->ws.samples.voltage) / (float)(p_phase->ws.samples.voltage - p_phase->pa_error.v_last_sample);
+    }
+
+    ++p_phase->pa_error.sample_counter;
+
+    if (p_phase->pa_error.sample_counter > p_config->update_interval)
+    {
+      p_phase->pa_error.status = LMA_CALIB_OK;
+      p_phase->signals.calibrate_angle_error = false;
+    }
+  }
+  else if (izc)
+  {
+    /* Error - phase angle too large*/
+    p_phase->pa_error.status = LMA_CALIB_PHASE_ANGLE_ERROR;
+  }
+  else if (vzc)
+  {
+    /* Error - phase angle too large*/
+    p_phase->pa_error.status = LMA_CALIB_PHASE_ANGLE_ERROR;
+  }
+  else
+  {
+    /* Do Nothing - no zero cross detected*/
+  }
+
+  p_phase->pa_error.v_last_sample = p_phase->ws.samples.voltage;
+  p_phase->pa_error.i_last_sample = p_phase->ws.samples.current;
 }
 /* END OF FUNCTION*/
 
@@ -527,6 +595,34 @@ void LMA_PhaseCalibrate(LMA_PhaseCalibArgs *const calib_args)
   p_config->update_interval = backup_update_interval;
   Phase_hard_reset(calib_args->p_phase);
 
+  /* Start on the phase angle error*/
+  calib_args->p_phase->signals.calibrate_angle_error = true;
+  calib_args->p_phase->pa_error.i_last_sample = calib_args->p_phase->ws.samples.current;
+  calib_args->p_phase->pa_error.v_last_sample = calib_args->p_phase->ws.samples.voltage;
+
+  LMA_ADC_Start();
+
+  while (calib_args->p_phase->signals.calibrate_angle_error)
+  {
+    /* Wait until the accumulation has stopped*/
+  }
+
+  LMA_ADC_Stop();
+
+  sample_count_fp = (float)calib_args->p_phase->pa_error.sample_counter;
+
+  calib_args->p_phase->pa_error.i_fraction /= sample_count_fp;
+  calib_args->p_phase->pa_error.v_fraction /= sample_count_fp;
+
+  /* Compute from Q32.32 to float*/
+  calib_args->p_phase->calib.vi_phase_correction =
+      calib_args->p_phase->pa_error.i_fraction - calib_args->p_phase->pa_error.v_fraction;
+
+  /* Convert to degrees*/
+  calib_args->p_phase->calib.vi_phase_correction *= p_config->gcalib.deg_per_sample;
+
+  Phase_hard_reset(calib_args->p_phase);
+
   LMA_TMR_Start();
   LMA_ADC_Start();
 }
@@ -561,6 +657,7 @@ void LMA_GlobalCalibrate(LMA_GlobalCalibArgs *const calib_args)
   /* Care more about accuracy here than speed*/
   p_config->gcalib.fs = (float)calib_fs.adc_counter / ((float)calib_args->rtc_period * (float)calib_args->rtc_cycles);
   p_config->gcalib.fline_coeff = p_config->gcalib.fs * (float)p_config->update_interval;
+  p_config->gcalib.deg_per_sample = (360.00f * p_config->fline_target) / p_config->gcalib.fs;
 
   LMA_TMR_Start();
   LMA_ADC_Start();
@@ -568,16 +665,16 @@ void LMA_GlobalCalibrate(LMA_GlobalCalibArgs *const calib_args)
 
 void LMA_EnergySet(LMA_SystemEnergy *const p_energy)
 {
-    LMA_CRITICAL_SECTION_PREPARE();
-    LMA_CRITICAL_SECTION_ENTER();
+  LMA_CRITICAL_SECTION_PREPARE();
+  LMA_CRITICAL_SECTION_ENTER();
   memcpy(&sys_energy, p_energy, sizeof(LMA_SystemEnergy));
   LMA_CRITICAL_SECTION_EXIT();
 }
 
 void LMA_EnergyGet(LMA_SystemEnergy *const p_energy)
 {
-    LMA_CRITICAL_SECTION_PREPARE();
-    LMA_CRITICAL_SECTION_ENTER();
+  LMA_CRITICAL_SECTION_PREPARE();
+  LMA_CRITICAL_SECTION_ENTER();
   memcpy(p_energy, &sys_energy, sizeof(LMA_SystemEnergy));
   LMA_CRITICAL_SECTION_EXIT();
 }
@@ -678,50 +775,47 @@ void LMA_MeasurementsGet(LMA_Phase *const p_phase, LMA_Measurements *const p_mea
 
 void LMA_ConsumptionDataGet(const LMA_SystemEnergy *const p_se, LMA_ConsumptionData *const p_ec)
 {
-    p_ec->act_imp_energy_wh =
-            (((float)p_se->energy.counter.act_imp * p_config->meter_constant) +
-                    p_se->energy.accumulator.act_imp_ws) / 3600.00f;
-    p_ec->act_exp_energy_wh =
-            (((float)p_se->energy.counter.act_exp * p_config->meter_constant) +
-                    p_se->energy.accumulator.act_exp_ws) / 3600.00f;
-    p_ec->app_imp_energy_wh =
-            (((float)p_se->energy.counter.app_imp * p_config->meter_constant) +
-                    p_se->energy.accumulator.app_imp_ws) / 3600.00f;
-    p_ec->app_exp_energy_wh =
-            (((float)p_se->energy.counter.app_exp * p_config->meter_constant) +
-                    p_se->energy.accumulator.app_exp_ws) / 3600.00f;
-    p_ec->c_imp_energy_wh =
-            (((float)p_se->energy.counter.c_react_imp * p_config->meter_constant) +
-                    p_se->energy.accumulator.c_react_imp_ws) / 3600.00f;
-    p_ec->c_exp_energy_wh =
-            (((float)p_se->energy.counter.c_react_exp * p_config->meter_constant) +
-                    p_se->energy.accumulator.c_react_exp_ws) / 3600.00f;
-    p_ec->l_imp_energy_wh =
-            (((float)p_se->energy.counter.l_react_imp * p_config->meter_constant) +
-                    p_se->energy.accumulator.l_react_imp_ws) / 3600.00f;
-    p_ec->l_exp_energy_wh =
-            (((float)p_se->energy.counter.l_react_exp * p_config->meter_constant) +
-                    p_se->energy.accumulator.l_react_exp_ws) / 3600.00f;
+  p_ec->act_imp_energy_wh =
+      (((float)p_se->energy.counter.act_imp * p_config->meter_constant) + p_se->energy.accumulator.act_imp_ws) / 3600.00f;
+  p_ec->act_exp_energy_wh =
+      (((float)p_se->energy.counter.act_exp * p_config->meter_constant) + p_se->energy.accumulator.act_exp_ws) / 3600.00f;
+  p_ec->app_imp_energy_wh =
+      (((float)p_se->energy.counter.app_imp * p_config->meter_constant) + p_se->energy.accumulator.app_imp_ws) / 3600.00f;
+  p_ec->app_exp_energy_wh =
+      (((float)p_se->energy.counter.app_exp * p_config->meter_constant) + p_se->energy.accumulator.app_exp_ws) / 3600.00f;
+  p_ec->c_imp_energy_wh =
+      (((float)p_se->energy.counter.c_react_imp * p_config->meter_constant) + p_se->energy.accumulator.c_react_imp_ws) /
+      3600.00f;
+  p_ec->c_exp_energy_wh =
+      (((float)p_se->energy.counter.c_react_exp * p_config->meter_constant) + p_se->energy.accumulator.c_react_exp_ws) /
+      3600.00f;
+  p_ec->l_imp_energy_wh =
+      (((float)p_se->energy.counter.l_react_imp * p_config->meter_constant) + p_se->energy.accumulator.l_react_imp_ws) /
+      3600.00f;
+  p_ec->l_exp_energy_wh =
+      (((float)p_se->energy.counter.l_react_exp * p_config->meter_constant) + p_se->energy.accumulator.l_react_exp_ws) /
+      3600.00f;
 }
 
 bool LMA_MeasurementsReady(LMA_Phase *const p_phase)
 {
-    bool tmp;
-    LMA_CRITICAL_SECTION_PREPARE();
+  bool tmp;
+  LMA_CRITICAL_SECTION_PREPARE();
 
-    LMA_CRITICAL_SECTION_ENTER();
-    tmp = p_phase->signals.measurements_ready;
-    p_phase->signals.measurements_ready = false;
-    LMA_CRITICAL_SECTION_EXIT();
+  LMA_CRITICAL_SECTION_ENTER();
+  tmp = p_phase->signals.measurements_ready;
+  p_phase->signals.measurements_ready = false;
+  LMA_CRITICAL_SECTION_EXIT();
 
-    return tmp;
+  return tmp;
 }
 
 void LMA_CB_ADC(void)
 {
   LMA_Phase *p_phase = p_phase_list;
+  bool process_energy = true;
 
-  /* If we are running fs calibration - increment counter*/
+  /* If we are running fs calibration - increment the counter*/
   if (calib_fs.running)
   {
     ++calib_fs.adc_counter;
@@ -730,32 +824,56 @@ void LMA_CB_ADC(void)
   {
     while (NULL != p_phase)
     {
-      Phase_accumulate(p_phase);
+      if (p_phase->signals.calibrate_angle_error)
+      {
+        process_energy = false;
+        Phase_calibrate_angle_error(p_phase);
+      }
+      else
+      {
+        Phase_accumulate(p_phase);
+      }
+
       p_phase = p_phase->p_next;
     }
 
-    Energy_process();
+    if (process_energy)
+    {
+      Energy_process();
+    }
   }
 }
 
 void LMA_CB_TMR(void)
 {
+  LMA_CRITICAL_SECTION_PREPARE();
   LMA_Phase *p_phase = p_phase_list;
+  static float act_energy_unit_tmp = 0.0f;
+  static float react_energy_unit_tmp = 0.0f;
+  static float app_energy_unit_tmp = 0.0f;
 
-  sys_energy.energy.unit.act = 0;
-  sys_energy.energy.unit.react = 0;
-  sys_energy.energy.unit.app = 0;
+  /* Reset the energy units*/
+  act_energy_unit_tmp = 0.0f;
+  react_energy_unit_tmp = 0.0f;
+  app_energy_unit_tmp = 0.0f;
 
   while (NULL != p_phase)
   {
     Phase_compute(p_phase);
 
-    sys_energy.energy.unit.act += p_phase->energy_units.act;
-    sys_energy.energy.unit.react += p_phase->energy_units.react;
-    sys_energy.energy.unit.app += p_phase->energy_units.app;
+    act_energy_unit_tmp += p_phase->energy_units.act;
+    react_energy_unit_tmp += p_phase->energy_units.react;
+    app_energy_unit_tmp += p_phase->energy_units.app;
 
     p_phase = p_phase->p_next;
   }
+
+  /* Overwrite the energy units in the system energy manager*/
+  LMA_CRITICAL_SECTION_ENTER();
+  sys_energy.energy.unit.act = act_energy_unit_tmp;
+  sys_energy.energy.unit.react = react_energy_unit_tmp;
+  sys_energy.energy.unit.app = app_energy_unit_tmp;
+  LMA_CRITICAL_SECTION_EXIT();
 }
 
 void LMA_CB_RTC(void)
