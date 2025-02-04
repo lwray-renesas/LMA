@@ -5,7 +5,7 @@
  *      Author: a5126135
  */
 
-#include "SysTick_Benchmark.h"
+#include <Benchmark/Benchmark.h>
 
 /** @brief macros used to red current interrupt state */
 #define BM_CRITICAL_SECTION_PREPARE() uint32_t interrupt_save =  __get_PRIMASK()

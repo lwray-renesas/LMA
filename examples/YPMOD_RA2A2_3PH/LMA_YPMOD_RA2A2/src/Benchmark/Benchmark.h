@@ -5,8 +5,8 @@
  *      Author: a5126135
  */
 
-#ifndef SYSTICK_BENCHMARK_SYSTICK_BENCHMARK_H_
-#define SYSTICK_BENCHMARK_SYSTICK_BENCHMARK_H_
+#ifndef BENCHMARK_BENCHMARK_H_
+#define BENCHMARK_BENCHMARK_H_
 
 #include "hal_data.h"
 
@@ -55,4 +55,4 @@ void Benchmark_work_end(benchmark_t * bm);
  */
 void Benchmark_cb_period(benchmark_t * bm);
 
-#endif /* SYSTICK_BENCHMARK_SYSTICK_BENCHMARK_H_ */
+#endif /* BENCHMARK_BENCHMARK_H_ */
