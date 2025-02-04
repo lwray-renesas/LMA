@@ -46,13 +46,13 @@ Mkfile.old
 dkms.conf
 
 # e2studio user specific folders/files & build output directory.
-/Debug_*/*
-/Release_*/*
-*/Debug/*
-*/Release/*
-*/ra/*
-*/.settings/*
-/build/*
+**/Debug_*/*
+**/Release_*/*
+**/Debug/*
+**/Release/*
+**/ra/*
+**/.settings/*
+**/build/*
 settings.json
 .cache*
 launch.json

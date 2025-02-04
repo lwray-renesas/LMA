@@ -1,0 +1,750 @@
+T5160 000:002.596   SEGGER J-Link V7.98g Log File
+T5160 000:002.757   DLL Compiled: Sep  5 2024 11:46:36
+T5160 000:002.775   Logging started @ 2025-02-04 16:34
+T5160 000:002.791   Process: C:\Users\a5126135\.eclipse\com.renesas.platform_1931921373\DebugComp\RA\e2-server-gdb.exe
+T5160 000:002.809 - 2.807ms
+T5160 000:002.833 JLINK_GetDLLVersion()
+T5160 000:002.848 - 0.016ms returns 79807
+T5160 000:007.651 JLINK_OpenEx(...)
+T5160 000:018.600   Firmware: J-Link OB-RA4M2 compiled Jul  3 2024 17:03:13
+T5160 000:019.745   Firmware: J-Link OB-RA4M2 compiled Jul  3 2024 17:03:13
+T5160 000:032.578   Hardware: V1.00
+T5160 000:032.666   S/N: 1082481556
+T5160 000:032.686   OEM: SEGGER
+T5160 000:032.705   Feature(s): None
+T5160 000:033.992   Bootloader: 2021 May 14
+T5160 000:034.878   USB speed mode: Full speed (12 MBit/s)
+T5160 000:035.590   TELNET listener socket opened on port 19021
+T5160 000:035.945   WEBSRV WEBSRV_Init(): Starting webserver thread(s)
+T5160 000:036.226   WEBSRV Webserver running on local port 19080
+T5160 000:036.577   Looking for J-Link GUI Server exe at: C:\Users\a5126135\.eclipse\com.renesas.platform_1931921373\DebugComp\RA\ARM\Segger_v7.98.7\JLinkGUIServer.exe
+T5160 000:037.035   Looking for J-Link GUI Server exe at: \JLinkGUIServer.exe
+T5160 000:344.100   Failed to connect to J-Link GUI Server.
+T5160 000:344.296 - 336.628ms returns "O.K."
+T5160 000:344.925 JLINK_ExecCommand("ProjectFile=C:\Dev\Temporary\2024_10_Metering\LMA_YPMOD_RA2A2/LMA_YPMOD_RA2A2 Debug_Flat.jlink", ...). 
+T5160 000:373.625 - 28.705ms returns 0x00
+T5160 000:374.090 JLINK_ExecCommand("device=R7FA2A2AD", ...). 
+T5160 000:374.869   Flash bank @ 0x00000000: SFL: Parsing sectorization info from ELF file
+T5160 000:374.910     FlashDevice.SectorInfo[0]: .SectorSize = 0x00000800, .SectorStartAddr = 0x00000000
+T5160 000:375.118   Flash bank @ 0x40100000: SFL: Parsing sectorization info from ELF file
+T5160 000:375.147     FlashDevice.SectorInfo[0]: .SectorSize = 0x00000400, .SectorStartAddr = 0x00000000
+T5160 000:375.191   Flash bank @ 0x01010008: SFL: Parsing sectorization info from ELF file
+T5160 000:375.212     FlashDevice.SectorInfo[0]: .SectorSize = 0x00000004, .SectorStartAddr = 0x00000000
+T5160 000:375.239   Device "R7FA2A2AD" selected.
+T5160 000:376.027 - 1.913ms returns 0x00
+T5160 000:376.078 JLINK_ExecCommand("SetCPUConnectIDCODE = FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", ...). 
+T5160 000:376.098 - 0.002ms returns 0x00
+T5160 000:376.114 JLINK_TIF_GetAvailable(...)
+T5160 000:376.360 - 0.246ms
+T5160 000:376.390 JLINK_TIF_Select(JLINKARM_TIF_SWD)
+T5160 000:377.102 - 0.712ms returns 0x00
+T5160 000:377.127 JLINK_SetSpeed(4000)
+T5160 000:377.232 - 0.106ms
+T5160 000:377.250 JLINK_SetEndian(ARM_ENDIAN_LITTLE)
+T5160 000:377.264 - 0.014ms returns 0
+T5160 000:377.280 JLINK_SetInitRegsOnReset(OFF)
+T5160 000:377.294 - 0.015ms returns 1
+T5160 000:377.309 JLINK_SetResetType(JLINKARM_RESET_TYPE_NO_RESET)
+T5160 000:377.324 - 0.014ms returns JLINKARM_RESET_TYPE_NORMAL
+T5160 000:377.340 JLINK_ExecCommand("EnableFlashBPs", ...). 
+T5160 000:377.357 - 0.000ms returns 0x00
+T5160 000:377.373 JLINK_ExecCommand("SetAllowFlashCache = 1", ...). 
+T5160 000:377.389 - 0.000ms returns 0x01
+T5160 000:377.405 JLINK_ExecCommand("SetRestartOnClose = 0", ...). 
+T5160 000:377.421 - 0.001ms returns 0x01
+T5160 000:377.436 JLINK_EnableSoftBPs(ON)
+T5160 000:377.451 - 0.015ms
+T5160 000:377.467 JLINK_Connect()
+T5160 000:378.409   InitTarget() start
+T5160 000:378.469    J-Link Script File: Executing InitTarget()
+T5160 000:378.508   Identifying target device...
+T5160 000:378.530   SWD selected. Executing JTAG -> SWD switching sequence...
+T5160 000:379.146   Initializing DAP...
+T5160 000:380.607   DAP initialized successfully.
+T5160 000:382.162   Low power mode detected. Waking device from low power mode.
+T5160 000:384.486   InitTarget() end - Took 6.01ms
+T5160 000:385.110   Found SW-DP with ID 0x5BA02477
+T5160 000:387.027   DPIDR: 0x5BA02477
+T5160 000:387.060   CoreSight SoC-400 or earlier
+T5160 000:387.081   Scanning AP map to find all available APs
+T5160 000:387.888   AP[2]: Stopped AP scan as end of AP map has been reached
+T5160 000:387.919   AP[0]: AHB-AP (IDR: 0x74770001, ADDR: 0x00000000)
+T5160 000:387.939   AP[1]: APB-AP (IDR: 0x44770002, ADDR: 0x01000000)
+T5160 000:387.962   Iterating through AP map to find AHB-AP to use
+T5160 000:388.803   AP[0]: Core found
+T5160 000:388.831   AP[0]: AHB-AP ROM base: 0x4001A000
+T5160 000:389.272   CPUID register: 0x411CD200. Implementer code: 0x41 (ARM)
+T5160 000:389.304   Feature set: Baseline
+T5160 000:389.724   Cache: No cache
+T5160 000:389.751   Found Cortex-M23 r1p0, Little endian.
+T5160 000:390.117   -- Max. mem block: 0x0001D8C8
+T5160 000:390.718   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T5160 000:391.226   CPU_ReadMem(4 bytes @ 0xE0002000)
+T5160 000:391.577   FPUnit: 4 code (BP) slots and 0 literal slots
+T5160 000:391.602   CPU_ReadMem(4 bytes @ 0xE000EDFC)
+T5160 000:391.893   CPU_ReadMem(4 bytes @ 0xE0001000)
+T5160 000:392.198   CPU_ReadMem(4 bytes @ 0xE0001000)
+T5160 000:392.551   CPU_ReadMem(4 bytes @ 0xE0001028)
+T5160 000:392.865   CPU_ReadMem(4 bytes @ 0xE0001038)
+T5160 000:393.156   CPU_WriteMem(4 bytes @ 0xE0001000)
+T5160 000:393.492   CPU_ReadMem(4 bytes @ 0xE000ED88)
+T5160 000:393.801   CPU_WriteMem(4 bytes @ 0xE000ED88)
+T5160 000:394.205   CPU_ReadMem(4 bytes @ 0xE000ED88)
+T5160 000:394.530   CPU_WriteMem(4 bytes @ 0xE000ED88)
+T5160 000:394.839   CPU_ReadMem(4 bytes @ 0xE000EFB8)
+T5160 000:395.142   Security extension: not implemented
+T5160 000:395.184   CoreSight components:
+T5160 000:395.205   ROMTbl[0] @ 4001A000
+T5160 000:395.227   CPU_ReadMem(64 bytes @ 0x4001A000)
+T5160 000:396.015   CPU_ReadMem(32 bytes @ 0xE000EFE0)
+T5160 000:396.584   CPU_ReadMem(4 bytes @ 0xE000EFBC)
+T5160 000:397.009   CPU_ReadMem(4 bytes @ 0xE000EFCC)
+T5160 000:397.606   [0][0]: E000E000 CID B105900D PID 000BBD20 DEVARCH 47702A04 DEVTYPE 00 Cortex-M23
+T5160 000:397.661   CPU_ReadMem(32 bytes @ 0xE0001FE0)
+T5160 000:398.136   CPU_ReadMem(4 bytes @ 0xE0001FBC)
+T5160 000:398.486   CPU_ReadMem(4 bytes @ 0xE0001FCC)
+T5160 000:398.858   [0][1]: E0001000 CID B105900D PID 000BBD20 DEVARCH 47701A02 DEVTYPE 00 DWT
+T5160 000:398.897   CPU_ReadMem(32 bytes @ 0xE0002FE0)
+T5160 000:399.581   CPU_ReadMem(4 bytes @ 0xE0002FBC)
+T5160 000:400.005   CPU_ReadMem(4 bytes @ 0xE0002FCC)
+T5160 000:400.396   [0][2]: E0002000 CID B105900D PID 000BBD20 DEVARCH 47701A03 DEVTYPE 00 FPB
+T5160 000:400.434   CPU_ReadMem(32 bytes @ 0x40019FE0)
+T5160 000:401.001   CPU_ReadMem(4 bytes @ 0x40019FBC)
+T5160 000:401.478   CPU_ReadMem(4 bytes @ 0x40019FCC)
+T5160 000:401.904   [0][3]: 40019000 CID B105900D PID 000BBD20 DEVARCH 47710A31 DEVTYPE 31 MTB
+T5160 000:401.988 - 24.520ms returns 0x00
+T5160 000:402.668 JLINK_Halt()
+T5160 000:405.430 - 2.762ms returns 0x00
+T5160 000:405.459 JLINK_IsHalted()
+T5160 000:405.477 - 0.018ms returns TRUE
+T5160 000:405.509 JLINK_ResetPullsRESET(ON)
+T5160 000:405.523 - 0.014ms
+T5160 000:405.538 JLINK_Reset()
+T5160 000:405.567   CPU_WriteMem(4 bytes @ 0xE000EDF0)
+T5160 000:405.903   CPU_ReadMem(4 bytes @ 0xE000ED44)
+T5160 000:406.199   CPU_WriteMem(4 bytes @ 0xE000EDFC)
+T5160 000:406.539   Reset: Halt core after reset via DEMCR.VC_CORERESET.
+T5160 000:406.948   Reset: Reset device via AIRCR.SYSRESETREQ.
+T5160 000:406.977   CPU_WriteMem(4 bytes @ 0xE000ED0C)
+T5160 000:461.654   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T5160 000:461.994   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T5160 000:462.291   CPU_WriteMem(4 bytes @ 0xE000EDFC)
+T5160 000:468.663   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T5160 000:471.789   CPU_WriteMem(4 bytes @ 0xE0002000)
+T5160 000:472.156   CPU_ReadMem(4 bytes @ 0xE000EDFC)
+T5160 000:472.574   CPU_ReadMem(4 bytes @ 0xE0001000)
+T5160 000:472.865   CPU_WriteMem(4 bytes @ 0xE0001000)
+T5160 000:473.241   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T5160 000:473.536 - 67.997ms
+T5160 000:474.111 JLINK_IsHalted()
+T5160 000:474.133 - 0.022ms returns TRUE
+T5160 000:474.349 JLINK_MeasureCPUSpeed(RAMAddr = 0xFFFFFFFF)
+T5160 000:474.372   CPU_ReadMem(16 bytes @ 0x20004000)
+T5160 000:474.813   CPU_ReadMem(64 bytes @ 0x20004000)
+T5160 000:475.519    -- Updating C cache (64 bytes @ 0x20004000)
+T5160 000:475.557    -- Read from C cache (6 bytes @ 0x20004000)
+T5160 000:475.581   CPU_ReadMem(4 bytes @ 0x40019004)
+T5160 000:475.869   CPU_ReadMem(4 bytes @ 0xE000ED90)
+T5160 000:476.164   CPU_ReadMem(4 bytes @ 0xE000ED94)
+T5160 000:476.486   CPU_WriteMem(16 bytes @ 0x20004000)
+T5160 000:476.883   CPU_WriteMem(6 bytes @ 0x20004000)
+T5160 000:477.240   CPU_ReadMem(64 bytes @ 0x20004000)
+T5160 000:477.929    -- Updating C cache (64 bytes @ 0x20004000)
+T5160 000:477.953    -- Read from C cache (6 bytes @ 0x20004000)
+T5160 000:477.980   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T5160 000:478.282   CPU_WriteMem(4 bytes @ 0xE0002008)
+T5160 000:478.308   CPU_WriteMem(4 bytes @ 0xE000200C)
+T5160 000:478.330   CPU_WriteMem(4 bytes @ 0xE0002010)
+T5160 000:478.351   CPU_WriteMem(4 bytes @ 0xE0002014)
+T5160 000:484.198   CPU_WriteMem(4 bytes @ 0xE0002008)
+T5160 000:484.593   CPU_WriteMem(4 bytes @ 0xE000200C)
+T5160 000:484.944   CPU_WriteMem(4 bytes @ 0xE0002010)
+T5160 000:485.391   CPU_WriteMem(4 bytes @ 0xE0002014)
+T5160 000:485.696   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T5160 000:485.992   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T5160 000:486.288   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T5160 000:512.327   CPU_WriteMem(6 bytes @ 0x20004000)
+T5160 000:512.669   ClockFreq: 501300 Hz
+T5160 000:512.706 - 38.357ms returns 501300
+T5160 000:512.729 JLINK_ReadReg(XPSR)
+T5160 000:512.747   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T5160 000:513.059 - 0.330ms returns 0x81000000
+T6210 000:598.593 JLINK_ReadReg(XPSR)
+T6210 000:598.691   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T6210 000:599.067 - 0.473ms returns 0x81000000
+T6210 000:660.963 JLINK_ReadReg(XPSR)
+T6210 000:661.060   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T6210 000:661.665 - 0.702ms returns 0x81000000
+T6210 000:676.346 JLINK_ReadReg(XPSR)
+T6210 000:676.439   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T6210 000:676.988 - 0.642ms returns 0x81000000
+T6210 000:813.598 JLINK_SetEndian(ARM_ENDIAN_LITTLE)
+T6210 000:813.697 - 0.099ms returns 0
+T6210 000:813.913 JLINK_BeginDownload(Flags = 0x00000000)
+T6210 000:813.954 - 0.041ms
+T6210 000:833.640 JLINK_WriteMem(0x00000000, 0xBC0 Bytes, ...)
+T6210 000:833.707   Data:  88 09 00 20 89 2B 00 00 87 29 00 00 85 2B 00 00 ...
+T6210 000:833.972   completely In flash
+T6210 000:834.020 - 0.379ms returns 0xBC0
+T6210 000:834.530 JLINK_WriteMem(0x00000BC0, 0xBB0 Bytes, ...)
+T6210 000:834.574   Data:  D7 FD 97 E7 40 F2 18 14 C2 F2 00 04 31 1C 28 1C ...
+T6210 000:834.602   completely In flash
+T6210 000:834.625 - 0.095ms returns 0xBB0
+T6210 000:835.042 JLINK_WriteMem(0x00001770, 0xB90 Bytes, ...)
+T6210 000:835.098   Data:  20 23 C4 F2 04 03 1A 88 04 21 0A 43 1A 80 70 47 ...
+T6210 000:835.134   completely In flash
+T6210 000:835.168 - 0.126ms returns 0xB90
+T6210 000:835.616 JLINK_WriteMem(0x00002300, 0xBA0 Bytes, ...)
+T6210 000:835.666   Data:  A1 B1 02 22 51 40 C9 B2 0A 01 00 21 05 E0 83 68 ...
+T6210 000:835.701   completely In flash
+T6210 000:835.735 - 0.119ms returns 0xBA0
+T6210 000:836.128 JLINK_WriteMem(0x00002EA0, 0xBB0 Bytes, ...)
+T6210 000:836.178   Data:  00 28 00 DC 99 E0 00 2A 68 D0 FF 2D 00 D1 76 E0 ...
+T6210 000:836.217   completely In flash
+T6210 000:836.252 - 0.124ms returns 0xBB0
+T6210 000:836.662 JLINK_WriteMem(0x00003A50, 0xBC0 Bytes, ...)
+T6210 000:836.712   Data:  20 25 C8 40 69 1A 8E 40 71 1E 8E 41 06 43 15 00 ...
+T6210 000:836.748   completely In flash
+T6210 000:836.781 - 0.119ms returns 0xBC0
+T6210 000:837.034 JLINK_WriteMem(0x00004610, 0x9EC Bytes, ...)
+T6210 000:837.069   Data:  99 E0 43 46 5A 46 DB 08 52 07 1A 43 5B 46 5C 02 ...
+T6210 000:837.097   completely In flash
+T6210 000:837.128 - 0.093ms returns 0x9EC
+T6210 000:837.368 JLINK_WriteMem(0x00004FFC, 0xD0 Bytes, ...)
+T6210 000:837.417   Data:  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ...
+T6210 000:837.451   completely In flash
+T6210 000:837.486 - 0.117ms returns 0xD0
+T6210 000:837.759 JLINK_WriteMem(0x01010018, 0x1C Bytes, ...)
+T6210 000:837.812   Data:  FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF ...
+T6210 000:838.065   completely In flash
+T6210 000:838.112 - 0.354ms returns 0x1C
+T6210 000:861.344 JLINK_EndDownload()
+T6210 000:861.715   CPU_ReadMem(4 bytes @ 0x40019004)
+T6210 000:862.103   CPU_ReadMem(4 bytes @ 0xE000ED90)
+T6210 000:862.495   CPU_ReadMem(4 bytes @ 0xE000ED94)
+T6210 000:862.850    -- --------------------------------------
+T6210 000:862.910    -- Start of determining flash info (Bank @ 0x00000000)
+T6210 000:862.950    -- End of determining flash info
+T6210 000:862.989    -- Start of determining dirty areas in flash cache
+T6210 000:863.046    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x00000000 if necessary
+T6210 000:863.079    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x00000800 if necessary
+T6210 000:863.109    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x00001000 if necessary
+T6210 000:863.140    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x00001800 if necessary
+T6210 000:863.172    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x00002000 if necessary
+T6210 000:863.204    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x00002800 if necessary
+T6210 000:863.236    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x00003000 if necessary
+T6210 000:863.268    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x00003800 if necessary
+T6210 000:863.301    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x00004000 if necessary
+T6210 000:863.335    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x00004800 if necessary
+T6210 000:863.367    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x00005000 if necessary
+T6210 000:863.505    -- End of determining dirty areas
+T6210 000:863.543    -- Start of preparing flash programming
+T6210 000:863.583    -- Preparing RAMCode
+T6210 000:863.619    -- Calculating RAM usage
+T6210 000:863.658    -- RAM usage = 12648 Bytes
+T6210 000:863.693    -- Preserving CPU registers
+T6210 000:869.620    -- Preparing memory
+T6210 000:869.709    -- Determining CPU clock frequency
+T6210 000:906.211    -- CPU frequency = 501 kHz
+T6210 000:906.315    -- Preparing target
+T6210 000:906.348    -- Preserving target RAM temporarily used for programming
+T6210 000:971.749    -- Downloading RAMCode
+T6210 001:013.266    -- Initializing RAMCode (InitType: 3 = Verify)
+T6210 001:013.350    -- Executing Init(3)
+T6210 001:024.107    -- End of preparing flash programming
+T6210 001:024.215   
+  ***** Warning: 
+T6210 001:024.236   CPU is running at very low speed (501 kHz). Readback will be performed instead of CRC calculation.
+T6210 001:024.257    -- CPU is running at 501 kHz.
+T6210 001:024.280    -- Start of comparing flash
+T6210 001:024.302    -- Read back was estimated as fastest method
+T6210 001:024.326    -- Comparing range 0x0000 - 0x0FFF (2 Sectors, 4 KB), using single-block CRC calculation
+T6210 001:024.349    -- CRC check is not supported by this flash bank. Switched to read back method.
+T6210 001:051.493    -- CRC does not match, checking individual sectors
+T6210 001:051.578    -- CRC check is not supported by this flash bank. Switched to read back method.
+T6210 001:078.856    -- CRC does not match for sectors 0-1
+T6210 001:078.942    -- Comparing range 0x1000 - 0x1FFF (2 Sectors, 4 KB), using single-block CRC calculation
+T6210 001:078.965    -- CRC check is not supported by this flash bank. Switched to read back method.
+T6210 001:106.163    -- CRC does not match, checking individual sectors
+T6210 001:106.225    -- CRC check is not supported by this flash bank. Switched to read back method.
+T6210 001:133.624    -- CRC does not match for sectors 2-3
+T6210 001:133.718    -- Comparing range 0x2000 - 0x2FFF (2 Sectors, 4 KB), using single-block CRC calculation
+T6210 001:133.741    -- CRC check is not supported by this flash bank. Switched to read back method.
+T6210 001:160.989    -- CRC does not match, checking individual sectors
+T6210 001:161.079    -- CRC check is not supported by this flash bank. Switched to read back method.
+T6210 001:188.398    -- CRC does not match for sectors 4-5
+T6210 001:188.467    -- Comparing range 0x3000 - 0x3FFF (2 Sectors, 4 KB), using single-block CRC calculation
+T6210 001:188.490    -- CRC check is not supported by this flash bank. Switched to read back method.
+T6210 001:215.919    -- CRC does not match, checking individual sectors
+T6210 001:216.010    -- CRC check is not supported by this flash bank. Switched to read back method.
+T6210 001:243.587    -- CRC does not match for sectors 6-7
+T6210 001:243.744    -- Comparing range 0x4000 - 0x4FFF (2 Sectors, 4 KB), using single-block CRC calculation
+T6210 001:243.804    -- CRC check is not supported by this flash bank. Switched to read back method.
+T6210 001:271.367    -- CRC does not match, checking individual sectors
+T6210 001:271.537    -- CRC check is not supported by this flash bank. Switched to read back method.
+T6210 001:298.983    -- CRC does not match for sectors 8-9
+T6210 001:299.180    -- Comparing range 0x5000 - 0x57FF (1 Sector, 2 KB), using single-block CRC calculation
+T6210 001:299.253    -- CRC check is not supported by this flash bank. Switched to read back method.
+T6210 001:313.587    -- CRC does not match for sector 10
+T6210 001:313.772    -- End of comparing flash
+T6210 001:313.843    -- Start of erasing sectors
+T6210 001:313.918    -- Erasing range 0x00000000 - 0x000007FF (  1 Sector, 2 KB)
+T6210 001:313.991    -- Initializing RAMCode (InitType: 1 = Erase)
+T6210 001:314.061    -- Executing UnInit()
+T6210 001:319.672    -- Executing Init(1)
+T6210 001:330.743    -- Erasing range 0x00000800 - 0x00000FFF (  1 Sector, 2 KB)
+T6210 001:337.194    -- Erasing range 0x00001000 - 0x000017FF (  1 Sector, 2 KB)
+T6210 001:343.615    -- Erasing range 0x00001800 - 0x00001FFF (  1 Sector, 2 KB)
+T6210 001:349.974    -- Erasing range 0x00002000 - 0x000027FF (  1 Sector, 2 KB)
+T6210 001:356.497    -- Erasing range 0x00002800 - 0x00002FFF (  1 Sector, 2 KB)
+T6210 001:362.750    -- Erasing range 0x00003000 - 0x000037FF (  1 Sector, 2 KB)
+T6210 001:368.899    -- Erasing range 0x00003800 - 0x00003FFF (  1 Sector, 2 KB)
+T6210 001:375.047    -- Erasing range 0x00004000 - 0x000047FF (  1 Sector, 2 KB)
+T6210 001:381.125    -- Erasing range 0x00004800 - 0x00004FFF (  1 Sector, 2 KB)
+T6210 001:387.172    -- Erasing range 0x00005000 - 0x000057FF (  1 Sector, 2 KB)
+T6210 001:393.399    -- End of erasing sectors
+T6210 001:393.434    -- Start of flash programming
+T6210 001:393.457    -- Programming range 0x00000000 - 0x000007FF (  1 Sector, 2 KB)
+T6210 001:393.480    -- Initializing RAMCode (InitType: 2 = Program)
+T6210 001:393.502    -- Executing UnInit()
+T6210 001:396.945    -- Executing Init(2)
+T6210 001:400.014    -- Programming range 0x00000800 - 0x00000FFF (  1 Sector, 2 KB)
+T6210 001:400.068    -- Programming range 0x00001000 - 0x000017FF (  1 Sector, 2 KB)
+T6210 001:422.685    -- Programming range 0x00001800 - 0x00001FFF (  1 Sector, 2 KB)
+T6210 001:435.569    -- Programming range 0x00002000 - 0x000027FF (  1 Sector, 2 KB)
+T6210 001:448.619    -- Programming range 0x00002800 - 0x00002FFF (  1 Sector, 2 KB)
+T6210 001:461.506    -- Programming range 0x00003000 - 0x000037FF (  1 Sector, 2 KB)
+T6210 001:474.776    -- Programming range 0x00003800 - 0x00003FFF (  1 Sector, 2 KB)
+T6210 001:487.768    -- Programming range 0x00004000 - 0x000047FF (  1 Sector, 2 KB)
+T6210 001:500.411    -- Programming range 0x00004800 - 0x00004FFF (  1 Sector, 2 KB)
+T6210 001:513.383    -- Programming range 0x00005000 - 0x000057FF (  1 Sector, 2 KB)
+T6210 001:526.395    -- End of flash programming
+T6210 001:526.521    -- 0x0000 - 0x57FF ( 11 Sectors, 22 KB)
+T6210 001:526.574    -- Start of verifying flash
+T6210 001:526.623    -- Checksum calculation was estimated as fastest method
+T6210 001:526.672    -- Checksum is not supported by this flash bank. Switched to read back method.
+T6210 001:526.734    -- Initializing RAMCode (InitType: 3 = Verify)
+T6210 001:526.784    -- Executing UnInit()
+T6210 001:555.470    -- Executing Init(3)
+T6210 001:574.954    -- End of verifying flash
+T6210 001:575.025    -- Start of restoring
+T6210 001:575.047    -- Executing UnInit()
+T6210 001:578.569    -- Restoring target memory
+T6210 001:630.007    -- Restoring CPU registers
+T6210 001:630.850    -- End of restoring
+T6210 001:631.001    -- Bank 0 @ 0x00000000: 1 range affected (22528 bytes)
+T6210 001:631.083    -- Total: 0.767s (Prepare: 0.160s, Compare: 0.289s, Erase: 0.079s, Program: 0.158s, Verify: 0.022s, Restore: 0.055s)
+T6210 001:631.171    -- Program speed: 139 KB/s
+T6210 001:631.257    -- --------------------------------------
+T6210 001:631.330    -- Start of determining flash info (Bank @ 0x01010008)
+T6210 001:631.400    -- End of determining flash info
+T6210 001:631.469    -- Start of determining dirty areas in flash cache
+T6210 001:631.540    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x01010018 if necessary
+T6210 001:631.611    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x0101001C if necessary
+T6210 001:631.683    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x01010020 if necessary
+T6210 001:631.753    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x01010024 if necessary
+T6210 001:631.830    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x01010028 if necessary
+T6210 001:631.906    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x0101002C if necessary
+T6210 001:632.009    -- Filling invalid ranges in sector buffer (flash cache) for sector @ 0x01010030 if necessary
+T6210 001:632.123    -- End of determining dirty areas
+T6210 001:632.238    -- Start of preparing flash programming
+T6210 001:632.353    -- Preparing RAMCode
+T6210 001:632.579    -- Calculating RAM usage
+T6210 001:632.704    -- RAM usage = 6008 Bytes
+T6210 001:632.813    -- Preserving CPU registers
+T6210 001:633.000    -- Preparing memory
+T6210 001:633.123    -- Determining CPU clock frequency
+T6210 001:672.032    -- CPU frequency = 48057 kHz
+T6210 001:672.223    -- Preparing target
+T6210 001:672.292    -- Preserving target RAM temporarily used for programming
+T6210 001:703.358    -- Downloading RAMCode
+T6210 001:748.940    -- Initializing RAMCode (InitType: 3 = Verify)
+T6210 001:749.148    -- Executing Init(3)
+T6210 001:760.915    -- End of preparing flash programming
+T6210 001:761.105    -- CPU is running at 48057 kHz.
+T6210 001:761.180    -- Start of comparing flash
+T6210 001:761.251    -- Flash algorithm supports a native verify function which is used to compare the flash content.
+T6210 001:761.328    -- Comparing range 0x1010018 - 0x1010033 (7 Sectors, 28 Bytes), using verify function of the RAMCode
+T6210 001:762.917    -- Data matches for sectors 4-10
+T6210 001:763.127    -- End of comparing flash
+T6210 001:763.205    -- Start of erasing sectors
+T6210 001:763.275    -- End of erasing sectors
+T6210 001:763.344    -- Start of flash programming
+T6210 001:763.412    -- End of flash programming
+T6210 001:763.482    -- Start of verifying flash
+T6210 001:763.550    -- End of verifying flash
+T6210 001:763.617    -- Start of restoring
+T6210 001:763.695    -- Executing UnInit()
+T6210 001:768.252    -- Restoring target memory
+T6210 001:793.507    -- Restoring CPU registers
+T6210 001:794.184    -- End of restoring
+T6210 001:794.320    -- Bank 2 @ 0x01010008: Skipped. Contents already match
+T6210 001:794.397    -- Bank 2 @ 0x01010008: Skipped. Contents already match
+T6210 001:794.817 - 933.471ms returns 22528 (0x5800)
+T6210 001:797.139 JLINK_WriteReg(R15 (PC), 0x00002B88)
+T6210 001:797.298 - 0.159ms returns 0
+T6210 001:797.378 JLINK_WriteReg(XPSR, 0x01000000)
+T6210 001:797.461 - 0.083ms returns 0
+T6210 001:797.541 JLINK_ResetPullsRESET(ON)
+T6210 001:797.581 - 0.040ms
+T6210 001:797.622 JLINK_Halt()
+T6210 001:797.668 - 0.045ms returns 0x00
+T6210 001:797.712 JLINK_IsHalted()
+T6210 001:797.752 - 0.039ms returns TRUE
+T6210 001:797.792 JLINK_Reset()
+T6210 001:797.836   CPU_ReadMem(4 bytes @ 0x20004000)
+T6210 001:798.311   CPU_WriteMem(4 bytes @ 0x20004000)
+T6210 001:798.781   CPU_WriteMem(4 bytes @ 0xE000EDF0)
+T6210 001:799.215   CPU_ReadMem(4 bytes @ 0xE000ED44)
+T6210 001:799.612   CPU_WriteMem(4 bytes @ 0xE000EDFC)
+T6210 001:799.994   Reset: Halt core after reset via DEMCR.VC_CORERESET.
+T6210 001:800.910   Reset: Reset device via AIRCR.SYSRESETREQ.
+T6210 001:800.985   CPU_WriteMem(4 bytes @ 0xE000ED0C)
+T6210 001:857.190   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T6210 001:857.959   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T6210 001:858.578   CPU_WriteMem(4 bytes @ 0xE000EDFC)
+T6210 001:864.835   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T6210 001:868.675   CPU_WriteMem(4 bytes @ 0xE0002000)
+T6210 001:869.244   CPU_ReadMem(4 bytes @ 0xE000EDFC)
+T6210 001:869.842   CPU_ReadMem(4 bytes @ 0xE0001000)
+T6210 001:870.471   CPU_WriteMem(4 bytes @ 0xE0001000)
+T6210 001:871.069   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T6210 001:871.729 - 73.935ms
+T6210 001:871.852 JLINK_SetEndian(ARM_ENDIAN_LITTLE)
+T6210 001:871.900 - 0.048ms returns 0
+T6210 001:873.552 JLINK_ResetPullsRESET(ON)
+T6210 001:873.646 - 0.094ms
+T6210 001:873.685 JLINK_Halt()
+T6210 001:873.715 - 0.029ms returns 0x00
+T6210 001:873.745 JLINK_IsHalted()
+T6210 001:873.774 - 0.029ms returns TRUE
+T6210 001:873.806 JLINK_Reset()
+T6210 001:873.846   CPU_WriteMem(4 bytes @ 0xE000EDF0)
+T6210 001:874.365   CPU_ReadMem(4 bytes @ 0xE000ED44)
+T6210 001:874.861   CPU_WriteMem(4 bytes @ 0xE000EDFC)
+T6210 001:875.404   Reset: Halt core after reset via DEMCR.VC_CORERESET.
+T6210 001:876.055   Reset: Reset device via AIRCR.SYSRESETREQ.
+T6210 001:876.136   CPU_WriteMem(4 bytes @ 0xE000ED0C)
+T6210 001:929.690   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T6210 001:930.057   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T6210 001:930.447   CPU_WriteMem(4 bytes @ 0xE000EDFC)
+T6210 001:936.163   CPU_ReadMem(4 bytes @ 0xE000EDF0)
+T6210 001:939.620   CPU_WriteMem(4 bytes @ 0xE0002000)
+T6210 001:940.190   CPU_ReadMem(4 bytes @ 0xE000EDFC)
+T6210 001:940.662   CPU_ReadMem(4 bytes @ 0xE0001000)
+T6210 001:941.190   CPU_WriteMem(4 bytes @ 0xE0001000)
+T6210 001:941.646   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T6210 001:942.036 - 68.230ms
+T6210 001:942.070 JLINK_SetEndian(ARM_ENDIAN_LITTLE)
+T6210 001:942.094 - 0.024ms returns 0
+T6210 001:962.627 JLINK_ReadReg(XPSR)
+T6210 001:962.694   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T6210 001:963.029 - 0.402ms returns 0x21000000
+T6210 001:963.575 JLINK_ReadMem(0x00002B80, 0x40 Bytes, ...)
+T6210 001:963.611    -- Read from flash cache (64 bytes @ 0x00002B80)
+T6210 001:963.635   Data:  00 A5 FF FF 00 BE 70 47 10 B5 00 F0 41 F8 FE F7 ...
+T6210 001:963.658 - 0.082ms returns 0
+T6210 001:988.210 JLINK_ReadReg(XPSR)
+T6210 001:988.286 - 0.076ms returns 0x21000000
+T6210 001:988.848 JLINK_ReadMem(0x00002B80, 0x40 Bytes, ...)
+T6210 001:988.900    -- Read from flash cache (64 bytes @ 0x00002B80)
+T6210 001:988.922   Data:  00 A5 FF FF 00 BE 70 47 10 B5 00 F0 41 F8 FE F7 ...
+T6210 001:988.944 - 0.096ms returns 0
+T6210 002:403.144 JLINK_ReadReg(XPSR)
+T6210 002:403.247 - 0.102ms returns 0x21000000
+T6210 002:496.534 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T6210 002:496.629 - 0.095ms returns 0x04
+T6210 002:496.653 JLINK_GetNumWPUnits()
+T6210 002:496.674 - 0.021ms returns 2
+T6210 002:496.697 JLINK_GetNumWPUnits()
+T6210 002:496.716 - 0.018ms returns 2
+T6210 002:496.741 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T6210 002:496.762 - 0.020ms returns 0x04
+T6210 002:496.783 JLINK_GetNumWPUnits()
+T6210 002:496.801 - 0.018ms returns 2
+T6210 002:496.821 JLINK_GetNumWPUnits()
+T6210 002:496.841 - 0.019ms returns 2
+T6210 002:496.868 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T6210 002:496.890 - 0.022ms returns 0x04
+T6210 002:496.911 JLINK_GetNumWPUnits()
+T6210 002:496.932 - 0.021ms returns 2
+T6210 002:496.954 JLINK_GetNumWPUnits()
+T6210 002:496.974 - 0.020ms returns 2
+T6210 002:497.064 JLINK_SetBPEx(Addr = 0x00001952, Type = 0xFFFFFF00)
+T6210 002:497.104 - 0.040ms returns 0x00000001
+T6210 002:497.135 JLINK_ClrBPEx(BPHandle = 0x00000001)
+T6210 002:497.544 - 0.409ms returns 0x00
+T6210 002:513.451 JLINK_ReadMem(0x00001940, 0x40 Bytes, ...)
+T6210 002:513.518    -- Read from flash cache (64 bytes @ 0x00001940)
+T6210 002:513.542   Data:  10 BD 10 B5 03 78 02 2B 00 D0 10 BD FF F7 3A FC ...
+T6210 002:513.564 - 0.113ms returns 0
+T6210 002:514.269 JLINK_SetBPEx(Addr = 0x00001954, Type = 0xFFFFFF00)
+T6210 002:514.303 - 0.034ms returns 0x00000002
+T6210 002:591.121 JLINK_ReadRegs(NumRegs = 22, Indexes: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 86, 87, 20)
+T6210 002:591.249    -- R0=0x00, R1=0x01, R2=0x01, R3=0x20004219, R4=0x20005740, R5=0x20005730, R6=0x20004DF8, R7=0x20005740, R8=0x00, R9=0x7FFFFFFF, R10=0x20004CA4, R11=0x917363FD, R12=0x40044200, R13 (SP)=0x20000988, R14=0x20004199, R15 (PC)=0x2B88, XPSR=0x21000000, MSP=0x20000988, PSP=0xDCF6D24, MSPLIM=0x00, PSPLIM=0x00, CFBP=0x00
+T6210 002:591.292 - 0.171ms returns 0x00
+T6210 002:591.637 JLINK_ReadReg(XPSR)
+T6210 002:591.702 - 0.064ms returns 0x21000000
+T6210 002:592.852 JLINK_ReadMem(0x00002B80, 0x40 Bytes, ...)
+T6210 002:592.935    -- Read from flash cache (64 bytes @ 0x00002B80)
+T6210 002:592.975   Data:  00 A5 FF FF 00 BE 70 47 10 B5 00 F0 41 F8 FE F7 ...
+T6210 002:593.010 - 0.158ms returns 0
+T0FFC 002:705.950 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T0FFC 002:706.031 - 0.081ms returns 0x04
+T0FFC 002:706.058 JLINK_GetNumWPUnits()
+T0FFC 002:706.082 - 0.023ms returns 2
+T0FFC 002:706.110 JLINK_GetNumWPUnits()
+T0FFC 002:706.137 - 0.027ms returns 2
+T0FFC 002:706.432 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T0FFC 002:706.488 - 0.055ms returns 0x04
+T0FFC 002:706.514 JLINK_GetNumWPUnits()
+T0FFC 002:706.540 - 0.026ms returns 2
+T0FFC 002:706.564 JLINK_GetNumWPUnits()
+T0FFC 002:706.589 - 0.024ms returns 2
+T0FFC 002:706.926 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T0FFC 002:706.967 - 0.040ms returns 0x04
+T0FFC 002:706.998 JLINK_GetNumWPUnits()
+T0FFC 002:707.018 - 0.019ms returns 2
+T0FFC 002:707.034 JLINK_GetNumWPUnits()
+T0FFC 002:707.048 - 0.014ms returns 2
+T0FFC 002:707.323 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T0FFC 002:707.362 - 0.039ms returns 0x04
+T0FFC 002:707.386 JLINK_GetNumWPUnits()
+T0FFC 002:707.405 - 0.019ms returns 2
+T0FFC 002:707.425 JLINK_GetNumWPUnits()
+T0FFC 002:707.446 - 0.020ms returns 2
+T0FFC 002:707.663 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T0FFC 002:707.695 - 0.031ms returns 0x04
+T0FFC 002:707.711 JLINK_GetNumWPUnits()
+T0FFC 002:707.726 - 0.014ms returns 2
+T0FFC 002:707.741 JLINK_GetNumWPUnits()
+T0FFC 002:707.756 - 0.014ms returns 2
+T0FFC 002:708.324 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T0FFC 002:708.368 - 0.045ms returns 0x04
+T0FFC 002:708.390 JLINK_GetNumWPUnits()
+T0FFC 002:708.413 - 0.022ms returns 2
+T0FFC 002:708.434 JLINK_GetNumWPUnits()
+T0FFC 002:708.456 - 0.021ms returns 2
+T0FFC 002:709.466 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T0FFC 002:709.534 - 0.068ms returns 0x04
+T0FFC 002:709.563 JLINK_GetNumWPUnits()
+T0FFC 002:709.589 - 0.025ms returns 2
+T0FFC 002:709.612 JLINK_GetNumWPUnits()
+T0FFC 002:709.637 - 0.024ms returns 2
+T0FFC 002:710.144 JLINK_GetNumBPUnits(Type = 0xFFFFFF00)
+T0FFC 002:710.198 - 0.053ms returns 0x04
+T0FFC 002:710.225 JLINK_GetNumWPUnits()
+T0FFC 002:710.251 - 0.025ms returns 2
+T0FFC 002:710.277 JLINK_GetNumWPUnits()
+T0FFC 002:710.307 - 0.029ms returns 2
+T6210 002:747.997 JLINK_ReadReg(XPSR)
+T6210 002:748.113 - 0.116ms returns 0x21000000
+T6210 002:749.057 JLINK_ReadMem(0x00002B80, 0x40 Bytes, ...)
+T6210 002:749.161    -- Read from flash cache (64 bytes @ 0x00002B80)
+T6210 002:749.214   Data:  00 A5 FF FF 00 BE 70 47 10 B5 00 F0 41 F8 FE F7 ...
+T6210 002:749.250 - 0.193ms returns 0
+T6210 002:854.807 JLINK_ReadReg(XPSR)
+T6210 002:854.920 - 0.113ms returns 0x21000000
+T6210 013:823.094 JLINK_STRACE_Read(..., NumItems = 0x10000)
+T6210 013:823.179   Initializing trace type buffer with configured Coresight trace components (* indicates set/detected address):
+T6210 013:823.282     TF:   0x00000000
+T6210 013:823.301     TMC:  0x00000000
+T6210 013:823.314     ETB:  0x00000000
+T6210 013:823.326    *MTB:  0x40019000
+T6210 013:823.342     TPIU: 0x00000000
+T6210 013:823.357     ETM:  0x00000000
+T6210 013:823.370     STM:  0x00000000
+T6210 013:823.386     PTM:  0x00000000
+T6210 013:823.669 - 0.574ms NumItemsRead = 0x00
+T6210 013:823.714 JLINK_IsHalted()
+T6210 013:824.021 - 0.305ms returns TRUE
+T6210 013:824.061 JLINK_STRACE_Read(..., NumItems = 0x10000)
+T6210 013:824.083 - 0.022ms NumItemsRead = 0x00
+T6210 013:824.107 JLINK_GoEx(MaxEmulInsts = 0, Flags = 0x01)
+T6210 013:824.139   CPU_WriteMem(4 bytes @ 0xE0002000)
+T6210 013:824.611   CPU_ReadMem(4 bytes @ 0xE0001000)
+T6210 013:825.064   CPU_WriteMem(4 bytes @ 0xE0001000)
+T6210 013:825.637   CPU_WriteMem(4 bytes @ 0xE0002008)
+T6210 013:825.717   CPU_WriteMem(4 bytes @ 0xE000200C)
+T6210 013:825.741   CPU_WriteMem(4 bytes @ 0xE0002010)
+T6210 013:825.762   CPU_WriteMem(4 bytes @ 0xE0002014)
+T6210 013:826.707   CPU_WriteMem(4 bytes @ 0xE0001004)
+T6210 013:827.856   Memory map 'after startup completion point' is active
+T6210 013:827.912 - 3.805ms
+T6210 013:899.712 JLINK_ReadMem(0x20000250, 0x4 Bytes, ...)
+T6210 013:899.853   CPU_ReadMem(4 bytes @ 0x20000250)
+T6210 013:900.296   Data:  00 00 00 00
+T6210 013:900.349 - 0.638ms returns 0
+T6210 013:900.722 JLINK_ReadMem(0x20000254, 0x4 Bytes, ...)
+T6210 013:900.805   CPU_ReadMem(4 bytes @ 0x20000254)
+T6210 013:901.270   Data:  00 00 00 00
+T6210 013:901.306 - 0.583ms returns 0
+T6210 013:932.102 JLINK_IsHalted()
+T6210 013:934.963 - 2.861ms returns TRUE
+T6210 013:935.037 JLINK_ReadReg(XPSR)
+T6210 013:935.058   CPU_ReadMem(4 bytes @ 0xE000EE08)
+T6210 013:935.416 - 0.378ms returns 0x61000000
+T6210 013:935.462 JLINK_ReadReg(R15 (PC))
+T6210 013:935.486 - 0.023ms returns 0x00001954
+T6210 013:935.512 JLINK_ReadReg(XPSR)
+T6210 013:935.531 - 0.019ms returns 0x61000000
+T6210 013:935.555 JLINK_ReadReg(XPSR)
+T6210 013:935.576 - 0.021ms returns 0x61000000
+T6210 013:935.597 JLINK_ReadReg(R15 (PC))
+T6210 013:935.618 - 0.020ms returns 0x00001954
+T6210 013:935.638 JLINK_ReadReg(XPSR)
+T6210 013:935.661 - 0.023ms returns 0x61000000
+T6210 013:935.682 JLINK_ReadReg(XPSR)
+T6210 013:935.701 - 0.019ms returns 0x61000000
+T6210 013:935.722 JLINK_ReadMem(0x00001954, 0x1 Bytes, ...)
+T6210 013:935.744    -- Read from flash cache (1 bytes @ 0x00001954)
+T6210 013:935.774   Data:  FF
+T6210 013:935.797 - 0.076ms returns 0
+T6210 013:935.813 JLINK_IsHalted()
+T6210 013:935.827 - 0.014ms returns TRUE
+T6210 013:935.842 JLINK_ReadReg(XPSR)
+T6210 013:935.856 - 0.014ms returns 0x61000000
+T6210 013:935.875 JLINK_ReadReg(XPSR)
+T6210 013:935.898 - 0.021ms returns 0x61000000
+T6210 013:935.917 JLINK_ReadReg(R15 (PC))
+T6210 013:935.934 - 0.017ms returns 0x00001954
+T6210 013:935.950 JLINK_ReadReg(XPSR)
+T6210 013:935.965 - 0.014ms returns 0x61000000
+T6210 013:935.979 JLINK_ReadReg(XPSR)
+T6210 013:935.994 - 0.014ms returns 0x61000000
+T6210 013:936.008 JLINK_ReadMem(0x00001954, 0x1 Bytes, ...)
+T6210 013:936.022    -- Read from flash cache (1 bytes @ 0x00001954)
+T6210 013:936.042   Data:  FF
+T6210 013:936.061 - 0.054ms returns 0
+T6210 013:936.144 JLINK_IsHalted()
+T6210 013:936.170 - 0.025ms returns TRUE
+T6210 013:936.192 JLINK_ReadReg(XPSR)
+T6210 013:936.210 - 0.017ms returns 0x61000000
+T6210 013:936.230 JLINK_ReadReg(R15 (PC))
+T6210 013:936.250 - 0.020ms returns 0x00001954
+T6210 013:936.272 JLINK_ReadReg(XPSR)
+T6210 013:936.286 - 0.014ms returns 0x61000000
+T6210 013:936.301 JLINK_ReadReg(XPSR)
+T6210 013:936.315 - 0.014ms returns 0x61000000
+T6210 013:936.331 JLINK_ReadReg(R15 (PC))
+T6210 013:936.346 - 0.014ms returns 0x00001954
+T6210 013:936.366 JLINK_ReadReg(XPSR)
+T6210 013:936.390 - 0.023ms returns 0x61000000
+T6210 013:936.413 JLINK_ReadReg(XPSR)
+T6210 013:936.434 - 0.020ms returns 0x61000000
+T6210 013:936.453 JLINK_ReadMem(0x00001954, 0x1 Bytes, ...)
+T6210 013:936.472    -- Read from flash cache (1 bytes @ 0x00001954)
+T6210 013:936.499   Data:  FF
+T6210 013:936.541 - 0.087ms returns 0
+T6210 013:936.565 JLINK_IsHalted()
+T6210 013:936.587 - 0.022ms returns TRUE
+T6210 013:936.608 JLINK_ReadReg(XPSR)
+T6210 013:936.634 - 0.025ms returns 0x61000000
+T6210 013:936.658 JLINK_ReadReg(XPSR)
+T6210 013:936.678 - 0.021ms returns 0x61000000
+T6210 013:936.702 JLINK_ReadReg(R15 (PC))
+T6210 013:936.725 - 0.023ms returns 0x00001954
+T6210 013:936.749 JLINK_ReadReg(XPSR)
+T6210 013:936.800 - 0.050ms returns 0x61000000
+T6210 013:936.834 JLINK_ReadReg(XPSR)
+T6210 013:936.854 - 0.021ms returns 0x61000000
+T6210 013:936.878 JLINK_ReadMem(0x00001954, 0x1 Bytes, ...)
+T6210 013:936.902    -- Read from flash cache (1 bytes @ 0x00001954)
+T6210 013:936.933   Data:  FF
+T6210 013:936.963 - 0.085ms returns 0
+T6210 013:937.693 JLINK_ReadRegs(NumRegs = 22, Indexes: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 86, 87, 20)
+T6210 013:937.798    -- R0=0x00, R1=0x40006000, R2=0x00, R3=0x20, R4=0x20005740, R5=0x20005730, R6=0x20004DF8, R7=0x20005740, R8=0x00, R9=0x7FFFFFFF, R10=0x20004CA4, R11=0x917363FD, R12=0x00, R13 (SP)=0x20000978, R14=0x2B93, R15 (PC)=0x1954, XPSR=0x61000000, MSP=0x20000978, PSP=0xDCF6D24, MSPLIM=0x00, PSPLIM=0x00, CFBP=0x00
+T6210 013:937.832 - 0.139ms returns 0x00
+T6210 013:938.416 JLINK_ReadReg(XPSR)
+T6210 013:938.485 - 0.068ms returns 0x61000000
+T6210 013:939.152 JLINK_ReadMem(0x00001940, 0x40 Bytes, ...)
+T6210 013:939.197    -- Read from flash cache (64 bytes @ 0x00001940)
+T6210 013:939.238   Data:  10 BD 10 B5 03 78 02 2B 00 D0 10 BD FF F7 3A FC ...
+T6210 013:939.264 - 0.112ms returns 0
+T6210 013:940.475 JLINK_ClrBPEx(BPHandle = 0x00000002)
+T6210 013:940.515 - 0.039ms returns 0x00
+T6210 013:961.048 JLINK_ReadMem(0x00001940, 0x40 Bytes, ...)
+T6210 013:961.144    -- Read from flash cache (64 bytes @ 0x00001940)
+T6210 013:961.184   Data:  10 BD 10 B5 03 78 02 2B 00 D0 10 BD FF F7 3A FC ...
+T6210 013:961.224 - 0.176ms returns 0
+T6210 013:978.614 JLINK_ReadMem(0x20000250, 0x4 Bytes, ...)
+T6210 013:978.723   CPU_ReadMem(4 bytes @ 0x20000250)
+T6210 013:979.131   Data:  00 00 00 00
+T6210 013:979.189 - 0.574ms returns 0
+T6210 013:979.414 JLINK_ReadMem(0x20000254, 0x4 Bytes, ...)
+T6210 013:979.442   CPU_ReadMem(4 bytes @ 0x20000254)
+T6210 013:979.750   Data:  00 00 00 00
+T6210 013:979.776 - 0.362ms returns 0
+T6210 014:164.090 JLINK_ReadReg(XPSR)
+T6210 014:164.168 - 0.079ms returns 0x61000000
+T6210 014:165.122 JLINK_ReadReg(XPSR)
+T6210 014:165.189 - 0.067ms returns 0x61000000
+T0FFC 014:943.118 JLINK_IsHalted()
+T0FFC 014:943.867 - 0.747ms returns TRUE
+T0FFC 014:943.950 JLINK_ReadReg(XPSR)
+T0FFC 014:944.013 - 0.058ms returns 0x61000000
+T0FFC 014:944.171 JLINK_ReadReg(R15 (PC))
+T0FFC 014:944.186 - 0.014ms returns 0x00001954
+T0FFC 014:944.202 JLINK_ReadReg(XPSR)
+T0FFC 014:944.218 - 0.016ms returns 0x61000000
+T0FFC 014:944.234 JLINK_ReadReg(XPSR)
+T0FFC 014:944.264 - 0.030ms returns 0x61000000
+T0FFC 014:944.278 JLINK_ReadReg(R15 (PC))
+T0FFC 014:944.298 - 0.018ms returns 0x00001954
+T0FFC 014:944.315 JLINK_ReadReg(XPSR)
+T0FFC 014:944.330 - 0.014ms returns 0x61000000
+T0FFC 014:944.365 JLINK_ReadReg(XPSR)
+T0FFC 014:944.382 - 0.017ms returns 0x61000000
+T0FFC 014:944.405 JLINK_ReadMem(0x00001954, 0x1 Bytes, ...)
+T0FFC 014:944.424    -- Read from flash cache (1 bytes @ 0x00001954)
+T0FFC 014:944.448   Data:  FF
+T0FFC 014:944.470 - 0.064ms returns 0
+T0FFC 014:944.488 JLINK_IsHalted()
+T0FFC 014:944.515 - 0.026ms returns TRUE
+T0FFC 014:944.546 JLINK_ReadReg(XPSR)
+T0FFC 014:944.576 - 0.029ms returns 0x61000000
+T0FFC 014:944.605 JLINK_ReadReg(XPSR)
+T0FFC 014:944.635 - 0.029ms returns 0x61000000
+T0FFC 014:944.666 JLINK_ReadReg(R15 (PC))
+T0FFC 014:944.694 - 0.029ms returns 0x00001954
+T0FFC 014:944.725 JLINK_ReadReg(XPSR)
+T0FFC 014:944.754 - 0.029ms returns 0x61000000
+T0FFC 014:944.784 JLINK_ReadReg(XPSR)
+T0FFC 014:944.813 - 0.029ms returns 0x61000000
+T0FFC 014:944.842 JLINK_ReadMem(0x00001954, 0x1 Bytes, ...)
+T0FFC 014:944.870    -- Read from flash cache (1 bytes @ 0x00001954)
+T0FFC 014:944.912   Data:  FF
+T0FFC 014:944.965 - 0.122ms returns 0
+T0FFC 014:945.446 JLINK_WriteMem(0xE0001FB0, 0x4 Bytes, ...)
+T0FFC 014:945.477   Data:  55 CE AC C5
+T0FFC 014:945.771   CPU_WriteMem(4 bytes @ 0xE0001FB0)
+T0FFC 014:946.229 - 0.781ms returns 0x4
+T0FFC 014:946.454 JLINK_WriteMem(0xE0001000, 0x4 Bytes, ...)
+T0FFC 014:946.477   Data:  01 00 00 48
+T0FFC 014:946.512   Debug reg: DWT_CTRL
+T0FFC 014:946.549   CPU_WriteMem(4 bytes @ 0xE0001000)
+T0FFC 014:947.010 - 0.555ms returns 0x4
+T0FFC 014:947.842 JLINK_ReadMem(0xE0001000, 0x4 Bytes, ...)
+T0FFC 014:947.894   CPU_ReadMem(4 bytes @ 0xE0001000)
+T0FFC 014:948.445   Data:  00 00 00 2B
+T0FFC 014:948.501   Debug reg: DWT_CTRL
+T0FFC 014:948.534 - 0.693ms returns 0
+T6210 169:878.496 JLINK_ReadReg(XPSR)
+T6210 169:878.928 - 0.433ms returns 0x61000000
+T6210 169:879.776 JLINK_ReadReg(XPSR)
+T6210 169:879.840 - 0.052ms returns 0x61000000
+T6210 169:909.088 JLINK_ReadReg(XPSR)
+T6210 169:909.152 - 0.082ms returns 0x61000000
+T5160 170:383.200 JLINK_Halt()
+T5160 170:383.680 - 0.476ms returns 0x00
+T5160 170:383.728 JLINK_ReadReg(XPSR)
+T5160 170:383.776 - 0.042ms returns 0x61000000
+T5160 170:393.632 JLINK_Close()
+T5160 170:394.880   CPU_WriteMem(4 bytes @ 0xE0002008)
+T5160 170:395.280   OnDisconnectTarget() start
+T5160 170:395.328    J-Link Script File: Executing OnDisconnectTarget()
+T5160 170:395.360   Restoring low power mode settings.
+T5160 170:398.080   OnDisconnectTarget() end - Took 2.75ms
+T5160 170:416.816 - 23.174ms
+T5160 170:416.896   
+T5160 170:416.928   Closed
