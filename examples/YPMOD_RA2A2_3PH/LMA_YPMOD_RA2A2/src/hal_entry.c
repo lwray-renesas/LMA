@@ -82,17 +82,17 @@ void hal_entry(void)
     /* Adjust phase correction for SDADC on RA2A2*/
     if(phase.calib.vi_phase_correction >= 0)
     {
-        /* I leads V, so I need to be delayed*/
-        /* 0.012 comes from HW UM 31.1.5*/
+        /* I leads V, so I (SDADC0) needs to be delayed*/
+        /* 0.012 comes from HW UM 31.1.5 - sampling frequency of 3906.25Hz and target AC line frequency of 50Hz*/
         R_SDADC_B->SDADPHCR0 = (uint16_t) (phase.calib.vi_phase_correction / 0.012f);
         R_SDADC_B->SDADPHCR4 = 0;
     }
     else
     {
-        /* I lags V, so V need to be delayed*/
-        /* 0.012 comes from HW UM 31.1.5*/
+        /* I lags V, so V (SDADC4) needs to be delayed*/
+        /* 0.012 comes from HW UM 31.1.5 - sampling frequency of 3906.25Hz and target AC line frequency of 50Hz*/
         R_SDADC_B->SDADPHCR0 = 0;
-        R_SDADC_B->SDADPHCR4 = (uint16_t) ((phase.calib.vi_phase_correction * -1.00f) / 0.012f);
+        R_SDADC_B->SDADPHCR4 = (uint16_t) (phase.calib.vi_phase_correction / -0.012f);
     }
 
     /* Start the ADC threads*/
@@ -100,6 +100,7 @@ void hal_entry(void)
 
     while(1)
     {
+    	/* Do a benchmark every iteration*/
         Benchmark_run(&benchmark);
 
         /* Check if there are measurements ready, if so read them and print to screen.*/
