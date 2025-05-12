@@ -128,6 +128,7 @@ static inline void Phase_hard_reset(LMA_Phase *const p_phase)
   LMA_AccReset(&(p_phase->ws), p_phase->phase_number);
 
   p_phase->signals.accumulators_ready = false;
+  p_phase->signals.measurements_ready = false;
 
   p_phase->voltage.fline = 0.0f;
   p_phase->voltage.v_rms = 0.0f;
