@@ -50,6 +50,31 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${APP_OUTPUT_DIRECTORY}")
 # Add a test executable
 add_executable(LMA-sim-windows ${SOURCES} ${HEADERS})
 
+# Source Grouping For cleaner output
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+# Local source grouping (within the current source dir)
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" PREFIX "" FILES
+    "src/main.c"
+    "src/simulation/simulation.c"
+    "src/args_parser/args_parser.c"
+    "src/simulation/simulation.h"
+    "src/args_parser/args_parser.h"
+)
+
+# External source grouping for ../../src
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/../../src" PREFIX "LMA_Core" FILES
+    "../../src/LMA_Core.c"
+    "../../src/LMA_Core.h"
+    "../../src/LMA_Utils/LMA_Types.h"
+)
+
+# External source grouping for ../../port
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/../../port" PREFIX "LMA_Port" FILES
+    "../../port/Windows/LMA_Port.c"
+    "../../port/Windows/LMA_Port.h"
+)
+
 if(WIN32)
     target_compile_definitions(LMA-sim-windows PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()

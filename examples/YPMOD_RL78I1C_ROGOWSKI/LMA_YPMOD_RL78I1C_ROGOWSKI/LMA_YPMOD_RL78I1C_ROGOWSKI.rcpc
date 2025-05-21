@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MicomToolCommonProjectFile Version="1.00">
+  <CreatorType Name="e2studio" Version=""/>
+  <Placeholders>
+    <PlaceholderPrefix>${</PlaceholderPrefix>
+    <PlaceholderPostfix>}</PlaceholderPostfix>
+  </Placeholders>
+  <Project Name="LMA_YPMOD_RL78I1C_ROGOWSKI" Type="Application">
+    <Files>
+      <Category Name="generate">
+        <Path>generate\cstart.asm</Path>
+        <Path>generate\iodefine.h</Path>
+        <Path>generate\stkinit.asm</Path>
+      </Category>
+      <Category Name="src">
+        <Path>src\LMA_YPMOD_RL78I1C_ROGOWSKI.c</Path>
+        <Category Name="LMA">
+          <Category Name="port">
+            <Category Name="YPMOD-RL78I1C-ROGOWSKI">
+              <Path>..\..\..\port\YPMOD-RL78I1C-ROGOWSKI\LMA_Port.c</Path>
+              <Path>..\..\..\port\YPMOD-RL78I1C-ROGOWSKI\LMA_Port.h</Path>
+            </Category>
+          </Category>
+          <Category Name="src">
+            <Path>..\..\..\src\LMA_Core.c</Path>
+            <Path>..\..\..\src\LMA_Core.h</Path>
+            <Category Name="LMA_Utils">
+              <Path>..\..\..\src\LMA_Utils\LMA_Types.h</Path>
+            </Category>
+          </Category>
+        </Category>
+        <Category Name="hw">
+          <Path>src\hw\r_cg_cgc.c</Path>
+          <Path>src\hw\r_cg_cgc.h</Path>
+          <Path>src\hw\r_cg_cgc_user.c</Path>
+          <Path>src\hw\r_cg_dsadc.c</Path>
+          <Path>src\hw\r_cg_dsadc.h</Path>
+          <Path>src\hw\r_cg_dsadc_user.c</Path>
+          <Path>src\hw\r_cg_mac32bit.c</Path>
+          <Path>src\hw\r_cg_mac32bit.h</Path>
+          <Path>src\hw\r_cg_mac32bit_user.c</Path>
+          <Path>src\hw\r_cg_macrodriver.h</Path>
+          <Path>src\hw\r_cg_port.c</Path>
+          <Path>src\hw\r_cg_port.h</Path>
+          <Path>src\hw\r_cg_port_user.c</Path>
+          <Path>src\hw\r_cg_rtc.c</Path>
+          <Path>src\hw\r_cg_rtc.h</Path>
+          <Path>src\hw\r_cg_rtc_user.c</Path>
+          <Path>src\hw\r_cg_sau.c</Path>
+          <Path>src\hw\r_cg_sau.h</Path>
+          <Path>src\hw\r_cg_sau_user.c</Path>
+          <Path>src\hw\r_cg_systeminit.c</Path>
+          <Path>src\hw\r_cg_tau.c</Path>
+          <Path>src\hw\r_cg_tau.h</Path>
+          <Path>src\hw\r_cg_tau_user.c</Path>
+          <Path>src\hw\r_cg_userdefine.h</Path>
+        </Category>
+      </Category>
+    </Files>
+    <Device Category="com.renesas.cdt.managedbuild.renesas.ccrl.common.option.cpu.s3" Series="RL78">R5F11TLG</Device>
+    <BuildOptions Name="CC-RL" Version="v1.15.00">
+      <BuildMode Active="True" Name="HardwareDebug">
+        <GeneralOptions/>
+        <CompileOptions>
+          <Option>-cpu=S3</Option>
+          <Option>-c</Option>
+          <Option>-dev="C:/Users/a5126135/.eclipse/com.renesas.platform_246208409/DebugComp/RL78/RL78/Common/DR5F11TLG.DVF"</Option>
+          <Option>-I "${ProjDirPath}\generate"</Option>
+          <Option>-I "${ProjDirPath}\src\hw"</Option>
+          <Option>-I "${ProjDirPath}\..\..\..\src"</Option>
+          <Option>-I "${ProjDirPath}\..\..\..\src\LMA_Utils"</Option>
+          <Option>-I "${ProjDirPath}\..\..\..\port\YPMOD-RL78I1C-ROGOWSKI"</Option>
+          <Option>-character_set=utf8</Option>
+          <Option>-g</Option>
+          <Option>-o ${workspace_loc}\${ProjName}/${ConfigName}</Option>
+          <Option>-Olite</Option>
+          <Option>-lang=c99</Option>
+        </CompileOptions>
+        <AssembleOptions>
+          <Option>-cpu=S3</Option>
+          <Option>-c</Option>
+          <Option>-dev="C:/Users/a5126135/.eclipse/com.renesas.platform_246208409/DebugComp/RL78/RL78/Common/DR5F11TLG.DVF"</Option>
+          <Option>-character_set=utf8</Option>
+          <Option>-g</Option>
+          <Option>-o "${ProjDirPath}\${ConfigName}"</Option>
+        </AssembleOptions>
+        <LinkOptions>
+          <Option>-device="C:/Users/a5126135/.eclipse/com.renesas.platform_246208409/DebugComp/RL78/RL78/Common/DR5F11TLG.DVF"</Option>
+          <Option>-list</Option>
+          <Option>-show=symbol</Option>
+          <Option>-nooptimize</Option>
+          <Option>-entry=_start</Option>
+          <Option>-auto_section_layout</Option>
+          <Option>-security_id=0</Option>
+          <Option>-debug_monitor=1FE00-1FFFF</Option>
+          <Option>-user_opt_byte=EFFFE0</Option>
+          <Option>-ocdbg=84</Option>
+          <Option>-output="${ProjName}.abs"</Option>
+          <Option>-debug</Option>
+          <Option>-nocompress</Option>
+          <Option>-memory=high</Option>
+          <Option>-rom=.data=.dataR,.sdata=.sdataR</Option>
+          <Option>-nomessage</Option>
+          <Option>-nologo</Option>
+          <Option>-end</Option>
+          <Option>-output="${ProjName}.mot"</Option>
+          <Option>-form=stype</Option>
+          <Option>-byte_count=10</Option>
+          <Option>-nomessage</Option>
+          <Option>-nologo</Option>
+          <Option>-exit</Option>
+          <PreLinker>Auto</PreLinker>
+        </LinkOptions>
+        <LibraryGenerateOptions>
+          <Option>-cpu=S3</Option>
+          <Option>-nologo</Option>
+          <Option>-lang=c99</Option>
+          <Option>-output="${ProjName}.lib"</Option>
+          <GenerateMode>BuildOptionChanged</GenerateMode>
+        </LibraryGenerateOptions>
+        <LinkOrder>
+          <Path>HardwareDebug\cstart.obj</Path>
+          <Path>HardwareDebug\stkinit.obj</Path>
+          <Path>HardwareDebug\LMA_Port.obj</Path>
+          <Path>HardwareDebug\LMA_Core.obj</Path>
+          <Path>HardwareDebug\LMA_YPMOD_RL78I1C_ROGOWSKI.obj</Path>
+          <Path>HardwareDebug\r_cg_cgc.obj</Path>
+          <Path>HardwareDebug\r_cg_cgc_user.obj</Path>
+          <Path>HardwareDebug\r_cg_dsadc.obj</Path>
+          <Path>HardwareDebug\r_cg_dsadc_user.obj</Path>
+          <Path>HardwareDebug\r_cg_mac32bit.obj</Path>
+          <Path>HardwareDebug\r_cg_mac32bit_user.obj</Path>
+          <Path>HardwareDebug\r_cg_port.obj</Path>
+          <Path>HardwareDebug\r_cg_port_user.obj</Path>
+          <Path>HardwareDebug\r_cg_rtc.obj</Path>
+          <Path>HardwareDebug\r_cg_rtc_user.obj</Path>
+          <Path>HardwareDebug\r_cg_sau.obj</Path>
+          <Path>HardwareDebug\r_cg_sau_user.obj</Path>
+          <Path>HardwareDebug\r_cg_systeminit.obj</Path>
+          <Path>HardwareDebug\r_cg_tau.obj</Path>
+          <Path>HardwareDebug\r_cg_tau_user.obj</Path>
+          <Path>HardwareDebug\LMA_YPMOD_RL78I1C_ROGOWSKI.lib</Path>
+        </LinkOrder>
+        <CommonOptions>
+          <IncludePathForC>"${ProjDirPath}\generate"</IncludePathForC>
+          <IncludePathForC>"${ProjDirPath}\src\hw"</IncludePathForC>
+          <IncludePathForC>"${ProjDirPath}\..\..\..\src"</IncludePathForC>
+          <IncludePathForC>"${ProjDirPath}\..\..\..\src\LMA_Utils"</IncludePathForC>
+          <IncludePathForC>"${ProjDirPath}\..\..\..\port\YPMOD-RL78I1C-ROGOWSKI"</IncludePathForC>
+        </CommonOptions>
+      </BuildMode>
+    </BuildOptions>
+  </Project>
+</MicomToolCommonProjectFile>
