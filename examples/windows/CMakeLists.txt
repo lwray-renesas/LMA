@@ -1,19 +1,19 @@
 cmake_minimum_required(VERSION 3.28)
 
 # Create the Project
-project(LMA-sim-windows VERSION 1.0 LANGUAGES C)
+project(LMA-sim-windows VERSION 1.0 LANGUAGES C CXX)
 
 # Setup source and header files
 set (SOURCES
-    "src/main.c"
-    "src/simulation/simulation.c"
-    "src/args_parser/args_parser.c"
+    "src/main.cpp"
+    "src/simulation/simulation.cpp"
+    "src/args_parser/args_parser.cpp"
     "../../src/LMA_Core.c"
     "../../port/windows/LMA_Port.c"
 )
 set (HEADERS
-    "src/simulation/simulation.h"
-    "src/args_parser/args_parser.h"
+    "src/simulation/simulation.hpp"
+    "src/args_parser/args_parser.hpp"
     "../../src/LMA_Core.h"
     "../../src/LMA_Utils/LMA_Types.h"
     "../../port/windows/LMA_Port.h"
@@ -56,10 +56,10 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # Local source grouping (within the current source dir)
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" PREFIX "" FILES
     "src/main.c"
-    "src/simulation/simulation.c"
-    "src/args_parser/args_parser.c"
-    "src/simulation/simulation.h"
-    "src/args_parser/args_parser.h"
+    "src/simulation/simulation.cpp"
+    "src/args_parser/args_parser.cpp"
+    "src/simulation/simulation.hpp"
+    "src/args_parser/args_parser.hpp"
 )
 
 # External source grouping for ../../src
@@ -86,7 +86,6 @@ target_include_directories(LMA-sim-windows
 )
 
 set_target_properties(LMA-sim-windows PROPERTIES
-    C_STANDARD 99
-    C_STANDARD_REQUIRED ON
-    C_EXTENSIONS OFF)
+    CXX_STANDARD 20
+    C_STANDARD 11)
 

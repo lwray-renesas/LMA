@@ -1,7 +1,9 @@
-#include "stdint.h"
-#include "stdbool.h"
+#ifndef _SIMULTAION_H_
+#define _SIMULTAION_H_
 
-/** @brief interface param structure for simulation. */
+#include <cstdint>
+
+  /** @brief interface param structure for simulation. */
 typedef struct simulation_params
 {
     const int32_t * const current_samples; /**< pointer to the current samples */
@@ -18,3 +20,5 @@ typedef struct simulation_params
 * @param[in] p_sim_params - pointer to the simulation parameters.
  */
 void Simulation(const simulation_params * const p_sim_params);
+
+#endif /* _SIMULTAION_H_*/

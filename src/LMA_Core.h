@@ -3,7 +3,7 @@
 
 #include "LMA_Types.h"
 
-/*****************************
+  /*****************************
 * Control API
 *****************************/
 /** @brief Initalises the Light-Weight Metrology for AC Framework according to the config.

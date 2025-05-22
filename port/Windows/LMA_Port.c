@@ -1,22 +1,12 @@
 #include "LMA_Port.h"
 #include "LMA_Core.h"
-#include "simulation.h"
 #include <stdio.h>
-#include <threads.h>
-#include <time.h>
 #include <math.h>
 
-extern const simulation_params *p_g_sim_params;
-extern LMA_Phase phase;
-static bool tmr_running = false;
-static bool adc_running = false;
-static bool rtc_running = false;
-bool driver_thread_running = false;
-
-/** @brief thread to emulate drivers running asynch to main thread
- * @param[inout] pointer to args for thread - passing simulation_params for controlling the sim
- */
-int Driver_thread(void *p_arg);
+extern bool tmr_running;
+extern bool adc_running;
+extern bool rtc_running;
+extern bool driver_thread_running;
 
 float LMA_AccToFloat(acc_t acc)
 {
@@ -35,7 +25,10 @@ float LMA_FPDiv_Fast(float a, float b)
 
 float LMA_FPSqrt_Fast(float a)
 {
-    return sqrtf(a);
+  double b = (double)a;
+  double c = sqrt(b);
+
+  return (float)c;
 }
 
 float LMA_FPAbs_Fast(float a)
@@ -174,74 +167,4 @@ void LMA_IMP_ApparentOn(void)
 void LMA_IMP_ApparentOff(void)
 {
   printf("APPARENT LED OFF");
-}
-
-static int Driver_thread(void *p_arg)
-{
-  size_t sample = 0;
-  size_t rtc_counter = 0;
-  size_t tmr_counter = 0;
-  size_t sleep_counter = 0;
-  const simulation_params *const p_sim_params = (simulation_params *)p_arg;
-  const uint32_t one_sec = (uint32_t)(p_sim_params->fs);
-  const uint32_t ten_msec = (uint32_t)(p_sim_params->fs) / 40;
-  driver_thread_running = true;
-
-  /* Keep running while there are samples available in the simulation*/
-  while (sample < p_sim_params->sample_count)
-  {
-    /* RTC Handling*/
-    if (rtc_running)
-    {
-      ++rtc_counter;
-
-      /* Every 1sec in ADC samples - simulate RTC callback*/
-      if (rtc_counter >= one_sec)
-      {
-        rtc_counter = 0;
-        LMA_CB_RTC();
-      }
-    }
-
-    /* TMR Handling*/
-    if (tmr_running)
-    {
-      ++tmr_counter;
-
-      /* Every 10msec in ADC samples - simulate TMR callback*/
-      if (tmr_counter >= ten_msec)
-      {
-        tmr_counter = 0;
-        LMA_CB_TMR();
-      }
-    }
-
-    /* ADC Handling*/
-    if (adc_running)
-    {
-      /* We are removing the bottom 3 bits of noise*/
-      phase.ws.samples.voltage = p_sim_params->voltage_samples[sample];
-      phase.ws.samples.current = p_sim_params->current_samples[sample];
-      phase.ws.samples.voltage90 = LMA_PhaseShift90(phase.ws.samples.voltage);
-
-      LMA_CB_ADC();
-
-      ++sample;
-    }
-
-    ++sleep_counter;
-
-    /* Sleep every line cycle (50hz)*/
-    if (sleep_counter >= 78)
-    {
-      sleep_counter = 0;
-      const struct timespec ts = {
-          .tv_sec = 0, .tv_nsec = 20000000 /**< 20ms */
-      };
-      thrd_sleep(&ts, NULL);
-    }
-  }
-
-  driver_thread_running = false;
-  return 0;
 }

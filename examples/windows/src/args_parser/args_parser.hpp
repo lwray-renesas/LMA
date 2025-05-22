@@ -1,7 +1,7 @@
 #ifndef _ARGS_PARSER_H_
 #define _ARGS_PARSER_H_
 
-/** @brief Struct defining the components of an argument */
+  /** @brief Struct defining the components of an argument */
 typedef struct arg_t
 {
   const char *const flag; /**< Pointer to string for the flag to look for. */

@@ -1,5 +1,5 @@
-#include "args_parser.h"
-#include "string.h"
+#include "args_parser.hpp"
+#include <string>
 
 int Args_Parse(const int argc, const char *argv[], arg_data_t *p_arg_data)
 {

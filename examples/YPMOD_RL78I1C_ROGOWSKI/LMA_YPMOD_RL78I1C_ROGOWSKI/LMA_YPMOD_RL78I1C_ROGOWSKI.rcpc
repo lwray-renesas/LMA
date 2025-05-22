@@ -13,7 +13,7 @@
         <Path>generate\stkinit.asm</Path>
       </Category>
       <Category Name="src">
-        <Path>src\LMA_YPMOD_RL78I1C_ROGOWSKI.c</Path>
+        <Path>src\main.c</Path>
         <Category Name="LMA">
           <Category Name="port">
             <Category Name="YPMOD-RL78I1C-ROGOWSKI">
@@ -123,7 +123,6 @@
           <Path>HardwareDebug\stkinit.obj</Path>
           <Path>HardwareDebug\LMA_Port.obj</Path>
           <Path>HardwareDebug\LMA_Core.obj</Path>
-          <Path>HardwareDebug\LMA_YPMOD_RL78I1C_ROGOWSKI.obj</Path>
           <Path>HardwareDebug\r_cg_cgc.obj</Path>
           <Path>HardwareDebug\r_cg_cgc_user.obj</Path>
           <Path>HardwareDebug\r_cg_dsadc.obj</Path>
@@ -139,6 +138,7 @@
           <Path>HardwareDebug\r_cg_systeminit.obj</Path>
           <Path>HardwareDebug\r_cg_tau.obj</Path>
           <Path>HardwareDebug\r_cg_tau_user.obj</Path>
+          <Path>HardwareDebug\main.obj</Path>
           <Path>HardwareDebug\LMA_YPMOD_RL78I1C_ROGOWSKI.lib</Path>
         </LinkOrder>
         <CommonOptions>

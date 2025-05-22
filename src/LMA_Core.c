@@ -587,9 +587,9 @@ void LMA_PhaseCalibrate(LMA_PhaseCalibArgs *const calib_args)
 
   /* Update Coefficients*/
   calib_args->p_phase->calib.vrms_coeff =
-      LMA_FPSqrt_Fast((float)calib_args->p_phase->accs.vacc / sample_count_fp) / calib_args->vrms_tgt;
+      LMA_FPSqrt_Fast((float)(calib_args->p_phase->accs.vacc) / sample_count_fp) / calib_args->vrms_tgt;
   calib_args->p_phase->calib.irms_coeff =
-      LMA_FPSqrt_Fast((float)calib_args->p_phase->accs.iacc / sample_count_fp) / calib_args->irms_tgt;
+      LMA_FPSqrt_Fast((float)(calib_args->p_phase->accs.iacc) / sample_count_fp) / calib_args->irms_tgt;
   calib_args->p_phase->calib.p_coeff = calib_args->p_phase->calib.vrms_coeff * calib_args->p_phase->calib.irms_coeff;
 
   /* Restore operation*/
