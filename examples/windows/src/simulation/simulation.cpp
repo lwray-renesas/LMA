@@ -35,7 +35,7 @@ static LMA_PhaseCalibration default_calib = {
 static LMA_SystemEnergy system_energy = {
     .impulse = {.led_on_count = 39, .active_counter = 0, .reactive_counter = 0, .active_on = false, .reactive_on = false}};
 
-void DriverThread(const simulation_params *sim_params)
+static void Driver_thread(const simulation_params *sim_params)
 {
   size_t sample = 0;
   size_t rtc_counter = 0;
@@ -91,7 +91,7 @@ void Simulation(const simulation_params *sim_params)
   LMA_PhaseLoadCalibration(&phase, &default_calib);
   LMA_Start();
 
-  driver_thread = std::thread(DriverThread, g_sim_params);
+  driver_thread = std::thread(Driver_thread, g_sim_params);
 
   LMA_PhaseCalibArgs ca{.p_phase = &phase,
                         .vrms_tgt = static_cast<float>(sim_params->vrms),
