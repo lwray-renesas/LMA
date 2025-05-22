@@ -1,14 +1,9 @@
 #include "args_parser.hpp"
 #include "simulation.hpp"
-#include <cmath>
+#include <math.h>
 #include <cstdint>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
 #include <iostream>
-#include <memory>
 #include <string>
-#include <vector>
 
 enum class AppStatus
 {

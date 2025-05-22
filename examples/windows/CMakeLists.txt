@@ -55,7 +55,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Local source grouping (within the current source dir)
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" PREFIX "" FILES
-    "src/main.c"
+    "src/main.cpp"
     "src/simulation/simulation.cpp"
     "src/args_parser/args_parser.cpp"
     "src/simulation/simulation.hpp"

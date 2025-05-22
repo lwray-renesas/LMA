@@ -160,6 +160,8 @@ void Simulation(const simulation_params *sim_params)
                 << "\t\tL Imp:   " << energy.l_imp_energy_wh << " [Wh]\n"
                 << "\t\tL Exp:   " << energy.l_exp_energy_wh << " [Wh]\n"
                 << std::flush;
+
+      str_len = 1;
     }
   }
 
