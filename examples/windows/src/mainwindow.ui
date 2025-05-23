@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1016</width>
+    <height>628</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,10 +17,10 @@
    <widget class="QWidget" name="formLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>150</y>
+      <x>720</x>
+      <y>330</y>
       <width>281</width>
-      <height>231</height>
+      <height>238</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
@@ -80,13 +80,6 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
-      <widget class="QLabel" name="calibrate_label">
-       <property name="text">
-        <string>Calibrate</string>
-       </property>
-      </widget>
-     </item>
      <item row="7" column="1">
       <widget class="QLabel" name="rogowski_label">
        <property name="text">
@@ -136,19 +129,30 @@
        </property>
       </widget>
      </item>
+     <item row="8" column="0" colspan="2">
+      <widget class="QPushButton" name="simulate_button">
+       <property name="text">
+        <string>Simulate</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLabel" name="calibrate_label">
+       <property name="text">
+        <string>Calibrate</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
-   <widget class="QPushButton" name="simulate_button">
+   <widget class="QWidget" name="graph_widget" native="true">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>410</y>
-      <width>75</width>
-      <height>24</height>
+      <x>29</x>
+      <y>19</y>
+      <width>681</width>
+      <height>551</height>
      </rect>
-    </property>
-    <property name="text">
-     <string>Simulate</string>
     </property>
    </widget>
   </widget>
@@ -157,7 +161,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1016</width>
      <height>22</height>
     </rect>
    </property>

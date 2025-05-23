@@ -47,12 +47,12 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${APP_OUTPUT_DIRECTORY}")
 #       APPLICATION
 ###################################
 # Qt
-find_package(Qt6 REQUIRED COMPONENTS Widgets Gui Concurrent)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Gui Concurrent Charts)
 qt_standard_project_setup()
 # Add a test executable
 qt_add_executable(LMA-sim-windows ${SOURCES} ${HEADERS} "src/mainwindow.ui")
 
-target_link_libraries(LMA-sim-windows PRIVATE Qt6::Widgets Qt6::Gui Qt6::Concurrent)
+target_link_libraries(LMA-sim-windows PRIVATE Qt6::Widgets Qt6::Gui Qt6::Concurrent Qt6::Charts)
 
 # Source Grouping For cleaner output
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)

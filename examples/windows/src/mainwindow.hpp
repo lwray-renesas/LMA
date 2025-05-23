@@ -4,6 +4,9 @@
 #include <QMainWindow>
 #include <memory>
 #include "simulation.hpp"
+#include <QtCharts/QChart>
+#include <QtCharts/QChartView>
+#include <QtCharts/QLineSeries>
 
 namespace Ui
 {
@@ -20,7 +23,8 @@ public:
 
 private:
   Ui::MainWindow *ui;
-  std::unique_ptr<SimulationParams> simulation_params;
+  std::unique_ptr<SimulationParams> p_simulation_params;
+  std::unique_ptr<QChartView> p_chart_view;
 
 private slots:
   void on_simulate_button_clicked();
