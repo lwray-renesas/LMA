@@ -15,7 +15,7 @@ typedef struct SimulationParams
     double fline;   /**< line frequency */
     bool calibrate; /**< flag to enable/disable calibration on startup */
     bool rogowski; /**< flag to enable/disable rogowski on startup */
-    std::atomic<bool> running;   /**< simulation running*/
+    std::atomic<bool> stop_simulation;   /**< signal to stop the simulation*/
 }SimulationParams;
 
 /** @brief driver for our simulation

@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
   ui->setupUi(this);
   simulation_params = std::make_unique<SimulationParams>();
-  simulation_params->running = false;
+  simulation_params->stop_simulation = true;
 }
 
 MainWindow::~MainWindow()
@@ -20,11 +20,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_simulate_button_clicked()
 {
-  if (!simulation_params->running)
-  {
+  // Track the status of the simulations running
+  static bool sim_running = false;
 
+  if (!sim_running)
+  {
+    sim_running = true;
     ui->simulate_button->setText("Cancel");
-    simulation_params->running = true;
+    simulation_params->stop_simulation = false;
     simulation_params->sample_count = std::stoull(ui->sample_count_input->text().toStdString());
     simulation_params->ps = std::stod(ui->phase_shift_input->text().toStdString());
     simulation_params->vrms = std::stod(ui->vrms_input->text().toStdString());
@@ -44,14 +47,17 @@ void MainWindow::on_simulate_button_clicked()
               this,
               [=]()
               {
-                simulation_params->running = false;
+                sim_running = false;
+                simulation_params->stop_simulation = false;
                 ui->simulate_button->setText("Simulate");
+                ui->simulate_button->setEnabled(true);
               },
               Qt::QueuedConnection);
         });
   }
   else
   {
-    // Handle Cancel logic
+    simulation_params->stop_simulation = true;
+    ui->simulate_button->setEnabled(false);
   }
 }

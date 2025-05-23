@@ -518,6 +518,26 @@ void LMA_Init(LMA_Config *const p_config_arg)
   LMA_RTC_Init();
 }
 
+void LMA_Deinit(void)
+{
+  /* invalidate phase list*/
+  LMA_Phase *tmp = p_phase_list;
+  LMA_Phase *del = tmp;
+
+  /* Walk the list*/
+  while (NULL != tmp->p_next)
+  {
+    /* Update tmp to next entry*/
+    tmp = tmp->p_next;
+
+    /* Delete the link in the prvious phase before updating*/
+    del->p_next = NULL;
+    del = tmp;
+  }
+
+  p_phase_list = NULL;
+}
+
 void LMA_PhaseRegister(LMA_Phase *const p_phase)
 {
   static uint32_t phase_count = 0;

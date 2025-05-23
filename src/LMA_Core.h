@@ -11,6 +11,10 @@
 */
 void LMA_Init(LMA_Config *const p_config_arg);
 
+/** @brief Deinitialises LMA internally.
+*/
+void LMA_Deinit(void);
+
 /** @brief Registers a phse to the library - once on power up.
 * @param[in] p_phase - pointer to the phase
 */

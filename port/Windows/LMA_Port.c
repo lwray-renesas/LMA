@@ -1,12 +1,10 @@
 #include "LMA_Port.h"
 #include "LMA_Core.h"
-#include <stdio.h>
 #include <math.h>
 
 extern bool tmr_running;
 extern bool adc_running;
 extern bool rtc_running;
-extern bool driver_thread_running;
 
 float LMA_AccToFloat(acc_t acc)
 {
@@ -141,30 +139,30 @@ void LMA_RTC_Stop(void)
 
 void LMA_IMP_ActiveOn(void)
 {
-  printf("ACTIVE LED ON");
+  /* TODO: Populate*/
 }
 
 void LMA_IMP_ActiveOff(void)
 {
-  printf("ACTIVE LED OFF");
+  /* TODO: Populate*/
 }
 
 void LMA_IMP_ReactiveOn(void)
 {
-  printf("REACTIVE LED ON");
+  /* TODO: Populate*/
 }
 
 void LMA_IMP_ReactiveOff(void)
 {
-  printf("REACTIVE LED OFF");
+  /* TODO: Populate*/
 }
 
 void LMA_IMP_ApparentOn(void)
 {
-  printf("APPARENT LED ON");
+  /* TODO: Populate*/
 }
 
 void LMA_IMP_ApparentOff(void)
 {
-  printf("APPARENT LED OFF");
+  /* TODO: Populate*/
 }
