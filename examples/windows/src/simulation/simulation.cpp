@@ -3,39 +3,54 @@
 #include <iomanip>
 #include <iostream>
 #include <thread>
+#include <atomic>
+#include <math.h>
 
 extern "C"
 {
 #include "LMA_Core.h"
-  bool driver_thread_running = false;
   bool tmr_running = false;
   bool adc_running = false;
   bool rtc_running = false;
 }
 
-static const simulation_params *g_sim_params = nullptr;
+std::shared_ptr<const int32_t> current_samples; /**< pointer to the current samples */
+std::shared_ptr<const int32_t> voltage_samples; /**< pointer to the coltage samples */
+
+static std::atomic<bool> driver_thread_running{false};
 static std::thread driver_thread;
 
-static LMA_Config config = {.gcalib = {.fs = 3906.25f, .fline_coeff = 97650.0f, .deg_per_sample = 4.608f},
-                            .update_interval = 25,
-                            .fline_target = 50.0f,
-                            .fline_tol_low = 25.0f,
-                            .fline_tol_high = 75.0f,
-                            .meter_constant = 4500.0f,
-                            .no_load_i = 0.01f,
-                            .no_load_p = 2.0f,
-                            .v_sag = 50.0f,
-                            .v_swell = 280.0f};
-
+static LMA_Config config;
 static LMA_Phase phase;
+static LMA_PhaseCalibration default_calib;
+static LMA_SystemEnergy system_energy;
 
-static LMA_PhaseCalibration default_calib = {
-    .vrms_coeff = 21177.2051f, .irms_coeff = 53685.3828f, .vi_phase_correction = 0.0f, .p_coeff = 1136906368.0f};
+// Sine wave generator
+static std::shared_ptr<int32_t> GenerateSineWaveADC(size_t numSamples, double frequency, double phaseShift, double rmsValue,
+                                               double gain, double divRatio, double sampleRate)
+{
+  if (sampleRate <= 0.0 || numSamples == 0 || divRatio == 0.0)
+  {
+    std::cerr << "\n\rInvalid waveform, potential memory issue, check args and try reducing samples\n\r";
+    return nullptr;
+  }
 
-static LMA_SystemEnergy system_energy = {
-    .impulse = {.led_on_count = 39, .active_counter = 0, .reactive_counter = 0, .active_on = false, .reactive_on = false}};
+  std::shared_ptr<int32_t> waveform(new int32_t[numSamples], std::default_delete<int32_t[]>());
+  const double amplitude = rmsValue * std::sqrt(2.0) * gain * divRatio;
+  const double omega = 2.0 * 3.14159265358979323846 * frequency;
+  const double dt = 1.0 / sampleRate;
 
-static void Driver_thread(const simulation_params *sim_params)
+  for (size_t i = 0; i < numSamples; ++i)
+  {
+    double time = i * dt;
+    double sample = amplitude * std::sin(omega * time + (phaseShift * 3.14159265358979323846 / 180.0));
+    waveform.get()[i] = static_cast<int32_t>(std::round(sample * (1 << 23) / 0.5));
+  }
+
+  return waveform;
+}
+
+static void Driver_thread(const SimulationParams *sim_params)
 {
   size_t sample = 0;
   size_t rtc_counter = 0;
@@ -63,8 +78,8 @@ static void Driver_thread(const simulation_params *sim_params)
 
     if (adc_running)
     {
-      phase.ws.samples.voltage = sim_params->voltage_samples[sample];
-      phase.ws.samples.current = sim_params->current_samples[sample];
+      phase.ws.samples.voltage = voltage_samples.get()[sample];
+      phase.ws.samples.current = current_samples.get()[sample];
       phase.ws.samples.voltage90 = LMA_PhaseShift90(phase.ws.samples.voltage);
 
       LMA_CB_ADC();
@@ -81,9 +96,47 @@ static void Driver_thread(const simulation_params *sim_params)
   driver_thread_running = false;
 }
 
-void Simulation(const simulation_params *sim_params)
+void Simulation(const SimulationParams *sim_params)
 {
-  g_sim_params = sim_params;
+  // Construct waveforms
+  voltage_samples =
+      GenerateSineWaveADC(sim_params->sample_count, sim_params->fline, 0.0, sim_params->vrms, 1, 0.0012623, sim_params->fs);
+  
+  if (sim_params->rogowski)
+  {
+      // TODO: Handle rogowski processing
+  }
+  else
+  {
+    current_samples =
+        GenerateSineWaveADC(sim_params->sample_count, sim_params->fline, 0.0, sim_params->irms, 8, 0.0004, sim_params->fs);
+  }
+  // Config
+  config.gcalib.fs = sim_params->fs;
+  config.gcalib.fline_coeff = 97650.0f;
+  config.gcalib.deg_per_sample = 4.608f;
+  config.update_interval = 25;
+  config.fline_target = sim_params->fline;
+  config.fline_tol_low = sim_params->fline - (sim_params->fline/2);
+  config.fline_tol_high = sim_params->fline + (sim_params->fline / 2);
+  config.meter_constant = 4500.0f;
+  config.no_load_i = 0.01f;
+  config.no_load_p = 2.0f;
+  config.v_sag = sim_params->vrms * 0.25;
+  config.v_swell = sim_params->vrms * 1.25;
+
+  // PhaseCalibration
+  default_calib.vrms_coeff = 21177.2051f;
+  default_calib.irms_coeff = 53685.3828f;
+  default_calib.vi_phase_correction = 0.0f;
+  default_calib.p_coeff = 1136906368.0f;
+
+  // SystemEnergy
+  system_energy.impulse.led_on_count = 0.01 / (1.0/sim_params->fs); // 10ms
+  system_energy.impulse.active_counter = 0;
+  system_energy.impulse.reactive_counter = 0;
+  system_energy.impulse.active_on = false;
+  system_energy.impulse.reactive_on = false;
 
   LMA_Init(&config);
   LMA_EnergySet(&system_energy);
@@ -91,14 +144,23 @@ void Simulation(const simulation_params *sim_params)
   LMA_PhaseLoadCalibration(&phase, &default_calib);
   LMA_Start();
 
-  driver_thread = std::thread(Driver_thread, g_sim_params);
+  driver_thread = std::thread(Driver_thread, sim_params);
 
-  LMA_PhaseCalibArgs ca{.p_phase = &phase,
-                        .vrms_tgt = static_cast<float>(sim_params->vrms),
-                        .irms_tgt = static_cast<float>(sim_params->irms),
-                        .line_cycles = 25};
+  // Wait until the driver thread is running
+  while (!driver_thread_running)
+  {
+  }
 
-  LMA_GlobalCalibArgs gca{.rtc_period = 1.0f, .rtc_cycles = 3};
+  LMA_PhaseCalibArgs ca;
+  LMA_GlobalCalibArgs gca;
+
+  ca.p_phase = &phase;
+  ca.vrms_tgt = static_cast<float>(sim_params->vrms);
+  ca.irms_tgt = static_cast<float>(sim_params->irms);
+  ca.line_cycles = 25;
+
+  gca.rtc_period = 1.0f;
+  gca.rtc_cycles = 3;
 
   if (sim_params->calibrate)
   {
