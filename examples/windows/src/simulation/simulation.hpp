@@ -31,10 +31,13 @@ typedef struct SimulationParams
 /** @brief results of smiulation*/
 typedef struct SimulationResults
 {
-  std::unique_ptr<std::vector<int32_t>> raw_voltage_signal; /**< Generated raw voltage signal*/
-  std::unique_ptr<std::vector<int32_t>> raw_current_signal; /**< Generated raw current signal*/
+  std::unique_ptr<std::vector<int32_t>> raw_voltage_signal; /**< Generated raw voltage signal (ADC)*/
+  std::unique_ptr<std::vector<int32_t>> raw_current_signal; /**< Generated raw current signal (ADC)*/
+  std::unique_ptr<std::vector<double>> voltage_signal; /**< Generated voltage signal in volts*/
+  std::unique_ptr<std::vector<double>> current_signal;      /**< Generated current signal in amps*/
   std::vector<LMA_Measurements> measurements; /**< Computed measurment results*/
   LMA_ConsumptionData final_energy;              /**< Final measured energy*/
+  LMA_PhaseCalibration calib_parameters;   /**< Calibration parameters*/
 } SimulationResults;
 
 /** @brief driver for our simulation

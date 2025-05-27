@@ -20,18 +20,20 @@ typedef struct DriverParams
 
 
 // Sine wave generator
-static std::unique_ptr<std::vector<int32_t>> GenerateSineWaveADC(size_t numSamples, double frequency, double phaseShift,
+static std::pair<std::unique_ptr<std::vector<int32_t>>, std::unique_ptr<std::vector<double>>>
+                   GenerateSineWaveADC(size_t numSamples, double frequency, double phaseShift,
                                                                  double rmsValue, double gain, double divRatio,
                                                                  double sampleRate)
 {
-  auto res = std::make_unique<std::vector<int32_t>>();
+  auto res_adc = std::make_unique<std::vector<int32_t>>();
+  auto res = std::make_unique<std::vector<double>>();
 
   if (sampleRate <= 0.0 || numSamples == 0 || divRatio == 0.0)
   {
     std::cerr << "\n\rInvalid waveform, potential memory issue, check args and try reducing samples\n\r";
   }
 
-  const double amplitude = rmsValue * std::sqrt(2.0) * gain * divRatio;
+  const double amplitude = rmsValue * std::sqrt(2.0);
   const double omega = 2.0 * 3.14159265358979323846 * frequency;
   const double dt = 1.0 / sampleRate;
 
@@ -39,10 +41,11 @@ static std::unique_ptr<std::vector<int32_t>> GenerateSineWaveADC(size_t numSampl
   {
     double time = i * dt;
     double sample = amplitude * std::sin(omega * time + (phaseShift * 3.14159265358979323846 / 180.0));
-    res->push_back(static_cast<int32_t>(std::round(sample * (1 << 23) / 0.5)));
+    res->push_back(sample);
+    res_adc->push_back(static_cast<int32_t>(std::round(sample * gain * divRatio * (1 << 23) / 0.5)));
   }
 
-  return res;
+  return std::make_pair<std::unique_ptr<std::vector<int32_t>>, std::unique_ptr<std::vector<double>>>(std::move(res_adc), std::move(res));
 }
 
 static void Driver_thread(std::shared_ptr<DriverParams> drvr_params)
@@ -96,9 +99,14 @@ std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params
   auto results = std::make_shared<SimulationResults>();
   auto drv_params = std::make_shared<DriverParams>();
 
+  results->voltage_signal = std::make_unique<std::vector<double>>();
+  results->current_signal = std::make_unique<std::vector<double>>();
+
   // Construct waveforms
-  drv_params->p_voltage_samples =
+  auto v_pair =
       GenerateSineWaveADC(sim_params->sample_count, sim_params->fline, 0.0, sim_params->vrms, 1, 0.0012623, sim_params->fs);
+  drv_params->p_voltage_samples = std::move(v_pair.first);
+  results->voltage_signal = std::move(v_pair.second);
 
   if (sim_params->rogowski)
   {
@@ -106,9 +114,12 @@ std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params
   }
   else
   {
-    drv_params->p_current_samples =
+    auto i_pair =
         GenerateSineWaveADC(sim_params->sample_count, sim_params->fline, 0.0, sim_params->irms, 8, 0.0004, sim_params->fs);
+    drv_params->p_current_samples = std::move(i_pair.first);
+    results->current_signal = std::move(i_pair.second);
   }
+
 
   // Config
   auto p_config = std::make_unique<LMA_Config>();
@@ -245,6 +256,7 @@ std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params
   LMA_Stop();
 
   LMA_ConsumptionDataGet(p_system_energy.get(), &(results->final_energy));
+  std::memcpy(&(results->calib_parameters), &(drv_params->p_phase->calib), sizeof(LMA_GlobalCalibration));
 
   LMA_Deinit();
 

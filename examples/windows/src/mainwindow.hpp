@@ -28,6 +28,7 @@ private:
   //
   QLineSeries *CreateLineSeriesFromVector(std::vector<int32_t> *p_vec);
   QLineSeries *CreateLineSeriesFromVector(std::vector<double> *p_vec);
+  std::unique_ptr<std::vector<QLineSeries *>> CreateLineSeriesFromVector(std::vector<LMA_Measurements> &p_vec);
 
   Ui::MainWindow *ui;
   std::unique_ptr<SimulationParams> p_simulation_params;
