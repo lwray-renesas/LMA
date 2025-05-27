@@ -3,6 +3,16 @@
 
 #include <cstdint>
 #include <atomic>
+#include <memory>
+#include <vector>
+
+extern "C"
+{
+#include "LMA_Core.h"
+extern bool tmr_running;
+extern bool adc_running;
+extern bool rtc_running;
+}
 
 /** @brief interface param structure for simulation. */
 typedef struct SimulationParams
@@ -18,9 +28,19 @@ typedef struct SimulationParams
     std::atomic<bool> stop_simulation;   /**< signal to stop the simulation*/
 }SimulationParams;
 
+/** @brief results of smiulation*/
+typedef struct SimulationResults
+{
+  std::unique_ptr<std::vector<int32_t>> raw_voltage_signal; /**< Generated raw voltage signal*/
+  std::unique_ptr<std::vector<int32_t>> raw_current_signal; /**< Generated raw current signal*/
+  std::vector<LMA_Measurements> measurements; /**< Computed measurment results*/
+  LMA_ConsumptionData final_energy;              /**< Final measured energy*/
+} SimulationResults;
+
 /** @brief driver for our simulation
 * @param[in] p_sim_params - pointer to the simulation parameters.
+* @return shared pointer to simulation results.
  */
-void Simulation(const SimulationParams * const p_sim_params);
+std::shared_ptr<SimulationResults> Simulation(const SimulationParams *const p_sim_params);
 
 #endif /* _SIMULTAION_H_*/

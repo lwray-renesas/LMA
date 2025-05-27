@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   p_simulation_params->stop_simulation = true;
 
   QChart *p_chart = new QChart;
-  p_chart->createDefaultAxes();
   p_chart->setTitle("Simple Line Chart");
 
   p_chart_view = std::make_unique<QChartView>(p_chart, ui->graph_widget);
@@ -24,6 +23,30 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 MainWindow::~MainWindow()
 {
   delete ui;
+}
+
+QLineSeries* MainWindow::CreateLineSeriesFromVector(std::vector<int32_t>* p_vec)
+{
+  QLineSeries * series = new QLineSeries;
+
+  for (size_t i = 0; i < p_vec->size(); ++i)
+  {
+    series->append(static_cast<qreal>(i), static_cast<qreal>((*p_vec)[i]));
+  }
+
+  return series;
+}
+
+QLineSeries *MainWindow::CreateLineSeriesFromVector(std::vector<double> *p_vec)
+{
+  QLineSeries *series = new QLineSeries;
+
+  for (size_t i = 0; i < p_vec->size(); ++i)
+  {
+    series->append(static_cast<qreal>(i), static_cast<qreal>((*p_vec)[i]));
+  }
+
+  return series;
 }
 
 void MainWindow::on_simulate_button_clicked()
@@ -49,24 +72,22 @@ void MainWindow::on_simulate_button_clicked()
     auto simulation_future = QtConcurrent::run(
         [=]()
         {
-          Simulation(p_simulation_params.get());
-
-          // Plot on chart
-          auto p_line_series = new QLineSeries;
-          p_line_series->append(0, 6);
-          p_line_series->append(2, 4);
-          p_line_series->append(3, 8);
-          p_line_series->append(7, 4);
-          p_line_series->append(10, 5);
-          *p_line_series << QPointF(11, 1) << QPointF(13, 3) << QPointF(17, 6) << QPointF(18, 3) << QPointF(20, 2);
-
-          p_chart_view->chart()->removeAllSeries();
-          p_chart_view->chart()->addSeries(dynamic_cast<QAbstractSeries *>(p_line_series));
+          auto l_results = Simulation(p_simulation_params.get());
 
           QMetaObject::invokeMethod(
               this,
               [=]()
               {
+                auto voltage_series = CreateLineSeriesFromVector(l_results->raw_voltage_signal.get());
+                auto current_series = CreateLineSeriesFromVector(l_results->raw_current_signal.get());
+
+                // Plot on chart
+                p_chart_view->chart()->removeAllSeries();
+                p_chart_view->chart()->addSeries(dynamic_cast<QAbstractSeries *>(voltage_series));
+                p_chart_view->chart()->addSeries(dynamic_cast<QAbstractSeries *>(current_series));
+                p_chart_view->setRubberBand(QChartView::RectangleRubberBand);
+                p_chart_view->chart()->createDefaultAxes();
+
                 sim_running = false;
                 p_simulation_params->stop_simulation = false;
                 ui->simulate_button->setText("Simulate");

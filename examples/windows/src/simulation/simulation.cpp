@@ -7,19 +7,17 @@
 #include <thread>
 #include <vector>
 
-extern "C"
+/** @brief parameters passed to the driver thread*/
+typedef struct DriverParams
 {
-#include "LMA_Core.h"
-  bool tmr_running = false;
-  bool adc_running = false;
-  bool rtc_running = false;
-}
+  std::unique_ptr<std::vector<int32_t>> p_current_samples; /**< Pointer to the current samples */
+  std::unique_ptr<std::vector<int32_t>> p_voltage_samples; /**< Pointer to the coltage samples */
+  std::atomic<bool> stop_driver_thread;   /**< Pointer to the variable for stopping/cancelling the driver thread*/
+  std::atomic<bool> driver_thread_running; /**< Pointer to the variable for indicating the driver thread is running*/
+  std::unique_ptr<LMA_Phase> p_phase; /**< Pointer to the phase to work on*/
+  double fs;                                                /**< sampling frequency*/
+}DriverParams;
 
-static std::unique_ptr<std::vector<int32_t>> p_current_samples; /**< pointer to the current samples */
-static std::unique_ptr<std::vector<int32_t>> p_voltage_samples; /**< pointer to the coltage samples */
-static std::atomic<bool> stop_driver_thread{false};
-static std::atomic<bool> driver_thread_running{false};
-static std::unique_ptr<LMA_Phase> p_phase;
 
 // Sine wave generator
 static std::unique_ptr<std::vector<int32_t>> GenerateSineWaveADC(size_t numSamples, double frequency, double phaseShift,
@@ -47,19 +45,19 @@ static std::unique_ptr<std::vector<int32_t>> GenerateSineWaveADC(size_t numSampl
   return res;
 }
 
-static void Driver_thread(const SimulationParams *sim_params)
+static void Driver_thread(std::shared_ptr<DriverParams> drvr_params)
 {
   size_t sample = 0;
   size_t rtc_counter = 0;
   size_t tmr_counter = 0;
   size_t sleep_counter = 0;
 
-  const uint32_t one_sec = static_cast<uint32_t>(sim_params->fs);
+  const uint32_t one_sec = static_cast<uint32_t>(drvr_params->fs);
   const uint32_t ten_ms = one_sec / 10;
 
-  driver_thread_running = true;
+  drvr_params->driver_thread_running = true;
 
-  while (sample < sim_params->sample_count && !stop_driver_thread)
+  while (sample < drvr_params->p_voltage_samples->size() && !(drvr_params->stop_driver_thread))
   {
     if (rtc_running && ++rtc_counter >= one_sec)
     {
@@ -75,9 +73,9 @@ static void Driver_thread(const SimulationParams *sim_params)
 
     if (adc_running)
     {
-      p_phase->ws.samples.voltage = static_cast<spl_t>((*p_voltage_samples)[sample]);
-      p_phase->ws.samples.current = static_cast<spl_t>((*p_current_samples)[sample]);
-      p_phase->ws.samples.voltage90 = LMA_PhaseShift90(p_phase->ws.samples.voltage);
+      drvr_params->p_phase->ws.samples.voltage = static_cast<spl_t>((*drvr_params->p_voltage_samples)[sample]);
+      drvr_params->p_phase->ws.samples.current = static_cast<spl_t>((*drvr_params->p_current_samples)[sample]);
+      drvr_params->p_phase->ws.samples.voltage90 = LMA_PhaseShift90(drvr_params->p_phase->ws.samples.voltage);
 
       LMA_CB_ADC();
       ++sample;
@@ -90,13 +88,16 @@ static void Driver_thread(const SimulationParams *sim_params)
     }
   }
 
-  driver_thread_running = false;
+  drvr_params->driver_thread_running = false;
 }
 
-void Simulation(const SimulationParams *sim_params)
+std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params)
 {
+  auto results = std::make_shared<SimulationResults>();
+  auto drv_params = std::make_shared<DriverParams>();
+
   // Construct waveforms
-  p_voltage_samples =
+  drv_params->p_voltage_samples =
       GenerateSineWaveADC(sim_params->sample_count, sim_params->fline, 0.0, sim_params->vrms, 1, 0.0012623, sim_params->fs);
 
   if (sim_params->rogowski)
@@ -105,7 +106,7 @@ void Simulation(const SimulationParams *sim_params)
   }
   else
   {
-    p_current_samples =
+    drv_params->p_current_samples =
         GenerateSineWaveADC(sim_params->sample_count, sim_params->fline, 0.0, sim_params->irms, 8, 0.0004, sim_params->fs);
   }
 
@@ -139,26 +140,26 @@ void Simulation(const SimulationParams *sim_params)
   p_system_energy->impulse.active_on = false;
   p_system_energy->impulse.reactive_on = false;
 
-  p_phase = std::make_unique<LMA_Phase>();
+  drv_params->p_phase = std::make_unique<LMA_Phase>();
   LMA_Init(p_config.get());
   LMA_EnergySet(p_system_energy.get());
-  LMA_PhaseRegister(p_phase.get());
-  LMA_PhaseLoadCalibration(p_phase.get(), p_default_calib.get());
+  LMA_PhaseRegister(drv_params->p_phase.get());
+  LMA_PhaseLoadCalibration(drv_params->p_phase.get(), p_default_calib.get());
   LMA_Start();
 
-  driver_thread_running = false;
-  stop_driver_thread = false;
-  std::thread driver_thread = std::thread(Driver_thread, sim_params);
+  drv_params->driver_thread_running = false;
+  drv_params->stop_driver_thread = false;
+  std::thread driver_thread = std::thread(Driver_thread, drv_params);
 
   // Wait until the driver thread is running
-  while (!driver_thread_running)
+  while (!drv_params->driver_thread_running)
   {
   }
 
   LMA_PhaseCalibArgs ca;
   LMA_GlobalCalibArgs gca;
 
-  ca.p_phase = p_phase.get();
+  ca.p_phase = drv_params->p_phase.get();
   ca.vrms_tgt = static_cast<float>(sim_params->vrms);
   ca.irms_tgt = static_cast<float>(sim_params->irms);
   ca.line_cycles = 25;
@@ -190,19 +191,19 @@ void Simulation(const SimulationParams *sim_params)
 
   int str_len = 0;
 
-  while (driver_thread_running)
+  while (drv_params->driver_thread_running)
   {
     /* Update simulation state from calling thread*/
-    stop_driver_thread.store(sim_params->stop_simulation.load());
+    drv_params->stop_driver_thread.store(sim_params->stop_simulation.load());
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     LMA_Measurements measurements;
     LMA_ConsumptionData energy;
 
-    if (LMA_MeasurementsReady(p_phase.get()))
+    if (LMA_MeasurementsReady(drv_params->p_phase.get()))
     {
-      LMA_MeasurementsGet(p_phase.get(), &measurements);
+      LMA_MeasurementsGet(drv_params->p_phase.get(), &measurements);
       LMA_EnergyGet(p_system_energy.get());
       LMA_ConsumptionDataGet(p_system_energy.get(), &energy);
 
@@ -230,6 +231,8 @@ void Simulation(const SimulationParams *sim_params)
                 << "\t\tL Exp:   " << energy.l_exp_energy_wh << " [Wh]\n"
                 << std::flush;
 
+      results->measurements.push_back(measurements);
+
       str_len = 1;
     }
   }
@@ -240,7 +243,15 @@ void Simulation(const SimulationParams *sim_params)
   }
 
   LMA_Stop();
+
+  LMA_ConsumptionDataGet(p_system_energy.get(), &(results->final_energy));
+
   LMA_Deinit();
 
   std::cout << "\nSimulation Complete!\n";
+
+  results->raw_voltage_signal = std::move(drv_params->p_voltage_samples);
+  results->raw_current_signal = std::move(drv_params->p_current_samples);
+
+  return results;
 }

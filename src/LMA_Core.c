@@ -127,8 +127,8 @@ static inline void Phase_hard_reset(LMA_Phase *const p_phase)
 
   LMA_AccReset(&(p_phase->ws), p_phase->phase_number);
 
-  p_phase->signals.accumulators_ready = false;
-  p_phase->signals.measurements_ready = false;
+  p_phase->sigs.accumulators_ready = false;
+  p_phase->sigs.measurements_ready = false;
 
   p_phase->voltage.fline = 0.0f;
   p_phase->voltage.v_rms = 0.0f;
@@ -161,7 +161,7 @@ static inline void Phase_accumulate(LMA_Phase *const p_phase)
       LMA_AccLoad(&(p_phase->ws), &(p_phase->accs), p_phase->phase_number);
 
       /* Signal Accumulators are ready*/
-      p_phase->signals.accumulators_ready = true;
+      p_phase->sigs.accumulators_ready = true;
 
       /* Reset*/
       LMA_AccReset(&(p_phase->ws), p_phase->phase_number);
@@ -178,10 +178,10 @@ static inline void Phase_accumulate(LMA_Phase *const p_phase)
  */
 static inline void Phase_compute(LMA_Phase *const p_phase)
 {
-  if (p_phase->signals.accumulators_ready)
+  if (p_phase->sigs.accumulators_ready)
   {
     const float sample_count_fp = LMA_AccToFloat((acc_t)p_phase->accs.sample_count);
-    p_phase->signals.accumulators_ready = false;
+    p_phase->sigs.accumulators_ready = false;
 
     /* Frequency*/
     p_phase->voltage.fline = LMA_FPDiv_Fast(p_config->gcalib.fline_coeff, sample_count_fp);
@@ -286,7 +286,7 @@ static inline void Phase_compute(LMA_Phase *const p_phase)
       p_phase->energy_units.app = 0;
     }
 
-    p_phase->signals.measurements_ready = true;
+    p_phase->sigs.measurements_ready = true;
   }
 }
 /* END OF FUNCTION*/
@@ -328,7 +328,7 @@ static inline void Phase_calibrate_angle_error(LMA_Phase *const p_phase)
     if (p_phase->pa_error.sample_counter > p_config->update_interval)
     {
       p_phase->pa_error.status = LMA_CALIB_OK;
-      p_phase->signals.calibrate_angle_error = false;
+      p_phase->sigs.calibrate_angle_error = false;
     }
   }
   else if (izc)
@@ -596,7 +596,7 @@ void LMA_PhaseCalibrate(LMA_PhaseCalibArgs *const calib_args)
 
   LMA_ADC_Start();
 
-  while (!calib_args->p_phase->signals.accumulators_ready)
+  while (!calib_args->p_phase->sigs.accumulators_ready)
   {
     /* Wait until the accumulation has stopped*/
   }
@@ -617,13 +617,13 @@ void LMA_PhaseCalibrate(LMA_PhaseCalibArgs *const calib_args)
   Phase_hard_reset(calib_args->p_phase);
 
   /* Start on the phase angle error*/
-  calib_args->p_phase->signals.calibrate_angle_error = true;
+  calib_args->p_phase->sigs.calibrate_angle_error = true;
   calib_args->p_phase->pa_error.i_last_sample = calib_args->p_phase->ws.samples.current;
   calib_args->p_phase->pa_error.v_last_sample = calib_args->p_phase->ws.samples.voltage;
 
   LMA_ADC_Start();
 
-  while (calib_args->p_phase->signals.calibrate_angle_error)
+  while (calib_args->p_phase->sigs.calibrate_angle_error)
   {
     /* Wait until the accumulation has stopped*/
   }
@@ -824,8 +824,8 @@ bool LMA_MeasurementsReady(LMA_Phase *const p_phase)
   LMA_CRITICAL_SECTION_PREPARE();
 
   LMA_CRITICAL_SECTION_ENTER();
-  tmp = p_phase->signals.measurements_ready;
-  p_phase->signals.measurements_ready = false;
+  tmp = p_phase->sigs.measurements_ready;
+  p_phase->sigs.measurements_ready = false;
   LMA_CRITICAL_SECTION_EXIT();
 
   return tmp;
@@ -845,7 +845,7 @@ void LMA_CB_ADC(void)
   {
     while (NULL != p_phase)
     {
-      if (p_phase->signals.calibrate_angle_error)
+      if (p_phase->sigs.calibrate_angle_error)
       {
         process_energy = false;
         Phase_calibrate_angle_error(p_phase);

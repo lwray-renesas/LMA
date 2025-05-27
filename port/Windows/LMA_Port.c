@@ -2,9 +2,9 @@
 #include "LMA_Core.h"
 #include <math.h>
 
-extern bool tmr_running;
-extern bool adc_running;
-extern bool rtc_running;
+bool tmr_running = false;
+bool adc_running = false;
+bool rtc_running = false;
 
 float LMA_AccToFloat(acc_t acc)
 {

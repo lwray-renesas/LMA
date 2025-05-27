@@ -121,7 +121,7 @@ typedef struct LMA_Phase
   LMA_Workspace ws;             /**< Porting glue - contains samples!*/
   LMA_Accumulators accs;        /**< snapshot of last updated accumulators*/
   LMA_Status status;            /**< Phase status */
-  LMA_Signals signals;          /**< Phase signals */
+  LMA_Signals sigs;          /**< Phase signals */
   uint32_t phase_number;        /**< zero indexed phase number for identification*/
 } LMA_Phase;
 
