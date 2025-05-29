@@ -119,6 +119,7 @@ std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params
     drv_params->p_current_samples = std::move(i_pair.first);
     results->current_signal = std::move(i_pair.second);
   }
+  drv_params->fs = sim_params->fs;
 
 
   // Config
