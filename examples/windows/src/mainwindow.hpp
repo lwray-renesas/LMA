@@ -1,12 +1,12 @@
 #ifndef MAINWINDOW_HPP
 #define MAINWINDOW_HPP
 
-#include <QMainWindow>
-#include <memory>
 #include "simulation.hpp"
+#include <QMainWindow>
 #include <QtCharts/QChart>
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
+#include <memory>
 
 namespace Ui
 {

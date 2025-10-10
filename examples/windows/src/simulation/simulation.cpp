@@ -12,18 +12,16 @@ typedef struct DriverParams
 {
   std::unique_ptr<std::vector<int32_t>> p_current_samples; /**< Pointer to the current samples */
   std::unique_ptr<std::vector<int32_t>> p_voltage_samples; /**< Pointer to the coltage samples */
-  std::atomic<bool> stop_driver_thread;   /**< Pointer to the variable for stopping/cancelling the driver thread*/
+  std::atomic<bool> stop_driver_thread;    /**< Pointer to the variable for stopping/cancelling the driver thread*/
   std::atomic<bool> driver_thread_running; /**< Pointer to the variable for indicating the driver thread is running*/
-  std::unique_ptr<LMA_Phase> p_phase; /**< Pointer to the phase to work on*/
-  double fs;                                                /**< sampling frequency*/
-}DriverParams;
-
+  std::unique_ptr<LMA_Phase> p_phase;      /**< Pointer to the phase to work on*/
+  double fs;                               /**< sampling frequency*/
+} DriverParams;
 
 // Sine wave generator
 static std::pair<std::unique_ptr<std::vector<int32_t>>, std::unique_ptr<std::vector<double>>>
-                   GenerateSineWaveADC(size_t numSamples, double frequency, double phaseShift,
-                                                                 double rmsValue, double gain, double divRatio,
-                                                                 double sampleRate)
+GenerateSineWaveADC(size_t numSamples, double frequency, double phaseShift, double rmsValue, double gain, double divRatio,
+                    double sampleRate)
 {
   auto res_adc = std::make_unique<std::vector<int32_t>>();
   auto res = std::make_unique<std::vector<double>>();
@@ -45,7 +43,8 @@ static std::pair<std::unique_ptr<std::vector<int32_t>>, std::unique_ptr<std::vec
     res_adc->push_back(static_cast<int32_t>(std::round(sample * gain * divRatio * (1 << 23) / 0.5)));
   }
 
-  return std::make_pair<std::unique_ptr<std::vector<int32_t>>, std::unique_ptr<std::vector<double>>>(std::move(res_adc), std::move(res));
+  return std::make_pair<std::unique_ptr<std::vector<int32_t>>, std::unique_ptr<std::vector<double>>>(std::move(res_adc),
+                                                                                                     std::move(res));
 }
 
 static void Driver_thread(std::shared_ptr<DriverParams> drvr_params)
@@ -120,7 +119,6 @@ std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params
     results->current_signal = std::move(i_pair.second);
   }
   drv_params->fs = sim_params->fs;
-
 
   // Config
   auto p_config = std::make_unique<LMA_Config>();

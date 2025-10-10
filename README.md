@@ -1,108 +1,61 @@
+---
+pagination_next: null
+pagination_prev: null
+---
+
 # LMA
-A Light Weight AC Metrology Framework written completely in C (C99) targetting 32bit MCU's.
 
-## Introduction
-TODO: Top level intro - go into typical initialisation (main.c)
+**Target Devices:** `RA2A2, RL78/I1C & PC`  
 
-```
-#include "LMA_Core.h"
+---
 
-/* Configuration required for configuring the library 4500 ws/imp = 800 imp/kwh*/
-static LMA_Config config =
-{
- .gcalib =
- {
-  .fs = 3906.25f,
-  .fline_coeff = 97650.0000f
- },
- .update_interval = 25,
- .fline_target = 50.00f,
- .fline_tol_low = 25.00f,
- .fline_tol_high = 75.00f,
- .meter_constant = 4500.00f,
- .no_load_i = 0.01f,
- .no_load_p = 2.00f,
- .v_sag = 50.00f,
- .v_swell = 280.00f
-};
+## Overview
 
-LMA_PhaseCalibration default_calib =
-{
- .vrms_coeff = 21177.2051f,
- .irms_coeff = 53685.3828f,
- .p_coeff = 1136906368.0000f
-};
+LMA stands for light-weight metering for AC applications and it is a middleware containing core services for AC metering applications. Core functions include measurements of voltage, frequency, current and power for single and multi-phase systems with a single API, energy accumulation impulse control and basic calibration API.
 
-/* Define our system energy struct*/
-LMA_SystemEnergy system_energy =
-{
- .impulse =
- {
-  .led_on_count = 39, /* 10ms at 3906 Hz sampling frequency*/
-  .active_counter = 0,
-  .reactive_counter = 0,
-  .active_on = false,
-  .reactive_on = false
- }
-};
+---
 
-/* Now define our phase pointing to our data structure*/
-LMA_Phase phase;
+## What's Included
 
-void main(void)
-{
-    /* Initialise the framework*/
-    LMA_Init(&config);
+- **Source Code**
+  - LMA Source Code.
+- **Ports**
+  - RA2A2
+  - RL78/I1C
+  - PC (CMake + Qt).
+- **Examples**
+  - YPMOD-RA2A2-3PH
+  - YPMOD-RL78I1C-ROGOWSKI
+  - PC (Simulation with CMake & Qt).
+- **Documenation**
+  - Generated using Doxygen to provide both AC metering training & API documentation.
 
-    /* Set system energy structure*/
-    LMA_EnergySet(&system_energy);
+---
 
-    /* Initialise the phase(s)*/
-    LMA_PhaseRegister(&phase);
+## Getting Started
 
-    /* Load calibration data*/
-    LMA_PhaseLoadCalibration(&phase, &default_calib);
+To get started with LMA, download the latest release from the release page and ...
 
-    /* Start the ADC threads*/
-    LMA_Start();
+---
 
-    while(1)
-    {
-		/* Run Application*/
-    }
-}
+## Additional Resources
 
-void ADC_Callback(adc_callback_args_t *p_args)
-{
-    phase.ws.samples.voltage = (spl_t)ADC_RESULT_REGISTER0;
-    phase.ws.samples.current = (spl_t)ADC_RESULT_REGISTER1;
-    phase.ws.samples.voltage90 = LMA_PhaseShift90(phase.ws.samples.voltage);
+- [Renesas Website](https://www.renesas.com)
+- [Renesas MCUs & MPUs](https://www.renesas.com/en/products/microcontrollers-microprocessors)
+- [Renesas e2 studio](https://www.renesas.com/tools/e2-studio)
 
-    LMA_CB_ADC();
-}
+---
 
-void TMR_Callback(void)
-{
-	/* Periodic interrupt event*/
-    LMA_CB_TMR();
-}
+## License
 
-void RTC_Callback(void)
-{
-    /* Periodic interrupt event */
-    LMA_CB_RTC();
-}
-```
+This project is licensed under the following [terms](https://www.renesas.com/en/document/oth/disclaimer015?srsltid=AfmBOorceqdmsAs42rxoYYHQwnXI3aHFoXRORrRm2e6OUmqg12zxtsEM).
 
-## Architecture
-TODO: System level explanation of how to programatically construct a meter.
+---
 
-## Drivers
-TODO: Description of drivers required and each ones responsibilities.
+## Support
 
-## Computations
-TODO: The signal chain for each measured metric.
+Raise an issue through ...
 
-## Impulse Control
-TODO: Explain the impulse control
+---
+
 

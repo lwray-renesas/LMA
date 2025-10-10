@@ -1,20 +1,17 @@
-#include "LMA_Port.h"
-#include "LMA_Core.h"
-#include <math.h>
-
-
-/** @brief phase shifts voltage signal
- * @details
- * - 50Hz signal is 20ms.
- * - 50Hz signal being 360degree of period, to get 90degree we divide by 4.
- * - 20ms divided by 4 = 5ms.
- * - to delay 5ms with a 3906Hz clock we can do 0.005/(1/3906) = 19.53 samples - so we do 20
- * samples.
+/** \addtogroup Porting
+ *  @{
  *
- * @param[in] new_voltage - new voltage to store in the buffer
- * @return voltage sample 90degree (20 samples) ago.
+ * @file LMA_Port.c
+ * @brief Porting file definitions for the LMA codebase.
+ *
+ * @details This file provides definitions of the LMA porting requirements - everythin in this file must be considered when
+ * porting between platforms.
  */
-static int32_t Phase_shift_90deg(int32_t new_voltage);
+
+/** @}*/
+
+#include "LMA_Port.h"
+#include <math.h>
 
 float LMA_AccToFloat(acc_t acc)
 {
@@ -33,13 +30,13 @@ float LMA_FPDiv_Fast(float a, float b)
 
 float LMA_FPSqrt_Fast(float a)
 {
-    return sqrtf(a);
+  return sqrtf(a);
 }
 
 float LMA_FPAbs_Fast(float a)
 {
-    uint32_t tmp = *(uint32_t*)(&a) & 0x7FFFFFFF;
-    return *(float*)&tmp;
+  uint32_t tmp = *(uint32_t *)(&a) & 0x7FFFFFFF;
+  return *(float *)&tmp;
 }
 
 void LMA_AccReset(LMA_Workspace *const p_ws, const uint32_t phase_id)
@@ -71,34 +68,33 @@ void LMA_AccLoad(LMA_Workspace *const p_ws, LMA_Accumulators *const p_accs, cons
 
 spl_t LMA_PhaseShift90(spl_t new_voltage)
 {
-    static spl_t voltage_buffer[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    static uint8_t buffer_index = 0;
+  static spl_t voltage_buffer[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  static uint8_t buffer_index = 0;
 
-    uint8_t buffer_index_19 = buffer_index + 2;
-    uint8_t buffer_index_20 = buffer_index + 1;
+  uint8_t buffer_index_19 = buffer_index + 2;
+  uint8_t buffer_index_20 = buffer_index + 1;
 
-    if(buffer_index_19 > 21)
-    {
-        buffer_index_19 -= 21;
-    }
+  if (buffer_index_19 > 21)
+  {
+    buffer_index_19 -= 21;
+  }
 
-    if(buffer_index_20 > 21)
-    {
-        buffer_index_20 -= 21;
-    }
+  if (buffer_index_20 > 21)
+  {
+    buffer_index_20 -= 21;
+  }
 
-    /* Append new voltage*/
-    voltage_buffer[buffer_index] = new_voltage;
+  /* Append new voltage*/
+  voltage_buffer[buffer_index] = new_voltage;
 
-    /* Interpolate 19.53 samples - just take the mid point*/
-    int32_t interpolated_value =
-            ((voltage_buffer[buffer_index_19] * 60) >> 7) + ((voltage_buffer[buffer_index_20] * 68) >> 7);
+  /* Interpolate 19.53 samples - just take the mid point*/
+  int32_t interpolated_value = ((voltage_buffer[buffer_index_19] * 60) >> 7) + ((voltage_buffer[buffer_index_20] * 68) >> 7);
 
-    buffer_index = buffer_index_20;
+  buffer_index = buffer_index_20;
 
-    /* Convert back to its 32b value*/
-    return interpolated_value;
+  /* Convert back to its 32b value*/
+  return interpolated_value;
 }
 
 void LMA_ADC_Init(void)

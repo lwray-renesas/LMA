@@ -1,13 +1,13 @@
 #ifndef _LMA_PORT_H
 #define _LMA_PORT_H
 
-#include <stdint.h>
+#include "hal_data.h"
 #include <stdbool.h>
 #include <stddef.h>
-#include "hal_data.h"
+#include <stdint.h>
 
 /** @brief macros used to red current interrupt state */
-#define LMA_CRITICAL_SECTION_PREPARE() uint32_t interrupt_save =  __get_PRIMASK()
+#define LMA_CRITICAL_SECTION_PREPARE() uint32_t interrupt_save = __get_PRIMASK()
 /** @brief macro used to disable interrupts*/
 #define LMA_CRITICAL_SECTION_ENTER() __disable_irq()
 /** @brief macro used to restore interrupt state*/
@@ -18,29 +18,36 @@ typedef int32_t spl_t;
 /** @brief Defines the accumulator type (generally double the bit-width of the sample) */
 typedef int64_t acc_t;
 
-/** @brief accumulators for accumulating samples*/
+/**
+ * @brief Accumulators
+ * @details Data structure containing accumulators for accumulating samples.
+ */
 typedef struct LMA_Accumulators
 {
-    acc_t vacc; /**< Voltage accumulator*/
-    acc_t iacc; /**< Current accumulator*/
-    acc_t pacc; /**< Power accumulator*/
-    acc_t qacc; /**< Reactive accumulator*/
-    uint32_t sample_count; /**< line frequency accumulator*/
+  acc_t vacc;            /**< Voltage accumulator*/
+  acc_t iacc;            /**< Current accumulator*/
+  acc_t pacc;            /**< Power accumulator*/
+  acc_t qacc;            /**< Reactive accumulator*/
+  uint32_t sample_count; /**< line frequency accumulator*/
 } LMA_Accumulators;
 
-/** @brief Some glue logic between the phases and porting layer to enable work on a phase between systems*/
+/**
+ * @brief Workspace
+ * @details Data structure containing some glue logic between the phases and porting layer to enable work on a phase between
+ * systems
+ */
 typedef struct LMA_Workspace
 {
-    /** @brief dedicated struct for a sample set */
-    struct LMA_Samples
-    {
-      spl_t voltage;   /**< Voltage ADC sample */
-      spl_t current;   /**< Current ADC sample */
-      spl_t voltage90; /**< Sample used to contain the phase shifted voltage signal */
-    } samples;
+  /** @brief dedicated struct for a sample set */
+  struct LMA_Samples
+  {
+    spl_t voltage;   /**< Voltage ADC sample */
+    spl_t current;   /**< Current ADC sample */
+    spl_t voltage90; /**< Sample used to contain the phase shifted voltage signal */
+  } samples;
 
-    LMA_Accumulators accs; /**< Block of accumulators to work with*/
-}LMA_Workspace;
+  LMA_Accumulators accs; /**< Block of accumulators to work with*/
+} LMA_Workspace;
 
 /** @brief Converts an accumulator type to a floating point type.
  * @param acc - accumulator for conversion.
@@ -118,10 +125,9 @@ void LMA_AccLoad(LMA_Workspace *const p_ws, LMA_Accumulators *const p_accs, cons
  */
 spl_t LMA_PhaseShift90(spl_t new_voltage);
 
-
 /******************
-* DRIVERS
-******************/
+ * DRIVERS
+ ******************/
 /** @brief Initialises ADC but doesn't start it */
 void LMA_ADC_Init(void);
 /** @brief Starts the ADC running */

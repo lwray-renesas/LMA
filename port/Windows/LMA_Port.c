@@ -31,8 +31,8 @@ float LMA_FPSqrt_Fast(float a)
 
 float LMA_FPAbs_Fast(float a)
 {
-    uint32_t tmp = *(uint32_t*)(&a) & 0x7FFFFFFF;
-    return *(float*)&tmp;
+  uint32_t tmp = *(uint32_t *)(&a) & 0x7FFFFFFF;
+  return *(float *)&tmp;
 }
 
 void LMA_AccReset(LMA_Workspace *const p_ws, const uint32_t phase_id)
@@ -64,34 +64,33 @@ void LMA_AccLoad(LMA_Workspace *const p_ws, LMA_Accumulators *const p_accs, cons
 
 spl_t LMA_PhaseShift90(spl_t new_voltage)
 {
-    static spl_t voltage_buffer[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    static uint8_t buffer_index = 0;
+  static spl_t voltage_buffer[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  static uint8_t buffer_index = 0;
 
-    uint8_t buffer_index_19 = buffer_index + 2;
-    uint8_t buffer_index_20 = buffer_index + 1;
+  uint8_t buffer_index_19 = buffer_index + 2;
+  uint8_t buffer_index_20 = buffer_index + 1;
 
-    if(buffer_index_19 > 21)
-    {
-        buffer_index_19 -= 21;
-    }
+  if (buffer_index_19 > 21)
+  {
+    buffer_index_19 -= 21;
+  }
 
-    if(buffer_index_20 > 21)
-    {
-        buffer_index_20 -= 21;
-    }
+  if (buffer_index_20 > 21)
+  {
+    buffer_index_20 -= 21;
+  }
 
-    /* Append new voltage*/
-    voltage_buffer[buffer_index] = new_voltage;
+  /* Append new voltage*/
+  voltage_buffer[buffer_index] = new_voltage;
 
-    /* Interpolate 19.53 samples - just take the mid point*/
-    int32_t interpolated_value =
-            ((voltage_buffer[buffer_index_19] * 60) >> 7) + ((voltage_buffer[buffer_index_20] * 68) >> 7);
+  /* Interpolate 19.53 samples - just take the mid point*/
+  int32_t interpolated_value = ((voltage_buffer[buffer_index_19] * 60) >> 7) + ((voltage_buffer[buffer_index_20] * 68) >> 7);
 
-    buffer_index = buffer_index_20;
+  buffer_index = buffer_index_20;
 
-    /* Convert back to its 32b value*/
-    return interpolated_value;
+  /* Convert back to its 32b value*/
+  return interpolated_value;
 }
 
 void LMA_ADC_Init(void)
@@ -110,7 +109,6 @@ void LMA_ADC_Stop(void)
 
 void LMA_TMR_Init(void)
 {
-
 }
 
 void LMA_TMR_Start(void)

@@ -10,12 +10,14 @@ set (SOURCES
     "src/simulation/simulation.cpp"
     "../../src/LMA_Core.c"
     "../../port/windows/LMA_Port.c"
+    "../../src/LMA_Utils/LMA_Utils.c"
 )
 set (HEADERS
     "src/mainwindow.hpp"
     "src/simulation/simulation.hpp"
     "../../src/LMA_Core.h"
     "../../src/LMA_Utils/LMA_Types.h"
+    "../../src/LMA_Utils/LMA_Utils.h"
     "../../port/windows/LMA_Port.h"
 )
 # setup directories
@@ -72,6 +74,8 @@ source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/../../src" PREFIX "LMA_Core" FILE
     "../../src/LMA_Core.c"
     "../../src/LMA_Core.h"
     "../../src/LMA_Utils/LMA_Types.h"
+    "../../src/LMA_Utils/LMA_Utils.h"
+    "../../src/LMA_Utils/LMA_Utils.c"
 )
 
 # External source grouping for ../../port

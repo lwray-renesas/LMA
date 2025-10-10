@@ -1,0 +1,17 @@
+/**
+\mainpage Guidance Material
+
+\section Overview Overview
+\todo Introduce
+
+\section GettingStarted Getting Started
+\todo Introduce examples
+
+\subsection Examples Examples
+\todo explain
+
+See the folloing material for an AC metering deep dive!
+- \subpage Mathematics
+- \subpage ACMetering
+
+*/

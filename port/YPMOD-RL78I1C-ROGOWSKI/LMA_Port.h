@@ -5,7 +5,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-
 /* LLVM Toolchain*/
 #if defined(__clang__) && defined(__RL78__)
 
@@ -45,7 +44,10 @@ typedef int32_t spl_t;
 /** @brief Defines the accumulator type (generally double the bit-width of the sample) */
 typedef int64_t acc_t;
 
-/** @brief accumulators for accumulating samples*/
+/**
+ * @brief Accumulators
+ * @details Data structure containing accumulators for accumulating samples.
+ */
 typedef struct LMA_Accumulators
 {
   acc_t vacc;            /**< Voltage accumulator*/
@@ -55,7 +57,11 @@ typedef struct LMA_Accumulators
   uint32_t sample_count; /**< line frequency accumulator*/
 } LMA_Accumulators;
 
-/** @brief Some glue logic between the phases and porting layer to enable work on a phase between systems*/
+/**
+ * @brief Workspace
+ * @details Data structure containing some glue logic between the phases and porting layer to enable work on a phase between
+ * systems
+ */
 typedef struct LMA_Workspace
 {
   /** @brief dedicated struct for a sample set */
