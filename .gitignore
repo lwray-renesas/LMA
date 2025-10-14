@@ -58,4 +58,4 @@ settings.json
 launch.json
 
 # documentation specific
-**/docs/html*
+**/docs/html/*
