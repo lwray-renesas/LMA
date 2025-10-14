@@ -1,16 +1,14 @@
 /**
 \mainpage Guidance Material
 
-\section Overview Overview
-\todo Introduce
+\section Introduction Introduction
+Welcome to the LMA homepage, here we document a lightweight AC metrology framework written in C, the aims of which are functionality, education and portability - in that order.
 
-\section GettingStarted Getting Started
-\todo Introduce examples
+The quickest way to get started is to identify one of the examples in the repositories examples folder and start running it.<br>
+Each example comes equipped with a RUNME.md which contains instructions for running the example project - so head over there, choose an example & follow the respective instructions to run it.<br>
+Link to repository: https://github.com/lwray-renesas/LMA
 
-\subsection Examples Examples
-\todo explain
-
-See the folloing material for an AC metering deep dive!
+For an AC metering deep dive, checkout the pages below:
 - \subpage Mathematics
 - \subpage ACMetering
 

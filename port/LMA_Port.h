@@ -1,9 +1,10 @@
 /** \addtogroup Porting
  * @brief LMA Porting Layer
  * @details The LMA porting layer is used to perform most (ideally all) porting activities between platforms to enable LMA to
- * run across different different cores.
+ * run across different different cores. To perform a port, ensure you fulfill the functional requirements of the API in the
+ * porting files - using an existing port as reference may help.
  *
- * @warning The documentation here is based on empty "skeleton" porting files and should be used to aid with creating a new
+ * @note The documentation here is based on empty "skeleton" porting files and should be used to aid with creating a new
  * port or navigating existing ports.
  *  @{
  *
@@ -71,7 +72,7 @@ typedef struct LMA_Workspace
     spl_t voltage;   /**< Voltage ADC sample */
     spl_t current;   /**< Current ADC sample */
     spl_t voltage90; /**< Sample used to contain the phase shifted voltage signal */
-  } samples;
+  } samples;         /**< structure containing samples to work on*/
 
   LMA_Accumulators accs; /**< Block of accumulators to work with*/
 } LMA_Workspace;
@@ -116,7 +117,7 @@ float LMA_FPAbs_Fast(float a);
  * iacc = i_sample ^ 2
  * pacc = i_sample * v_sample
  * qacc = i_sample * v90_sample
- * @param[inout] pointer to data to work with.
+ * @param[inout] p_ws - pointer to data to work with.
  * @param[in] phase_id - phase identifier for managing porting resources.
  */
 void LMA_AccReset(LMA_Workspace *const p_ws, const uint32_t phase_id);
@@ -127,14 +128,14 @@ void LMA_AccReset(LMA_Workspace *const p_ws, const uint32_t phase_id);
  * iacc += i_sample ^ 2
  * pacc += i_sample * v_sample
  * qacc += i_sample * v90_sample
- * @param[inout] pointer to data to work with.
+ * @param[inout] p_ws - pointer to data to work with.
  * @param[in] phase_id - phase identifier for managing porting resources.
  */
 void LMA_AccRun(LMA_Workspace *const p_ws, const uint32_t phase_id);
 
 /** @brief Loads the accumulators into the accumulator structure.
- * @param[inout] pointer to data to work with.
- * @param[inout] pointer to accumulators to copy results to.
+ * @param[inout] p_ws - pointer to data to work with.
+ * @param[inout] p_accs - pointer to accumulators to copy results to.
  * @param[in] phase_id - phase identifier for managing porting resources.
  */
 void LMA_AccLoad(LMA_Workspace *const p_ws, LMA_Accumulators *const p_accs, const uint32_t phase_id);

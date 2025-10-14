@@ -544,6 +544,12 @@ bool LMA_MeasurementsReady(LMA_Phase *const p_phase)
   return tmp;
 }
 
+/** @details The ADC Callback handles:
+ *  1. Sample processing and accumulation.
+ *  2. Energy Impulse Management.
+ *
+ *  It does not update the measured parameters - this is done in the TMR callback.
+ */
 void LMA_CB_ADC(void)
 {
   LMA_Phase *p_phase = p_phase_list;
@@ -748,6 +754,15 @@ void LMA_CB_ADC(void)
   }
 }
 
+/** @details The TMR Callback computes and updates:
+ *  1. Energy consumption in units (how much energy is consumed in Ws/VARs/VAs per ADC interval)
+ *  2. Power
+ *  3. Voltage
+ *  4. Current
+ *  5. Frequency
+ *
+ *  For each phase.
+ */
 void LMA_CB_TMR(void)
 {
   LMA_CRITICAL_SECTION_PREPARE();
@@ -890,6 +905,9 @@ void LMA_CB_TMR(void)
   LMA_CRITICAL_SECTION_EXIT();
 }
 
+/** @details The RTC isr calling this should ideally have nested interrupts enabled in which the ADC can interrupt us.
+ * This callback allows us to calibrate sampling frequency.
+ */
 void LMA_CB_RTC(void)
 {
   /* If we are calibrating, synch the ADC sampling window to the RTC*/

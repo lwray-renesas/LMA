@@ -11,7 +11,7 @@
 #include "LMA_Utils.h"
 
 /** @addtogroup API
- * @brief
+ * @brief LMA API
  * @details The LMA API consists of control and measurement, both of which are used together to form the base software defined
  * functionality of AC metrology.
  *  @{
@@ -138,7 +138,7 @@ void LMA_MeasurementsGet(LMA_Phase *const p_phase, LMA_Measurements *const p_mea
 
 /** @brief Converts current snap shot of energy consumed by the meter in Wh.
  * @details Must call LMA_EnergyGet first.
- * @param[in] p_ec - pointer to the energy consumption structure to populate.
+ * @param[in] p_se - pointer to the system energy structure (containing system energy counters)
  * @param[out] p_ec - pointer to the energy consumption structure to populate.
  */
 void LMA_ConsumptionDataGet(const LMA_SystemEnergy *const p_se, LMA_ConsumptionData *const p_ec);
@@ -161,30 +161,15 @@ bool LMA_MeasurementsReady(LMA_Phase *const p_phase);
  */
 
 /** @brief ADC CALLBACK - Processes the ADC samples according to the number of phases registered.
- * @details - The ADC Callback handles:
- *  1. Sample processing and accumulation.
- *  2. Energy Impulse Management.
- *
- *  It does not update the measured parameters - this is done in the TMR callback.
  */
 void LMA_CB_ADC(void);
 
 /** @brief TMR CALLBACK - 10ms periodic timer - processes the accumulated ADC values as accumulated by the ADC CB and computes
  * the measured parameters.
- * @details - The TMR Callback computes and updates:
- *  1. Energy consumption in units (how much energy is consumed in Ws/VARs/VAs per ADC interval)
- *  2. Power
- *  3. Voltage
- *  4. Current
- *  5. Frequency
- *
- *  For each phase.
  */
 void LMA_CB_TMR(void);
 
 /** @brief RTC CALLBACK - Process periodic rtc interrupt.
- * @details The RTC isr calling this should ideally have nested interrupts enabled in which the ADC can interrupt us.
- * This callback allows us to calibrate sampling frequency.
  */
 void LMA_CB_RTC(void);
 

@@ -1,23 +1,327 @@
 /**
 \page Mathematics Mathematics
-\todo Introduce
+This page outlines the key formulae, principles, and concepts forming the mathematical foundations of AC metrology used within LMA.
+
+<hr>
+
+\section Context Context
+In metrology, measurements begin at the raw ADC level, where we acquire **discretised instantaneous samples** of both voltage and current.
+
+Thus, we have:
+\f$ v(t) \f$  and  \f$ i(t) \f$<br>
+Specifically in the form of ADC samples: \f$ V_\mathrm{adc_n} \f$ & \f$ I_\mathrm{adc_n} \f$
+
+These represent the instantaneous voltage and current waveforms.  
+All subsequent calculations—RMS, power, and energy—are derived directly from these sampled signals.
+
+\image html VI_Sampling.png "Voltage and Current sampling from ADC" width=30% height=30%
+
+<hr>
+
+\section RMS RMS
+When analysing AC systems, we are often interested in average quantities.  
+However, since the average of a pure sine wave over one period is zero, using a simple mean would yield no useful measurement of power or energy.  
+Instead, we use the **Root Mean Square (RMS)**, which represents an AC systems equivalent DC value.
+
+Mathematically:
+\f[
+x_\mathrm{RMS} = \sqrt{ \frac{1}{N} \sum_{n=1}^{N} x_n^2 }
+\f]
+
+This concept forms the **foundation of AC metrology**.
+
+<hr>
 
 \section Voltage Voltage
-\todo explain
+Using the instantaneous voltage signal \f$ v(t) \f$, the RMS value is:
+
+\f[
+V_\mathrm{RMS} = \sqrt{ \frac{1}{T} \int_0^T [v(t)^2] \, dt }
+\f]
+
+In discrete digital form (using ADC samples):
+\f[
+V_\mathrm{RMS} = \sqrt{ \frac{1}{N} \sum_{n=1}^{N} [V_\mathrm{adc_n}^2] }
+\f]
+
+Where:
+- \f$ N \f$ = number of samples  
+- \f$ V_\mathrm{adc_n} \f$ = voltage sample
+
+<hr>
 
 \section Current Current
-\todo explain
+Similarly, for current:
+\f[
+I_\mathrm{RMS} = \sqrt{ \frac{1}{T} \int_0^T [i(t)^2] \, dt }
+\f]
+
+Discrete form:
+\f[
+I_\mathrm{RMS} = \sqrt{ \frac{1}{N} \sum_{n=1}^{N} [I_\mathrm{adc_n}^2] }
+\f]
+
+Where:
+- \f$ N \f$ = number of samples  
+- \f$ I_\mathrm{adc_n} \f$ = current sample
+
+<hr>
 
 \section Frequency Frequency
-\todo explain
+In AC systems, frequency refers to the fundamental line frequency, typically 50 Hz or 60 Hz depending on the region.<br>
+Accurate frequency measurement is crucial for power computation, phase determination, and system diagnostics.<br>
+A common digital approach is to first filter the voltage signal to isolate the fundamental component and remove high-frequency noise or harmonics,
+then perform zero-crossing detection on the filtered waveform.<br>
+Zero-crossing detection identifies points where the voltage waveform passes through zero in a defined direction (negative-to-positive or positive-to-negative),
+which serve as time markers of the AC cycle.
+\image html Zero_crossing_2.png "Zero Crossing Detection - https://en.wikipedia.org/wiki/Zero_crossing" width=30% height=30%
+
+In a digital system, the voltage signal is represented by discrete ADC samples, \f$ V_\mathrm{adc_n} \f$, where \f$ n \f$ indexes the sample.<br>
+A zero crossing occurs between samples \f$ V_\mathrm{adc_n} \f$ and \f$ V_\mathrm{adc_{n+1}} \f$ where the sign of the voltage changes.<br>
+The frequency can then be calculated as:
+\f[
+f = \frac{1}{N \cdot \delta_t} [Hz]
+\f]
+
+Where:
+    - \f$ N \f$ = number of ADC samples between consecutive zero crossings of the same polarity
+    - \f$ \delta_t \f$ = sampling interval (seconds)
+    - \f$ V_\mathrm{adc_n} \f$ = voltage ADC sample at index \f$ n \f$
+
+<hr>
 
 \section Power Power
-\todo explain
+Power in AC systems is derived directly from voltage and current waveforms defined as:
+\f[
+v(t) = V_\mathrm{m} \sin(2 \pi f t)
+\f]
+\f[
+i(t) = I_\mathrm{m} \sin(2 \pi f t)
+\f]
+
+Where:
+    - \f$ V_\mathrm{m} \f$ = peak voltage
+    - \f$ I_\mathrm{m} \f$ = peak current
+    - \f$ f \f$ = line frequency
+    - \f$ t \f$ = time
+
+\subsection PhaseShift Phase Shift
+An important topic to cover before going into power computations however is the phase relationship of current and voltage.<br>
+Current and voltage are often **out of phase** due to reactive components (inductors or capacitors).  
+The angular displacement between them is the **phase shift**, \f$ \phi \f$, a key parameter for determining active and reactive power.<br>
+This means we must modify our voltage and current signals to better represent the system:
+\f[
+v(t) = V_\mathrm{m} \sin(2 \pi f t)
+\f]
+\f[
+i(t) = I_\mathrm{m} \sin(2 \pi f t + \phi)
+\f]
+
+Where \f$ \phi \f$ denotes the phase angle:
+- **Positive** (\f$ \phi > 0 \f$): current leads voltage (capacitive load)  
+- **Negative** (\f$ \phi < 0 \f$): current lags voltage (inductive load)
+
+\image html VI_Sin.png "V-I Sinusiodal - https://www.electronics-tutorials.ws/accircuits/phase-difference.html" width=30% height=30%
+
+This is often nicely shown in the form of a phasor diagram.
+\image html PhaseShift_Vector.png "V-I Phasor - https://www.electronics-tutorials.ws/accircuits/phasors.html" width=30% height=30%
+
+\subsection ApparentPower Apparent Power
+Apparent power \f$ S \f$, measured in \f$ VoltAmperes [VA] \f$, represents the total system power (both useful and reactive components):
+\f[
+S = V_\mathrm{RMS} I_\mathrm{RMS}
+\f]
+
+Discrete form:
+\f[
+S = \frac{1}{N} \sqrt{ \sum_{n=1}^{N} [V_\mathrm{adc_n}^2] \cdot \sum_{n=1}^{N} [I_\mathrm{adc_n}^2] }
+\f]
+
+\subsection ActivePower Active Power
+Active (real) power \f$ P \f$, measured in \f$ Watts [W] \f$, is the component that performs useful (resistive) work:
+\f[
+P = \frac{1}{T} \int_0^T [v(t) i(t)] dt
+\f]
+Discrete form:
+\f[
+P = \frac{1}{N} \sum_{n=1}^{N} [V_\mathrm{adc_n} I_\mathrm{adc_n}]
+\f]
+
+\subsection ReactivePower Reactive Power
+Reactive (imaginary) power \f$ Q \f$, measured in \f$ VoltAmperesReactive [VAR] \f$, is the component that performs no net work in the system.<br>
+It represents energy exchanged with inductive or capacitive components.<br>
+We can understand reactive power by recalling three key points about phase relationships:
+    - A purely resistive load has 0° phase shift between voltage and current.
+    - A purely reactive load has a 90° phase shift between voltage and current.
+    - Instantaneous active power is always given by \f$ p(t) = v(t) \cdot i(t) \f$.
+
+From this, we can derive an important concept, if we artificially shift the current waveform by 90°, the resulting active power becomes zero, leaving only the reactive component.
+
+Therefore mathematically introducing a 90° shift in current gives:
+\f[ 
+    q(t) = v(t) \cdot i(t - 90^\circ) = V_\mathrm{pk} \sin(2 \pi f t) \cdot I_\mathrm{pk} \sin(2 \pi f t + \phi - 90^\circ) 
+\f]
+Discrete form:
+\f[ 
+    Q = \frac{1}{N} \sum_{n=1}^{N} [V_\mathrm{adc_n} \cdot I_\mathrm{adc_n-90^\circ}] 
+\f]
+
+Where:
+    - \f$ V_\mathrm{adc_n} \f$ = voltage sample at index \f$ n \f$
+    - \f$ I_\mathrm{adc_n-90^\circ} \f$ = current sample phase-shifted by 90°
+
+\subsection PowerFactor Power Factor (PF)
+The **Power Factor (PF)** expresses how efficiently power is used and is defined as:
+\f[
+\mathrm{PF} = \cos(\phi)
+\f]
+
+Thus:
+- Purely Resistive: \f$ \phi = 0^\circ \Rightarrow \mathrm{PF} = 1 \f$  
+- Purely Reactive: \f$ |\phi| = 90^\circ \Rightarrow \mathrm{PF} = 0 \f$  
+- Mixed Load: \f$ 0 < |\phi| < 90^\circ \Rightarrow 0 < \mathrm{PF} < 1 \f$
+
+The easiest way to compute the power factor is using apparent and active power:
+\f[
+\mathrm{PF} = \cos(\phi) = \frac{S}{P}
+\f]
+
+<hr>
 
 \section Energy Energy
-\todo explain
+Energy is the cumulative measure of total work done or power consumed by a system over time.  
+In AC metrology, we do not compute energy directly from voltage and current samples; instead, we build on previously defined power computations.
 
-\section Calibration Calibration
-\todo explain
+Energy computation flow:
+1. Compute average power (\f$ P, Q, S \f$) over a defined measurement period.
+2. Derive the corresponding energy for that period.
+3. Accumulate these periodic energy values over time to obtain total energy consumption.
+
+Instantaneous power is defined as:
+\f[ 
+    p(t) = v(t) \cdot i(t) 
+\f]
+
+And energy is the integral of power over time:
+\f[ 
+    E = \int_0^T p(t) \, dt 
+\f]
+
+In a discrete digital system, we process data in finite computation windows of samples (\f$ N \f$).<br>
+This means energy per unit time becomes:
+\f[ 
+    E = P \cdot dt
+\f]
+In a system with a fixed sampling period \f$ dt \f$ becomes \f$ \frac{1}{f_s} \f$ and an energy quanta per sampling period can be defined:
+\f[ 
+    E = \frac{P}{f_s}
+\f]
+
+\subsection EnergyTable Energy Computation Table
+
+The table below summarises the computation of energy per sampling period (unit) and accumulated totals for active, reactive, and apparent power.
+
+<table>
+  <tr>
+    <th>Type</th>
+    <th>Instantaneous Power</th>
+    <th>Average Power</th>
+    <th>Energy Uint</th>
+    <th>Accumulated Energy Total</th>
+    <th>Units</th>
+  </tr>
+  <tr>
+    <td>Active</td>
+    <td>\f$ p(t) = v(t) \cdot i(t) \f$</td>
+    <td>\f$ P = \frac{1}{N} \sum_{n=1}^{N} [V_\mathrm{adc_n} \cdot I_\mathrm{adc_n}] \f$</td>
+    <td>\f$ E_\mathrm{active,unit} = \frac{P}{f_s} \f$</td>
+    <td>\f$ E_\mathrm{active,total}(k) = E_\mathrm{active,total}(k-1) + E_\mathrm{active,unit}(k) \f$</td>
+    <td>Ws</td>
+  </tr>
+  <tr>
+    <td>Reactive</td>
+    <td>\f$ q(t) = v(t) \cdot i(t - 90^\circ) \f$</td>
+    <td>\f$ Q = \frac{1}{N} \sum_{n=1}^{N} [V_\mathrm{adc_n} \cdot I_\mathrm{adc_n-90^\circ}] \f$</td>
+    <td>\f$ E_\mathrm{reactive,unit} = \frac{Q}{f_s} \f$</td>
+    <td>\f$ E_\mathrm{reactive,total}(k) = E_\mathrm{reactive,total}(k-1) + E_\mathrm{reactive,unit}(k) \f$</td>
+    <td>VARs</td>
+  </tr>
+  <tr>
+    <td>Apparent</td>
+    <td>Not Applicable</td>
+    <td>\f$ S = \frac{1}{N} \sqrt{\sum_{n=1}^{N} V_\mathrm{adc_n}^2 \cdot \sum_{n=1}^{N} I_\mathrm{adc_n}^2} \f$</td>
+    <td>\f$ E_\mathrm{apparent,unit} =  \frac{S}{f_s} \f$</td>
+    <td>\f$ E_\mathrm{apparent,total}(k) = E_\mathrm{apparent,total}(k-1) + E_\mathrm{apparent,unit}(k) \f$</td>
+    <td>VAs</td>
+  </tr>
+</table>
+
+Where:
+- \f$ N \f$ = number of samples per computation window  
+- \f$ f_s \f$ = sampling frequency
+
+This table provides a compact overview of how each type of energy is calculated per computation window and accumulated over time, including their respective units.
+
+Where:
+- \f$ E_\mathrm{active,total} \f$ is in **watt-seconds [Ws]**
+- \f$ E_\mathrm{reactive,total} \f$ in **volt-ampere reactive seconds [VARs]**
+- \f$ E_\mathrm{apparent,total} \f$ in **volt-ampere seconds [VAs]**
+
+\subsection PracticalImplementation Practical Implementation
+In LMA, energy accumulation follows this loop:
+1. Collect \f$ N \f$ ADC samples for voltage and current.
+2. Compute average powers \f$ P, Q, S \f$ for the computation window.
+3. Convert each power to energy quanta \f$ E_\mathrm{unit} = \frac{P}{f_s} \f$.
+4. Accumulate totals for active, reactive, and apparent energy.
+5. Periodically store totals in non-volatile memory to preserve state.
+
+<hr>
+
+\section Harmonics Harmonics
+\todo Describe harmonic analysis, distortion, and total harmonic distortion (THD)
+
+<hr>
+
+\section Filtering Filtering
+Filtering is an essential part of digital metrology, removing DC bias, noise, and high-frequency components.
+
+\subsection HPF HPF
+A **High-Pass Filter (HPF)** attenuates low frequencies (including DC).
+Its cutoff frequency, \f$ f_c \f$, defines where attenuation begins (–3 dB point).
+
+\f[
+y_n = \alpha y_{n-1} + \alpha (x_n - x_{n-1})
+\f]
+\f[
+\alpha = \frac{1}{1 + 2 \pi f_c T_s}
+\f]
+
+Where:
+    - \f$ T_s \f$ = Sampling Period
+
+Used in LMA’s ADC front-end to eliminate DC offsets from amplifiers.
+
+\subsection LPF LPF
+A **Low-Pass Filter (LPF)** attenuates high-frequencies.
+Its cutoff frequency, \f$ f_c \f$, defines where attenuation begins (–3 dB point).
+
+\f[
+y_n = \alpha x_n + (1 - \alpha) y_{n-1}
+\f]
+\f[
+\alpha = \frac{2 \pi f_c T_s}{1 + 2 \pi f_c T_s}
+\f]
+
+Where:
+    - \f$ T_s \f$ = Sampling Period
+
+LPFs in LMA are used in zero-crossing detection and frequency measurement, and also as hardware anti-aliasing filters.
+
+<hr>
+
+\section Integration Integration
+\todo Describe integration, techniques & uses in AC metering.
+
+<hr>
 
 */

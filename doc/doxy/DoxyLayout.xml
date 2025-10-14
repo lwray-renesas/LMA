@@ -37,7 +37,7 @@
       <tab type="exceptionhierarchy" visible="no" title="" intro=""/>
     </tab>
     <tab type="files" visible="no" title="">
-      <tab type="filelist" visible="no" title="" intro=""/>
+      <tab type="filelist" visible="yes" title="" intro=""/>
       <tab type="globals" visible="no" title="" intro=""/>
     </tab>
     <tab type="examples" visible="no" title="" intro=""/>
@@ -45,7 +45,8 @@
 
   <!-- Layout definition for a class page -->
   <class>
-    <briefdescription visible="yes"/>
+    <briefdescription visible="no"/>
+    <detaileddescription visible="yes" title="Description"/>
     <includes visible="$SHOW_HEADERFILE"/>
     <inheritancegraph visible="yes"/>
     <collaborationgraph visible="yes"/>
@@ -83,7 +84,6 @@
       <related visible="yes" title="" subtitle=""/>
       <membergroups visible="yes"/>
     </memberdecl>
-    <detaileddescription visible="yes" title=""/>
     <memberdef>
       <inlineclasses visible="yes" title=""/>
       <typedefs visible="yes" title=""/>
@@ -104,7 +104,8 @@
 
   <!-- Layout definition for a namespace page -->
   <namespace>
-    <briefdescription visible="yes"/>
+    <briefdescription visible="no"/>
+    <detaileddescription visible="yes" title="Description"/>
     <memberdecl>
       <nestednamespaces visible="yes" title=""/>
       <constantgroups visible="yes" title=""/>
@@ -122,7 +123,6 @@
       <properties visible="yes" title=""/>
       <membergroups visible="yes"/>
     </memberdecl>
-    <detaileddescription visible="yes" title=""/>
     <memberdef>
       <inlineclasses visible="yes" title=""/>
       <typedefs visible="yes" title=""/>
@@ -138,16 +138,17 @@
 
   <!-- Layout definition for a concept page -->
   <concept>
-    <briefdescription visible="yes"/>
+    <briefdescription visible="no"/>
+    <detaileddescription visible="yes" title="Description"/>
     <includes visible="$SHOW_HEADERFILE"/>
     <definition visible="yes" title=""/>
-    <detaileddescription visible="yes" title=""/>
     <authorsection visible="yes"/>
   </concept>
 
   <!-- Layout definition for a file page -->
   <file>
-    <briefdescription visible="yes"/>
+    <briefdescription visible="no"/>
+    <detaileddescription visible="yes" title="Description"/>
     <includes visible="$SHOW_INCLUDE_FILES"/>
     <includegraph visible="yes"/>
     <includedbygraph visible="yes"/>
@@ -170,7 +171,6 @@
       <properties visible="yes" title=""/>
       <membergroups visible="yes"/>
     </memberdecl>
-    <detaileddescription visible="yes" title=""/>
     <memberdef>
       <inlineclasses visible="yes" title=""/>
       <defines visible="yes" title=""/>
@@ -187,7 +187,8 @@
 
   <!-- Layout definition for a group page -->
   <group>
-    <briefdescription visible="yes"/>
+    <briefdescription visible="no"/>
+    <detaileddescription visible="yes" title="Description"/>
     <groupgraph visible="yes"/>
     <memberdecl>
       <nestedgroups visible="yes" title=""/>
@@ -214,7 +215,6 @@
       <friends visible="yes" title=""/>
       <membergroups visible="yes"/>
     </memberdecl>
-    <detaileddescription visible="yes" title=""/>
     <memberdef>
       <pagedocs/>
       <inlineclasses visible="yes" title=""/>
@@ -239,7 +239,8 @@
 
   <!-- Layout definition for a C++20 module page -->
   <module>
-    <briefdescription visible="yes"/>
+    <briefdescription visible="no"/>
+    <detaileddescription visible="yes" title="Description"/>
     <exportedmodules visible="yes"/>
     <memberdecl>
       <concepts visible="yes" title=""/>
@@ -250,7 +251,6 @@
       <variables visible="yes" title=""/>
       <membergroups visible="yes" title=""/>
     </memberdecl>
-    <detaileddescription visible="yes" title=""/>
     <memberdecl>
       <files visible="yes"/>
     </memberdecl>
@@ -258,12 +258,12 @@
 
   <!-- Layout definition for a directory page -->
   <directory>
-    <briefdescription visible="yes"/>
+    <briefdescription visible="no"/>
+    <detaileddescription visible="yes" title="Description"/>
     <directorygraph visible="yes"/>
     <memberdecl>
       <dirs visible="yes"/>
       <files visible="yes"/>
     </memberdecl>
-    <detaileddescription visible="yes" title=""/>
   </directory>
 </doxygenlayout>

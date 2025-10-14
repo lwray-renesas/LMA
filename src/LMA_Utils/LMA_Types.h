@@ -17,7 +17,8 @@
 /** @addtogroup Types
  * @brief LMA Types
  * @details The LMA API relies on a set of unique data structure, enum's and other defined types to operate, here these are
- * outlined.
+ * outlined.<br>
+ * Checkout the \ref Storage topic to see what types are particularly useful for non-volatile storage.
  *  @{
  */
 
@@ -115,6 +116,20 @@ typedef struct LMA_EnergyUnit_str
   float react; /**< Currently computed unit of reactive energy per ADC interval*/
 } LMA_EnergyUnit;
 
+/** @addtogroup Storage
+ * @brief LMA Storage Data
+ * @details Some LMA API types are designed to be stored in non volatile memory for backup purposes, this top group outlines sub
+ * groups containing types which may be useful to store.
+ *  @{
+ */
+
+/** @addtogroup Calibration
+ * @brief LMA Calibration Data
+ * @details The calibration data is is subject to change on command during manufacture or maintenance, the types outlined here
+ * contain calibration data.
+ *  @{
+ */
+
 /**
  * @brief Global/System calibration data
  * @details Data structure containing system wide calibration parameters (i.e., not per phase).
@@ -137,6 +152,10 @@ typedef struct LMA_PhaseCalibration_str
   float vi_phase_correction; /**< V-I Phase Correction (I relative to V i.e., I lags V = negative, I leads V = positive)*/
   float p_coeff;             /**< Power coefficient*/
 } LMA_PhaseCalibration;
+
+/** @} */
+
+/** @} */
 
 /**
  * @brief Phase-angle error calibration data
@@ -183,6 +202,17 @@ typedef struct LMA_Phase_str
   uint32_t phase_number;        /**< zero indexed phase number for identification*/
 } LMA_Phase;
 
+/** @addtogroup Storage
+ *  @{
+ */
+
+/** @addtogroup Logging
+ * @brief LMA Logging Data
+ * @details Logging data is data which may be required to be periodically stored in non-volatile memory, this group outlines
+ * those types.
+ *  @{
+ */
+
 /**
  * @brief Energy data
  * @details Data structure containing system energy computations and impulse control parameters.
@@ -192,13 +222,13 @@ typedef struct LMA_SystemEnergy_str
   /** @brief Energy related data */
   struct energy
   {
-    /** @brief Currently computed unit of energy per ADC interval of whole system*/
+    /** @brief Currently computed units of energy per ADC interval of whole system*/
     struct unit
     {
       float act;   /**< Currently computed unit of active energy per ADC interval*/
       float app;   /**< Currently computed unit of apparent energy per ADC interval*/
       float react; /**< Currently computed unit of reactive energy per ADC interval*/
-    } unit;
+    } unit;        /**< structure containing energy units per ADC*/
 
     /** @brief Running energy accumulators for counting energy between pulses - Ws (Watt second)*/
     struct accumulator
@@ -211,7 +241,7 @@ typedef struct LMA_SystemEnergy_str
       float c_react_exp_ws; /**< Variable used to accumulate the C reactive export (to grid) energy*/
       float l_react_imp_ws; /**< Variable used to accumulate the L reactive import (from grid) energy*/
       float l_react_exp_ws; /**< Variable used to accumulate the L reactive export (to grid) energy*/
-    } accumulator;
+    } accumulator;          /**< structure containing energy accumulators*/
 
     /** @brief Total energy measured by meter in units of energy (pulses or kwh/imp)*/
     struct counter
@@ -232,8 +262,8 @@ typedef struct LMA_SystemEnergy_str
                                from grid) */
       uint64_t l_react_exp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (L reactive export ...
                                to grid) */
-    } counter;
-  } energy;
+    } counter;              /**< structure containing energy counters*/
+  } energy;                 /**< structure containing system energy data*/
 
   /** @brief Data related to impulse controls */
   struct impulse
@@ -245,8 +275,12 @@ typedef struct LMA_SystemEnergy_str
     bool active_on;            /**< Flag indicating the active led is on */
     bool apparent_on;          /**< Flag indicating the apparent led is on */
     bool reactive_on;          /**< Flag indicating the reactive led is on */
-  } impulse;
+  } impulse;                   /**< structure containing energy impulse controls*/
 } LMA_SystemEnergy;
+
+/** @} */
+
+/** @} */
 
 /**
  * @brief Calibration arguments (per phase)
