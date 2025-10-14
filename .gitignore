@@ -56,3 +56,6 @@ dkms.conf
 settings.json
 .cache*
 launch.json
+
+# documentation specific
+**/docs/html*
