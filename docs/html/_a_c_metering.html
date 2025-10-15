@@ -159,29 +159,16 @@ Shunt</h2>
 \[    V_\mathrm{shunt} = I_\mathrm{line} \cdot R_\mathrm{shunt} 
 \]
 </p>
-<table class="doxtable">
-<tr>
-<th>Advantages</th><th>Disadvantages</th></tr>
-<tr>
-<td><ul>
-<li>
-High accuracy and linearity </li>
-<li>
-Excellent phase response </li>
-<li>
-Low cost and simple to implement </li>
-<li>
-Tamper resistant </li>
-</ul>
-</td><td><ul>
-<li>
-No galvanic isolation </li>
-<li>
-Power dissipation increases with current </li>
-<li>
-Must be placed carefully to avoid thermal drift and EMI coupling </li>
-</ul>
-</td></tr>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><b>Advantages</b>  </th><th class="markdownTableHeadNone"><b>Disadvantages</b>  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">- High accuracy and linearity <br  />
+ - Excellent phase response <br  />
+ - Low cost and simple to implement <br  />
+ - Tamper resistant  </td><td class="markdownTableBodyNone">- No galvanic isolation <br  />
+ - Power dissipation increases with current <br  />
+ - Must be placed carefully to avoid thermal drift and EMI coupling  </td></tr>
 </table>
 <p>Shunts are most common in <b>low-cost single-phase</b> or <b>direct-connected meters</b>.</p>
 <h2 class="doxsection"><a class="anchor" id="CT"></a>
@@ -191,30 +178,18 @@ CT (Current Transformer)</h2>
 \[    I_\mathrm{secondary} = \frac{I_\mathrm{primary}}{N} 
 \]
 </p>
-<p> where \( N \) is the turns ratio.</p>
-<table class="doxtable">
-<tr>
-<th>Advantages</th><th>Disadvantages</th></tr>
-<tr>
-<td><ul>
-<li>
-Provides isolation and safety </li>
-<li>
-Low insertion loss </li>
-<li>
-Suitable for high-current applications </li>
-</ul>
-</td><td><ul>
-<li>
-Limited bandwidth and possible phase shift at low current </li>
-<li>
-Requires burden resistor for voltage conversion </li>
-<li>
-Potential for core saturation issues </li>
-<li>
-Susceptible to tamper </li>
-</ul>
-</td></tr>
+<p> Where \( N \) is the turns ratio.<br  />
+ This secondary current is then converted to a voltage through a burden resistor and filter network to be fed into an ADC.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><b>Advantages</b>  </th><th class="markdownTableHeadNone"><b>Disadvantages</b>  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">- Provides isolation and safety <br  />
+ - Low insertion loss <br  />
+ - Suitable for high-current applications  </td><td class="markdownTableBodyNone">- Limited bandwidth and possible phase shift at low current <br  />
+ - Requires burden resistor for voltage conversion <br  />
+ - Potential for core saturation issues <br  />
+ - Susceptible to tamper  </td></tr>
 </table>
 <h2 class="doxsection"><a class="anchor" id="Rogowski"></a>
 Rogowski Coil</h2>
@@ -233,25 +208,14 @@ Rogowski Coil</h2>
 <li>\( r \) = Distance from the conductor to the coil centre</li>
 <li>\( \frac{dI}{dt} \) = Rate of change of current</li>
 </ul>
-<table class="doxtable">
-<tr>
-<th>Advantages</th><th>Disadvantages</th></tr>
-<tr>
-<td><ul>
-<li>
-Excellent linearity and very wide bandwidth </li>
-<li>
-No magnetic core (no saturation) </li>
-<li>
-Provides galvanic isolation </li>
-</ul>
-</td><td><ul>
-<li>
-Output requires integration to reconstruct current waveform </li>
-<li>
-Sensitive to positioning meaning extra mechnical/assembly considerations </li>
-</ul>
-</td></tr>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><b>Advantages</b>  </th><th class="markdownTableHeadNone"><b>Disadvantages</b>  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">- Excellent linearity and very wide bandwidth <br  />
+ - No magnetic core (no saturation) <br  />
+ - Provides galvanic isolation  </td><td class="markdownTableBodyNone">- Output requires integration to reconstruct current waveform <br  />
+ - Sensitive to positioning, meaning extra mechanical/assembly considerations  </td></tr>
 </table>
 <p>Rogowski coils are often used in <b>industrial meters</b> or <b>power quality analyzers</b> where high accuracy and wide dynamic range are needed.</p>
 <hr  />
@@ -286,6 +250,9 @@ Pulse Output (Impulse)</h2>
 <li>Often used for communication with external monitoring systems.</li>
 <li>Typically generated based on active energy accumulation.</li>
 </ul>
+<h2 class="doxsection"><a class="anchor" id="ImportExport"></a>
+Import &amp; Export</h2>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo</a></b></dt><dd>explain import and export energy</dd></dl>
 <hr  />
 <h1 class="doxsection"><a class="anchor" id="Topology"></a>
 Topology</h1>
@@ -323,7 +290,7 @@ Three Phase</h2>
 Three Phase</div></div>
 <h2 class="doxsection"><a class="anchor" id="ArchitectureConsiderations"></a>
 Architecture Considerations</h2>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo</a></b></dt><dd>Explain consideration when constructing a meter (3PH arch vs 1PH arch - why 3PH shunt requires isolation etc.)</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo</a></b></dt><dd>Explain consideration when constructing a meter (3PH arch vs 1PH arch - why 3PH shunt requires isolation etc.)</dd></dl>
 <hr  />
 <h1 class="doxsection"><a class="anchor" id="MeterTypes"></a>
 Meter Types</h1>
@@ -454,7 +421,7 @@ Tamper Logging</h2>
 <hr  />
 <h1 class="doxsection"><a class="anchor" id="Isolation"></a>
 Isolation</h1>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo</a></b></dt><dd>Discuss isolation requirements where applicable</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000005">Todo</a></b></dt><dd>Discuss isolation requirements where applicable</dd></dl>
 <hr  />
 <h1 class="doxsection"><a class="anchor" id="Compliance"></a>
 Compliance</h1>
@@ -467,17 +434,17 @@ Global Standards – IEC</h2>
 <p>At the highest level, global conformance is defined by the <b>International Electrotechnical Commission (IEC)</b> — a non-profit organization responsible for standardizing electrical and electronic systems worldwide. <br  />
  IEC standards define what constitutes a compliant metering device from a <em>technical</em> standpoint and form the foundation upon which regional and national standards are based.</p>
 <p>Common IEC standard families relevant to AC metering include:</p>
-<table class="doxtable">
-<tr>
-<th>Category</th><th>IEC Series</th><th>Description</th></tr>
-<tr>
-<td><b>EMC</b></td><td>IEC 61000</td><td>Electromagnetic compatibility (EMC) standards defining immunity and emission limits for electronic equipment.</td></tr>
-<tr>
-<td><b>General Metering</b></td><td>IEC 62052</td><td>Defines general requirements for electricity metering devices (AC/DC systems).</td></tr>
-<tr>
-<td><b>Specific Metering</b></td><td>IEC 62053</td><td>Defines accuracy and performance classes for static and electromechanical meters.</td></tr>
-<tr>
-<td><b>Manufacturing / Inspection</b></td><td>IEC 62058</td><td>Defines methods for acceptance inspection and verification of newly manufactured meters.</td></tr>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><b>Category</b>  </th><th class="markdownTableHeadNone"><b>IEC Series</b>  </th><th class="markdownTableHeadNone"><b>Description</b>  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>EMC</b>  </td><td class="markdownTableBodyNone">IEC 61000  </td><td class="markdownTableBodyNone">Electromagnetic compatibility (EMC) standards defining immunity and emission limits for electronic equipment.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>General Metering</b>  </td><td class="markdownTableBodyNone">IEC 62052  </td><td class="markdownTableBodyNone">Defines general requirements for electricity metering devices (AC/DC systems).  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Specific Metering</b>  </td><td class="markdownTableBodyNone">IEC 62053  </td><td class="markdownTableBodyNone">Defines accuracy and performance classes for static and electromechanical meters.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Manufacturing / Inspection</b>  </td><td class="markdownTableBodyNone">IEC 62058  </td><td class="markdownTableBodyNone">Defines methods for acceptance inspection and verification of newly manufactured meters.  </td></tr>
 </table>
 <dl class="section remark"><dt>Remarks</dt><dd>IEC standards are the <b>reference baseline</b>; regional standards (e.g. EN 50470-3) are typically derived directly from them, sometimes with localized adjustments.</dd></dl>
 <hr  />
@@ -486,19 +453,19 @@ Regional / Bloc Standards (EU &amp; UK)</h2>
 <p>Regions or trade blocs (e.g. EU, UK) translate international standards into <b>legal frameworks</b> that products must comply with to be marketed. <br  />
  These frameworks define <b>requirements</b> — which are then supported by <b>standards</b> that provide the technical means to prove compliance.</p>
 <p>Typical compliance hierarchy in the EU/UK:</p>
-<table class="doxtable">
-<tr>
-<th>Step</th><th>Entity</th><th>Purpose</th></tr>
-<tr>
-<td>1</td><td><b>Requirements</b> (2014/32/EU – MID / UK MIR 2016)</td><td>Defines legal and functional requirements for measuring instruments.</td></tr>
-<tr>
-<td>2</td><td><b>Standards</b> (EN 50470-1, EN 50470-3)</td><td>Technical standards detailing design, accuracy, EMC, and environmental tests.</td></tr>
-<tr>
-<td>3</td><td><b>Testing</b> (Accredited Test House)</td><td>Perform tests against standards to verify compliance.</td></tr>
-<tr>
-<td>4</td><td><b>Certification</b></td><td>Test house issues certification if requirements are met.</td></tr>
-<tr>
-<td>5</td><td><b>Declaration of Conformity (DoC)</b></td><td>Manufacturer issues DoC declaring the product compliant.</td></tr>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><b>Step</b>  </th><th class="markdownTableHeadNone"><b>Entity</b>  </th><th class="markdownTableHeadNone"><b>Purpose</b>  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">1  </td><td class="markdownTableBodyNone"><b>Requirements</b> (2014/32/EU – MID / UK MIR 2016)  </td><td class="markdownTableBodyNone">Defines legal and functional requirements for measuring instruments.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">2  </td><td class="markdownTableBodyNone"><b>Standards</b> (EN 50470-1, EN 50470-3)  </td><td class="markdownTableBodyNone">Technical standards detailing design, accuracy, EMC, and environmental tests.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">3  </td><td class="markdownTableBodyNone"><b>Testing</b> (Accredited Test House)  </td><td class="markdownTableBodyNone">Perform tests against standards to verify compliance.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">4  </td><td class="markdownTableBodyNone"><b>Certification</b>  </td><td class="markdownTableBodyNone">Test house issues certification if requirements are met.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">5  </td><td class="markdownTableBodyNone"><b>Declaration of Conformity (DoC)</b>  </td><td class="markdownTableBodyNone">Manufacturer issues DoC declaring the product compliant.  </td></tr>
 </table>
 <h3 class="doxsection"><a class="anchor" id="MIDMIR"></a>
 MID / MIR Requirements</h3>
@@ -535,40 +502,40 @@ EMC Requirements</h3>
 Accuracy Standards</h2>
 <p>Accuracy defines how closely a meter’s measurement corresponds to the true electrical quantity. <br  />
  In the EU and UK, accuracy classes are defined under <b>MID/MIR</b> and <b>EN 50470-3</b>, while globally they trace back to <b>IEC 62053</b>.</p>
-<table class="doxtable">
-<tr>
-<th>Region</th><th>Standard</th><th>Accuracy Classes</th></tr>
-<tr>
-<td>IEC</td><td>IEC 62053-21 / -22 / -23</td><td>Class 2, Class 1, Class 0.5, Class 0.2S, etc.</td></tr>
-<tr>
-<td>EU / UK</td><td>BS EN 50470-3</td><td>Class A, Class B, Class C</td></tr>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><b>Region</b>  </th><th class="markdownTableHeadNone"><b>Standard</b>  </th><th class="markdownTableHeadNone"><b>Accuracy Classes</b>  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>IEC</b>  </td><td class="markdownTableBodyNone">IEC 62053-21 / -22 / -23  </td><td class="markdownTableBodyNone">Class 2, Class 1, Class 0.5, Class 0.2S, etc.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>EU / UK</b>  </td><td class="markdownTableBodyNone">BS EN 50470-3  </td><td class="markdownTableBodyNone">Class A, Class B, Class C  </td></tr>
 </table>
-<p>Mapping between IEC and EN accuracy classes: </p><table class="doxtable">
-<tr>
-<th>EN 50470-3 (EU/UK)</th><th>IEC 62053 Equivalent</th><th>Relative Accuracy</th></tr>
-<tr>
-<td>Class A</td><td>Class 2</td><td>Least accurate</td></tr>
-<tr>
-<td>Class B</td><td>Class 1</td><td>Typical residential accuracy</td></tr>
-<tr>
-<td>Class C</td><td>Class 0.5</td><td>High precision / industrial use</td></tr>
+<p>Mapping between IEC and EN accuracy classes: </p><table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><b>EN 50470-3 (EU/UK)</b>  </th><th class="markdownTableHeadNone"><b>IEC 62053 Equivalent</b>  </th><th class="markdownTableHeadNone"><b>Relative Accuracy</b>  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Class A</b>  </td><td class="markdownTableBodyNone">Class 2  </td><td class="markdownTableBodyNone">Least accurate  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Class B</b>  </td><td class="markdownTableBodyNone">Class 1  </td><td class="markdownTableBodyNone">Typical residential accuracy  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Class C</b>  </td><td class="markdownTableBodyNone">Class 0.5  </td><td class="markdownTableBodyNone">High precision / industrial use  </td></tr>
 </table>
 <dl class="section remark"><dt>Remarks</dt><dd>When designing meters, ensure calibration and testing are aligned with the <b>target class</b> for the intended region.</dd></dl>
 <hr  />
 <h2 class="doxsection"><a class="anchor" id="CompliancePath"></a>
 Compliance Path (EU/UK)</h2>
 <p>To achieve compliance, a typical AC energy meter must be verified against <b>multiple domains of standards</b>:</p>
-<table class="doxtable">
-<tr>
-<th>Category</th><th>Examples / References</th></tr>
-<tr>
-<td><b>Accuracy / Metering</b></td><td>EN 50470-1 / EN 50470-3, IEC 62053-21, IEC 62053-22</td></tr>
-<tr>
-<td><b>EMC</b></td><td>IEC 61000-6-1 / 6-2 (immunity), 61000-6-3 / 6-4 (emission)</td></tr>
-<tr>
-<td><b>Mechanical, Safety &amp; Environmental</b></td><td>IEC 62052-11 / 31 (general &amp; safety)</td></tr>
-<tr>
-<td><b>Manufacturing / Inspection</b></td><td>IEC 62058-11 / 31 (factory acceptance &amp; inspection)</td></tr>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><b>Category</b>  </th><th class="markdownTableHeadNone"><b>Examples / References</b>  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Accuracy / Metering</b>  </td><td class="markdownTableBodyNone">EN 50470-1 / EN 50470-3, IEC 62053-21, IEC 62053-22  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>EMC</b>  </td><td class="markdownTableBodyNone">IEC 61000-6-1 / 6-2 (immunity), 61000-6-3 / 6-4 (emission)  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Mechanical, Safety &amp; Environmental</b>  </td><td class="markdownTableBodyNone">IEC 62052-11 / 31 (general &amp; safety)  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Manufacturing / Inspection</b>  </td><td class="markdownTableBodyNone">IEC 62058-11 / 31 (factory acceptance &amp; inspection)  </td></tr>
 </table>
 <dl class="section remark"><dt>Remarks</dt><dd>Compliance documentation must include test reports, calibration certificates, and the manufacturer’s <b>Declaration of Conformity (DoC)</b> citing all applicable directives and standards.</dd></dl>
 <hr  />

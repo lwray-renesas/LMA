@@ -60,29 +60,9 @@ The voltage drop across the resistor is proportional to current by Ohm’s law:
     V_\mathrm{shunt} = I_\mathrm{line} \cdot R_\mathrm{shunt} 
 \f]
 
-<table>
-  <tr>
-    <th>Advantages</th>
-    <th>Disadvantages</th>
-  </tr>
-  <tr>
-    <td>
-      <ul>
-        <li>High accuracy and linearity</li>
-        <li>Excellent phase response</li>
-        <li>Low cost and simple to implement</li>
-        <li>Tamper resistant</li>
-      </ul>
-    </td>
-    <td>
-      <ul>
-        <li>No galvanic isolation</li>
-        <li>Power dissipation increases with current</li>
-        <li>Must be placed carefully to avoid thermal drift and EMI coupling</li>
-      </ul>
-    </td>
-  </tr>
-</table>
+| **Advantages** | **Disadvantages** |
+|----------------|-------------------|
+| - High accuracy and linearity  <br> - Excellent phase response  <br> - Low cost and simple to implement  <br> - Tamper resistant | - No galvanic isolation  <br> - Power dissipation increases with current  <br> - Must be placed carefully to avoid thermal drift and EMI coupling |
 
 Shunts are most common in **low-cost single-phase** or **direct-connected meters**.
 
@@ -92,31 +72,12 @@ It works on the principle of magnetic induction, where the line current through 
 \f[ 
     I_\mathrm{secondary} = \frac{I_\mathrm{primary}}{N} 
 \f]
-where \f$ N \f$ is the turns ratio.
+Where \f$ N \f$ is the turns ratio.<br>
+This secondary current is then converted to a voltage through a burden resistor and filter network to be fed into an ADC.
 
-<table>
-  <tr>
-    <th>Advantages</th>
-    <th>Disadvantages</th>
-  </tr>
-  <tr>
-    <td>
-      <ul>
-        <li>Provides isolation and safety</li>
-        <li>Low insertion loss</li>
-        <li>Suitable for high-current applications</li>
-      </ul>
-    </td>
-    <td>
-      <ul>
-        <li>Limited bandwidth and possible phase shift at low current</li>
-        <li>Requires burden resistor for voltage conversion</li>
-        <li>Potential for core saturation issues</li>
-        <li>Susceptible to tamper</li>
-      </ul>
-    </td>
-  </tr>
-</table>
+| **Advantages** | **Disadvantages** |
+|----------------|-------------------|
+| - Provides isolation and safety  <br> - Low insertion loss  <br> - Suitable for high-current applications | - Limited bandwidth and possible phase shift at low current  <br> - Requires burden resistor for voltage conversion  <br> - Potential for core saturation issues  <br> - Susceptible to tamper |
 
 \subsection Rogowski Rogowski Coil
 A **Rogowski coil** is an air-cored current sensor that measures the rate of change of current:
@@ -134,27 +95,9 @@ Where:
     - \f$ r \f$ = Distance from the conductor to the coil centre
     - \f$ \frac{dI}{dt} \f$ = Rate of change of current
 
-<table>
-  <tr>
-    <th>Advantages</th>
-    <th>Disadvantages</th>
-  </tr>
-  <tr>
-    <td>
-      <ul>
-        <li>Excellent linearity and very wide bandwidth</li>
-        <li>No magnetic core (no saturation)</li>
-        <li>Provides galvanic isolation</li>
-      </ul>
-    </td>
-    <td>
-      <ul>
-        <li>Output requires integration to reconstruct current waveform</li>
-        <li>Sensitive to positioning meaning extra mechnical/assembly considerations</li>
-      </ul>
-    </td>
-  </tr>
-</table>
+| **Advantages** | **Disadvantages** |
+|----------------|-------------------|
+| - Excellent linearity and very wide bandwidth  <br> - No magnetic core (no saturation)  <br> - Provides galvanic isolation | - Output requires integration to reconstruct current waveform  <br> - Sensitive to positioning, meaning extra mechanical/assembly considerations |
 
 Rogowski coils are often used in **industrial meters** or **power quality analyzers** where high accuracy and wide dynamic range are needed.
 
@@ -191,6 +134,9 @@ Pulse outputs are:
 - Useful for calibration and verification.
 - Often used for communication with external monitoring systems.
 - Typically generated based on active energy accumulation.
+
+\subsection ImportExport Import & Export
+\todo explain import and export energy
 
 <hr>
 
@@ -360,13 +306,12 @@ IEC standards define what constitutes a compliant metering device from a *techni
 
 Common IEC standard families relevant to AC metering include:
 
-<table>
-<tr><th>Category</th><th>IEC Series</th><th>Description</th></tr>
-<tr><td><b>EMC</b></td><td>IEC 61000</td><td>Electromagnetic compatibility (EMC) standards defining immunity and emission limits for electronic equipment.</td></tr>
-<tr><td><b>General Metering</b></td><td>IEC 62052</td><td>Defines general requirements for electricity metering devices (AC/DC systems).</td></tr>
-<tr><td><b>Specific Metering</b></td><td>IEC 62053</td><td>Defines accuracy and performance classes for static and electromechanical meters.</td></tr>
-<tr><td><b>Manufacturing / Inspection</b></td><td>IEC 62058</td><td>Defines methods for acceptance inspection and verification of newly manufactured meters.</td></tr>
-</table>
+| **Category**                 | **IEC Series** | **Description**                                                                                                   |
+|------------------------------|---------------|-------------------------------------------------------------------------------------------------------------------|
+| **EMC**                      | IEC 61000     | Electromagnetic compatibility (EMC) standards defining immunity and emission limits for electronic equipment.     |
+| **General Metering**         | IEC 62052     | Defines general requirements for electricity metering devices (AC/DC systems).                                   |
+| **Specific Metering**        | IEC 62053     | Defines accuracy and performance classes for static and electromechanical meters.                                |
+| **Manufacturing / Inspection** | IEC 62058   | Defines methods for acceptance inspection and verification of newly manufactured meters.                         |
 
 \remark
 IEC standards are the **reference baseline**; regional standards (e.g. EN 50470-3) are typically derived directly from them, sometimes with localized adjustments.
@@ -379,14 +324,13 @@ These frameworks define **requirements** — which are then supported by **stand
 
 Typical compliance hierarchy in the EU/UK:
 
-<table>
-<tr><th>Step</th><th>Entity</th><th>Purpose</th></tr>
-<tr><td>1</td><td><b>Requirements</b> (2014/32/EU – MID / UK MIR 2016)</td><td>Defines legal and functional requirements for measuring instruments.</td></tr>
-<tr><td>2</td><td><b>Standards</b> (EN 50470-1, EN 50470-3)</td><td>Technical standards detailing design, accuracy, EMC, and environmental tests.</td></tr>
-<tr><td>3</td><td><b>Testing</b> (Accredited Test House)</td><td>Perform tests against standards to verify compliance.</td></tr>
-<tr><td>4</td><td><b>Certification</b></td><td>Test house issues certification if requirements are met.</td></tr>
-<tr><td>5</td><td><b>Declaration of Conformity (DoC)</b></td><td>Manufacturer issues DoC declaring the product compliant.</td></tr>
-</table>
+| **Step** | **Entity** | **Purpose** |
+|-----------|-------------|-------------|
+| 1 | **Requirements** (2014/32/EU – MID / UK MIR 2016) | Defines legal and functional requirements for measuring instruments. |
+| 2 | **Standards** (EN 50470-1, EN 50470-3) | Technical standards detailing design, accuracy, EMC, and environmental tests. |
+| 3 | **Testing** (Accredited Test House) | Perform tests against standards to verify compliance. |
+| 4 | **Certification** | Test house issues certification if requirements are met. |
+| 5 | **Declaration of Conformity (DoC)** | Manufacturer issues DoC declaring the product compliant. |
 
 \subsubsection MIDMIR MID / MIR Requirements
 - **EU MID (Measuring Instruments Directive – 2014/32/EU)**  
@@ -414,19 +358,17 @@ These tests confirm that the meter operates reliably in realistic electrical env
 Accuracy defines how closely a meter’s measurement corresponds to the true electrical quantity.  
 In the EU and UK, accuracy classes are defined under **MID/MIR** and **EN 50470-3**, while globally they trace back to **IEC 62053**.
 
-<table>
-<tr><th>Region</th><th>Standard</th><th>Accuracy Classes</th></tr>
-<tr><td>IEC</td><td>IEC 62053-21 / -22 / -23</td><td>Class 2, Class 1, Class 0.5, Class 0.2S, etc.</td></tr>
-<tr><td>EU / UK</td><td>BS EN 50470-3</td><td>Class A, Class B, Class C</td></tr>
-</table>
+| **Region** | **Standard** | **Accuracy Classes** |
+|-------------|--------------|----------------------|
+| **IEC** | IEC 62053-21 / -22 / -23 | Class 2, Class 1, Class 0.5, Class 0.2S, etc. |
+| **EU / UK** | BS EN 50470-3 | Class A, Class B, Class C |
 
 Mapping between IEC and EN accuracy classes:
-<table>
-<tr><th>EN 50470-3 (EU/UK)</th><th>IEC 62053 Equivalent</th><th>Relative Accuracy</th></tr>
-<tr><td>Class A</td><td>Class 2</td><td>Least accurate</td></tr>
-<tr><td>Class B</td><td>Class 1</td><td>Typical residential accuracy</td></tr>
-<tr><td>Class C</td><td>Class 0.5</td><td>High precision / industrial use</td></tr>
-</table>
+| **EN 50470-3 (EU/UK)** | **IEC 62053 Equivalent** | **Relative Accuracy** |
+|-------------------------|---------------------------|------------------------|
+| **Class A** | Class 2 | Least accurate |
+| **Class B** | Class 1 | Typical residential accuracy |
+| **Class C** | Class 0.5 | High precision / industrial use |
 
 \remark
 When designing meters, ensure calibration and testing are aligned with the **target class** for the intended region.
@@ -436,13 +378,12 @@ When designing meters, ensure calibration and testing are aligned with the **tar
 \subsection CompliancePath Compliance Path (EU/UK)
 To achieve compliance, a typical AC energy meter must be verified against **multiple domains of standards**:
 
-<table>
-<tr><th>Category</th><th>Examples / References</th></tr>
-<tr><td><b>Accuracy / Metering</b></td><td>EN 50470-1 / EN 50470-3, IEC 62053-21, IEC 62053-22</td></tr>
-<tr><td><b>EMC</b></td><td>IEC 61000-6-1 / 6-2 (immunity), 61000-6-3 / 6-4 (emission)</td></tr>
-<tr><td><b>Mechanical, Safety & Environmental</b></td><td>IEC 62052-11 / 31 (general & safety)</td></tr>
-<tr><td><b>Manufacturing / Inspection</b></td><td>IEC 62058-11 / 31 (factory acceptance & inspection)</td></tr>
-</table>
+| **Category** | **Examples / References** |
+|---------------|---------------------------|
+| **Accuracy / Metering** | EN 50470-1 / EN 50470-3, IEC 62053-21, IEC 62053-22 |
+| **EMC** | IEC 61000-6-1 / 6-2 (immunity), 61000-6-3 / 6-4 (emission) |
+| **Mechanical, Safety & Environmental** | IEC 62052-11 / 31 (general & safety) |
+| **Manufacturing / Inspection** | IEC 62058-11 / 31 (factory acceptance & inspection) |
 
 \remark
 Compliance documentation must include test reports, calibration certificates, and the manufacturer’s **Declaration of Conformity (DoC)** citing all applicable directives and standards.

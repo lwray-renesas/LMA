@@ -7,11 +7,10 @@ var searchData=
   ['coil_4',['Rogowski Coil',['../_a_c_metering.html#Rogowski',1,'']]],
   ['compliance_5',['Compliance',['../_a_c_metering.html#Compliance',1,'']]],
   ['compliance_20path_20eu_20uk_6',['Compliance Path (EU/UK)',['../_a_c_metering.html#CompliancePath',1,'']]],
-  ['computation_20table_7',['Energy Computation Table',['../_mathematics.html#EnergyTable',1,'']]],
-  ['considerations_8',['Considerations',['../_a_c_metering.html#ArchitectureConsiderations',1,'Architecture Considerations'],['../todo.html#_todo000003',1,'Architecture Considerations']]],
-  ['context_9',['Context',['../_mathematics.html#Context',1,'']]],
-  ['ct_20current_20transformer_10',['CT (Current Transformer)',['../_a_c_metering.html#CT',1,'']]],
-  ['current_11',['Current',['../_mathematics.html#Current',1,'']]],
-  ['current_20sensing_12',['Current Sensing',['../_a_c_metering.html#CurrentSensing',1,'']]],
-  ['current_20transformer_13',['CT (Current Transformer)',['../_a_c_metering.html#CT',1,'']]]
+  ['considerations_7',['Considerations',['../_a_c_metering.html#ArchitectureConsiderations',1,'Architecture Considerations'],['../todo.html#_todo000004',1,'Architecture Considerations']]],
+  ['context_8',['Context',['../_mathematics.html#Context',1,'']]],
+  ['ct_20current_20transformer_9',['CT (Current Transformer)',['../_a_c_metering.html#CT',1,'']]],
+  ['current_10',['Current',['../_mathematics.html#Current',1,'']]],
+  ['current_20sensing_11',['Current Sensing',['../_a_c_metering.html#CurrentSensing',1,'']]],
+  ['current_20transformer_12',['CT (Current Transformer)',['../_a_c_metering.html#CT',1,'']]]
 ];

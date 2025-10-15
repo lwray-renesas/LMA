@@ -16,7 +16,6 @@ var searchData=
   ['power_13',['power',['../struct_l_m_a___phase.html#aa41b88783f1e3ce7855e0380141a8deb',1,'LMA_Phase']]],
   ['power_20energy_14',['Power &amp;amp; Energy',['../_a_c_metering.html#PowerEnergy',1,'']]],
   ['power_20factor_20pf_15',['Power Factor (PF)',['../_mathematics.html#PowerFactor',1,'']]],
-  ['practical_20implementation_16',['Practical Implementation',['../_mathematics.html#PracticalImplementation',1,'']]],
-  ['process_17',['Calibration Process',['../_a_c_metering.html#CalibrationProcess',1,'']]],
-  ['pulse_20output_20impulse_18',['Pulse Output (Impulse)',['../_a_c_metering.html#Pulse',1,'']]]
+  ['process_16',['Calibration Process',['../_a_c_metering.html#CalibrationProcess',1,'']]],
+  ['pulse_20output_20impulse_17',['Pulse Output (Impulse)',['../_a_c_metering.html#Pulse',1,'']]]
 ];

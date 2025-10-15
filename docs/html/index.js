@@ -14,10 +14,7 @@ var index =
         [ "Reactive Power", "_mathematics.html#ReactivePower", null ],
         [ "Power Factor (PF)", "_mathematics.html#PowerFactor", null ]
       ] ],
-      [ "Energy", "_mathematics.html#Energy", [
-        [ "Energy Computation Table", "_mathematics.html#EnergyTable", null ],
-        [ "Practical Implementation", "_mathematics.html#PracticalImplementation", null ]
-      ] ],
+      [ "Energy", "_mathematics.html#Energy", null ],
       [ "Harmonics", "_mathematics.html#Harmonics", null ],
       [ "Filtering", "_mathematics.html#Filtering", [
         [ "HPF", "_mathematics.html#HPF", null ],
@@ -34,7 +31,8 @@ var index =
         [ "Rogowski Coil", "_a_c_metering.html#Rogowski", null ]
       ] ],
       [ "Power &amp; Energy", "_a_c_metering.html#PowerEnergy", [
-        [ "Pulse Output (Impulse)", "_a_c_metering.html#Pulse", null ]
+        [ "Pulse Output (Impulse)", "_a_c_metering.html#Pulse", null ],
+        [ "Import &amp; Export", "_a_c_metering.html#ImportExport", null ]
       ] ],
       [ "Topology", "_a_c_metering.html#Topology", [
         [ "Single Phase", "_a_c_metering.html#SinglePhase", null ],

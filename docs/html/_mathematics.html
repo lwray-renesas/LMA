@@ -311,21 +311,32 @@ Energy</h1>
 \]
 </p>
 <p> In a system with a fixed sampling period \( dt \) becomes \( \frac{1}{f_s} \) and an energy quanta per sampling period can be defined:   </p><p class="formulaDsp">
-\[    E = \frac{P}{f_s}
+\[    E_\mathrm{unit} = \frac{P}{f_s}
 \]
 </p>
-<h2 class="doxsection"><a class="anchor" id="EnergyTable"></a>
-Energy Computation Table</h2>
+<p> Where:</p><ul>
+<li>\( P \) = Computed average power.</li>
+<li>\( f_s \) = System sampling frequency.</li>
+<li>\( E_\mathrm{unit} \) = Energy quanta per ADC sample.</li>
+</ul>
+<p>And we can use this quanta by incrementing a running total of energy every time a sampling period passes:   </p><p class="formulaDsp">
+\[    E_\mathrm{t} = E_\mathrm{t,prev} + E_\mathrm{unit}
+\]
+</p>
+<p> Where:</p><ul>
+<li>\( E_\mathrm{t} \) = Current running total of energy.</li>
+<li>\( E_\mathrm{t,prev} \) = Previous (before increment) running total of energy.</li>
+</ul>
 <p>The table below summarises the computation of energy per sampling period (unit) and accumulated totals for active, reactive, and apparent power.</p>
-<table class="doxtable">
-<tr>
-<th>Type</th><th>Instantaneous Power</th><th>Average Power</th><th>Energy Uint</th><th>Accumulated Energy Total</th><th>Units</th></tr>
-<tr>
-<td>Active</td><td>\( p(t) = v(t) \cdot i(t) \)</td><td>\( P = \frac{1}{N} \sum_{n=1}^{N} [V_\mathrm{adc_n} \cdot I_\mathrm{adc_n}] \)</td><td>\( E_\mathrm{active,unit} = \frac{P}{f_s} \)</td><td>\( E_\mathrm{active,total}(k) = E_\mathrm{active,total}(k-1) + E_\mathrm{active,unit}(k) \)</td><td>Ws</td></tr>
-<tr>
-<td>Reactive</td><td>\( q(t) = v(t) \cdot i(t - 90^\circ) \)</td><td>\( Q = \frac{1}{N} \sum_{n=1}^{N} [V_\mathrm{adc_n} \cdot I_\mathrm{adc_n-90^\circ}] \)</td><td>\( E_\mathrm{reactive,unit} = \frac{Q}{f_s} \)</td><td>\( E_\mathrm{reactive,total}(k) = E_\mathrm{reactive,total}(k-1) + E_\mathrm{reactive,unit}(k) \)</td><td>VARs</td></tr>
-<tr>
-<td>Apparent</td><td>Not Applicable</td><td>\( S = \frac{1}{N} \sqrt{\sum_{n=1}^{N} V_\mathrm{adc_n}^2 \cdot \sum_{n=1}^{N} I_\mathrm{adc_n}^2} \)</td><td>\( E_\mathrm{apparent,unit} =  \frac{S}{f_s} \)</td><td>\( E_\mathrm{apparent,total}(k) = E_\mathrm{apparent,total}(k-1) + E_\mathrm{apparent,unit}(k) \)</td><td>VAs</td></tr>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadNone">Instantaneous Power  </th><th class="markdownTableHeadNone">Average Power  </th><th class="markdownTableHeadNone">Energy Unit  </th><th class="markdownTableHeadNone">Accumulated Energy Total  </th><th class="markdownTableHeadNone">Units  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Active</b>  </td><td class="markdownTableBodyNone">\( p(t) = v(t) \cdot i(t) \)  </td><td class="markdownTableBodyNone">\( P = \frac{1}{N} \sum_{n=1}^{N} [V_\mathrm{adc_n} \cdot I_\mathrm{adc_n}] \)  </td><td class="markdownTableBodyNone">\( E_\mathrm{active,unit} = \frac{P}{f_s} \)  </td><td class="markdownTableBodyNone">\( E_\mathrm{active,t} = E_\mathrm{active,t,prev} + E_\mathrm{active,unit} \)  </td><td class="markdownTableBodyNone">Ws  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Reactive</b>  </td><td class="markdownTableBodyNone">\( q(t) = v(t) \cdot i(t - 90^\circ) \)  </td><td class="markdownTableBodyNone">\( Q = \frac{1}{N} \sum_{n=1}^{N} [V_\mathrm{adc_n} \cdot I_\mathrm{adc_n-90^\circ}] \)  </td><td class="markdownTableBodyNone">\( E_\mathrm{reactive,unit} = \frac{Q}{f_s} \)  </td><td class="markdownTableBodyNone">\( E_\mathrm{reactive,t} = E_\mathrm{reactive,t,prev} + E_\mathrm{reactive,unit} \)  </td><td class="markdownTableBodyNone">VARs  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Apparent</b>  </td><td class="markdownTableBodyNone">Not Applicable  </td><td class="markdownTableBodyNone">\( S = \frac{1}{N} \sqrt{\sum_{n=1}^{N} V_\mathrm{adc_n}^2 \cdot \sum_{n=1}^{N} I_\mathrm{adc_n}^2} \)  </td><td class="markdownTableBodyNone">\( E_\mathrm{apparent,unit} = \frac{S}{f_s} \)  </td><td class="markdownTableBodyNone">\( E_\mathrm{apparent,t} = E_\mathrm{apparent,t,prev} + E_\mathrm{apparent,unit} \)  </td><td class="markdownTableBodyNone">VAs  </td></tr>
 </table>
 <p>Where:</p><ul>
 <li>\( N \) = number of samples per computation window <br  />
@@ -334,13 +345,11 @@ Energy Computation Table</h2>
 </ul>
 <p>This table provides a compact overview of how each type of energy is calculated per computation window and accumulated over time, including their respective units.</p>
 <p>Where:</p><ul>
-<li>\( E_\mathrm{active,total} \) is in <b>watt-seconds [Ws]</b></li>
-<li>\( E_\mathrm{reactive,total} \) in <b>volt-ampere reactive seconds [VARs]</b></li>
-<li>\( E_\mathrm{apparent,total} \) in <b>volt-ampere seconds [VAs]</b></li>
+<li>\( E_\mathrm{active,t} \) is in <b>watt-seconds [Ws]</b></li>
+<li>\( E_\mathrm{reactive,t} \) in <b>volt-ampere reactive seconds [VARs]</b></li>
+<li>\( E_\mathrm{apparent,t} \) in <b>volt-ampere seconds [VAs]</b></li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="PracticalImplementation"></a>
-Practical Implementation</h2>
-<p>In LMA, energy accumulation follows this loop:</p><ol type="1">
+<p>To summarise, energy accumulation follows this loop:</p><ol type="1">
 <li>Collect \( N \) ADC samples for voltage and current.</li>
 <li>Compute average powers \( P, Q, S \) for the computation window.</li>
 <li>Convert each power to energy quanta \( E_\mathrm{unit} = \frac{P}{f_s} \).</li>

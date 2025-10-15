@@ -7,7 +7,6 @@ var searchData=
   ['power_4',['Power',['../_mathematics.html#ActivePower',1,'Active Power'],['../_mathematics.html#ApparentPower',1,'Apparent Power'],['../_mathematics.html#Power',1,'Power'],['../_mathematics.html#ReactivePower',1,'Reactive Power']]],
   ['power_20energy_5',['Power &amp;amp; Energy',['../_a_c_metering.html#PowerEnergy',1,'']]],
   ['power_20factor_20pf_6',['Power Factor (PF)',['../_mathematics.html#PowerFactor',1,'']]],
-  ['practical_20implementation_7',['Practical Implementation',['../_mathematics.html#PracticalImplementation',1,'']]],
-  ['process_8',['Calibration Process',['../_a_c_metering.html#CalibrationProcess',1,'']]],
-  ['pulse_20output_20impulse_9',['Pulse Output (Impulse)',['../_a_c_metering.html#Pulse',1,'']]]
+  ['process_7',['Calibration Process',['../_a_c_metering.html#CalibrationProcess',1,'']]],
+  ['pulse_20output_20impulse_8',['Pulse Output (Impulse)',['../_a_c_metering.html#Pulse',1,'']]]
 ];

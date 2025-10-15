@@ -27,5 +27,5 @@ var searchData=
   ['apparent_20power_24',['Apparent Power',['../_mathematics.html#ApparentPower',1,'']]],
   ['apparent_5fcounter_25',['apparent_counter',['../struct_l_m_a___system_energy_1_1impulse.html#a93ab0db4eedcaacb4fe96a63aad274ab',1,'LMA_SystemEnergy::impulse']]],
   ['apparent_5fon_26',['apparent_on',['../struct_l_m_a___system_energy_1_1impulse.html#a942c719691bd4c89d562a73ed0870668',1,'LMA_SystemEnergy::impulse']]],
-  ['architecture_20considerations_27',['Architecture Considerations',['../_a_c_metering.html#ArchitectureConsiderations',1,'Architecture Considerations'],['../todo.html#_todo000003',1,'Architecture Considerations']]]
+  ['architecture_20considerations_27',['Architecture Considerations',['../_a_c_metering.html#ArchitectureConsiderations',1,'Architecture Considerations'],['../todo.html#_todo000004',1,'Architecture Considerations']]]
 ];

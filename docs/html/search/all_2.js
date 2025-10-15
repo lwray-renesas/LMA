@@ -16,14 +16,13 @@ var searchData=
   ['coil_13',['Rogowski Coil',['../_a_c_metering.html#Rogowski',1,'']]],
   ['compliance_14',['Compliance',['../_a_c_metering.html#Compliance',1,'']]],
   ['compliance_20path_20eu_20uk_15',['Compliance Path (EU/UK)',['../_a_c_metering.html#CompliancePath',1,'']]],
-  ['computation_20table_16',['Energy Computation Table',['../_mathematics.html#EnergyTable',1,'']]],
-  ['considerations_17',['Considerations',['../_a_c_metering.html#ArchitectureConsiderations',1,'Architecture Considerations'],['../todo.html#_todo000003',1,'Architecture Considerations']]],
-  ['context_18',['Context',['../_mathematics.html#Context',1,'']]],
-  ['control_19',['Control',['../group___control.html',1,'']]],
-  ['counter_20',['counter',['../struct_l_m_a___system_energy_1_1energy_1_1counter.html',1,'LMA_SystemEnergy::energy::counter'],['../struct_l_m_a___system_energy_1_1energy.html#acf1baf565802cb9461e7d654b468d5e7',1,'LMA_SystemEnergy::energy::counter']]],
-  ['ct_20current_20transformer_21',['CT (Current Transformer)',['../_a_c_metering.html#CT',1,'']]],
-  ['current_22',['Current',['../_mathematics.html#Current',1,'']]],
-  ['current_23',['current',['../struct_l_m_a___phase.html#ae7926b5e346751d90dc0cd7107cf4d98',1,'LMA_Phase::current'],['../struct_l_m_a___workspace_1_1_l_m_a___samples.html#a50ffba35fd24c78b63a83f23641f1168',1,'LMA_Workspace::LMA_Samples::current']]],
-  ['current_20sensing_24',['Current Sensing',['../_a_c_metering.html#CurrentSensing',1,'']]],
-  ['current_20transformer_25',['CT (Current Transformer)',['../_a_c_metering.html#CT',1,'']]]
+  ['considerations_16',['Considerations',['../_a_c_metering.html#ArchitectureConsiderations',1,'Architecture Considerations'],['../todo.html#_todo000004',1,'Architecture Considerations']]],
+  ['context_17',['Context',['../_mathematics.html#Context',1,'']]],
+  ['control_18',['Control',['../group___control.html',1,'']]],
+  ['counter_19',['counter',['../struct_l_m_a___system_energy_1_1energy_1_1counter.html',1,'LMA_SystemEnergy::energy::counter'],['../struct_l_m_a___system_energy_1_1energy.html#acf1baf565802cb9461e7d654b468d5e7',1,'LMA_SystemEnergy::energy::counter']]],
+  ['ct_20current_20transformer_20',['CT (Current Transformer)',['../_a_c_metering.html#CT',1,'']]],
+  ['current_21',['Current',['../_mathematics.html#Current',1,'']]],
+  ['current_22',['current',['../struct_l_m_a___phase.html#ae7926b5e346751d90dc0cd7107cf4d98',1,'LMA_Phase::current'],['../struct_l_m_a___workspace_1_1_l_m_a___samples.html#a50ffba35fd24c78b63a83f23641f1168',1,'LMA_Workspace::LMA_Samples::current']]],
+  ['current_20sensing_23',['Current Sensing',['../_a_c_metering.html#CurrentSensing',1,'']]],
+  ['current_20transformer_24',['CT (Current Transformer)',['../_a_c_metering.html#CT',1,'']]]
 ];
