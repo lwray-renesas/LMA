@@ -15,6 +15,7 @@ typedef struct DriverParams
   std::atomic<bool> stop_driver_thread;    /**< Pointer to the variable for stopping/cancelling the driver thread*/
   std::atomic<bool> driver_thread_running; /**< Pointer to the variable for indicating the driver thread is running*/
   std::unique_ptr<LMA_Phase> p_phase;      /**< Pointer to the phase to work on*/
+  std::unique_ptr<LMA_Neutral> p_neutral;  /**< Pointer to the neautral to work on*/
   double fs;                               /**< sampling frequency*/
 } DriverParams;
 
@@ -47,6 +48,48 @@ GenerateSineWaveADC(size_t numSamples, double frequency, double phaseShift, doub
                                                                                                      std::move(res));
 }
 
+/** @brief phase shifts voltage signal
+ * @details
+ * - 50Hz signal is 20ms.
+ * - 50Hz signal being 360degree of period, to get 90degree we divide by 4.
+ * - 20ms divided by 4 = 5ms.
+ * - to delay 5ms with a 3906Hz clock we can do 0.005/(1/3906) = 19.53 samples - so we do 20
+ * samples.
+ *
+ * @param[in] new_voltage - new voltage to store in the buffer
+ * @return voltage sample 90degree (20 samples) ago.
+ */
+static spl_t PhaseShift90(spl_t new_voltage)
+{
+  static spl_t voltage_buffer[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  static uint8_t buffer_index = 0;
+
+  uint8_t buffer_index_19 = buffer_index + 2;
+  uint8_t buffer_index_20 = buffer_index + 1;
+
+  if (buffer_index_19 > 21)
+  {
+    buffer_index_19 -= 21;
+  }
+
+  if (buffer_index_20 > 21)
+  {
+    buffer_index_20 -= 21;
+  }
+
+  /* Append new voltage*/
+  voltage_buffer[buffer_index] = new_voltage;
+
+  /* Interpolate 19.53 samples - just take the mid point*/
+  int32_t interpolated_value = ((voltage_buffer[buffer_index_19] * 60) >> 7) + ((voltage_buffer[buffer_index_20] * 68) >> 7);
+
+  buffer_index = buffer_index_20;
+
+  /* Convert back to its 32b value*/
+  return interpolated_value;
+}
+
 static void Driver_thread(std::shared_ptr<DriverParams> drvr_params)
 {
   size_t sample = 0;
@@ -75,9 +118,10 @@ static void Driver_thread(std::shared_ptr<DriverParams> drvr_params)
 
     if (adc_running)
     {
-      drvr_params->p_phase->ws.samples.voltage = static_cast<spl_t>((*drvr_params->p_voltage_samples)[sample]);
-      drvr_params->p_phase->ws.samples.current = static_cast<spl_t>((*drvr_params->p_current_samples)[sample]);
-      drvr_params->p_phase->ws.samples.voltage90 = LMA_PhaseShift90(drvr_params->p_phase->ws.samples.voltage);
+      drvr_params->p_phase->inputs.v_sample = static_cast<spl_t>((*drvr_params->p_voltage_samples)[sample]);
+      drvr_params->p_phase->inputs.v90_sample = PhaseShift90(drvr_params->p_phase->inputs.v_sample);
+      drvr_params->p_phase->inputs.i_sample = static_cast<spl_t>((*drvr_params->p_current_samples)[sample]);
+      drvr_params->p_neutral->inputs.i_sample = static_cast<spl_t>((*drvr_params->p_current_samples)[sample]);
 
       LMA_CB_ADC();
       ++sample;
@@ -113,8 +157,8 @@ std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params
   }
   else
   {
-    auto i_pair =
-        GenerateSineWaveADC(sim_params->sample_count, sim_params->fline, 0.0, sim_params->irms, 8, 0.0004, sim_params->fs);
+    auto i_pair = GenerateSineWaveADC(sim_params->sample_count, sim_params->fline, sim_params->ps, sim_params->irms, 8, 0.0004,
+                                      sim_params->fs);
     drv_params->p_current_samples = std::move(i_pair.first);
     results->current_signal = std::move(i_pair.second);
   }
@@ -136,11 +180,15 @@ std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params
   p_config->v_swell = sim_params->vrms * 1.25;
 
   // PhaseCalibration
-  auto p_default_calib = std::make_unique<LMA_PhaseCalibration>();
-  p_default_calib->vrms_coeff = 21177.2051f;
-  p_default_calib->irms_coeff = 53685.3828f;
-  p_default_calib->vi_phase_correction = 0.0f;
-  p_default_calib->p_coeff = 1136906368.0f;
+  auto p_default_phase_calib = std::make_unique<LMA_PhaseCalibration>();
+  p_default_phase_calib->vrms_coeff = 21177.2051f;
+  p_default_phase_calib->irms_coeff = 53685.3828f;
+  p_default_phase_calib->vi_phase_correction = 0.0f;
+  p_default_phase_calib->p_coeff = 1136906368.0f;
+
+  // NeutralCalibration
+  auto p_default_neutral_calib = std::make_unique<LMA_NeutralCalibration>();
+  p_default_neutral_calib->irms_coeff = 53685.3828f;
 
   // SystemEnergy
   auto p_system_energy = std::make_unique<LMA_SystemEnergy>();
@@ -151,10 +199,14 @@ std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params
   p_system_energy->impulse.reactive_on = false;
 
   drv_params->p_phase = std::make_unique<LMA_Phase>();
+  drv_params->p_neutral = std::make_unique<LMA_Neutral>();
+
   LMA_Init(p_config.get());
   LMA_EnergySet(p_system_energy.get());
   LMA_PhaseRegister(drv_params->p_phase.get());
-  LMA_PhaseLoadCalibration(drv_params->p_phase.get(), p_default_calib.get());
+  LMA_NeutralRegister(drv_params->p_phase.get(), drv_params->p_neutral.get());
+  LMA_PhaseLoadCalibration(drv_params->p_phase.get(), p_default_phase_calib.get());
+  LMA_NeutralLoadCalibration(drv_params->p_neutral.get(), p_default_neutral_calib.get());
   LMA_Start();
 
   drv_params->driver_thread_running = false;
@@ -187,10 +239,12 @@ std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params
     LMA_GlobalCalibrate(&gca);
     std::cout << "Finished!" << std::endl;
 
-    std::cout << std::fixed << std::setprecision(4) << "\t\tVrms Coefficient:     " << ca.p_phase->calib.vrms_coeff << "\n"
-              << "\t\tIrms Coefficient:     " << ca.p_phase->calib.irms_coeff << "\n"
-              << "\t\tPower Coefficient:    " << ca.p_phase->calib.p_coeff << "\n"
-              << "\t\tPhase Correction:     " << ca.p_phase->calib.vi_phase_correction << "\n"
+    std::cout << std::fixed << std::setprecision(4) << "\t\tVrms Coefficient:     " << drv_params->p_phase->calib.vrms_coeff
+              << "\n"
+              << "\t\tIrms Coefficient:     " << drv_params->p_phase->calib.irms_coeff << "\n"
+              << "\t\tIrms Neutral Coefficient:     " << drv_params->p_neutral->calib.irms_coeff << "\n"
+              << "\t\tPower Coefficient:    " << drv_params->p_phase->calib.p_coeff << "\n"
+              << "\t\tPhase Correction:     " << drv_params->p_phase->calib.vi_phase_correction << "\n"
               << "\t\tSampling Frequency:   " << p_config->gcalib.fs << "\n"
               << "\t\tDegrees Per Sample:   " << p_config->gcalib.deg_per_sample << "\n"
               << "\t\tFline Coefficient:    " << p_config->gcalib.fline_coeff << "\n"
@@ -219,7 +273,7 @@ std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params
 
       if (str_len != 0)
       {
-        for (int i = 0; i < 14; ++i)
+        for (int i = 0; i < 15; ++i)
         {
           std::cout << "\033[2K\033[1F";
         }
@@ -227,6 +281,7 @@ std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params
 
       std::cout << std::fixed << std::setprecision(4) << "\t\tVrms:    " << measurements.vrms << " [V]\n"
                 << "\t\tIrms:    " << measurements.irms << " [A]\n"
+                << "\t\tIrms Neutral:    " << measurements.irms_neutral << " [A]\n"
                 << "\t\tFline:   " << measurements.fline << " [Hz]\n"
                 << "\t\tP:       " << measurements.p << " [W]\n"
                 << "\t\tQ:       " << measurements.q << " [VAR]\n"

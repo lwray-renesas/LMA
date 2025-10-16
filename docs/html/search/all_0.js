@@ -1,8 +1,8 @@
 var searchData=
 [
   ['ac_20metering_0',['AC Metering',['../_a_c_metering.html',1,'index']]],
-  ['acc_5ft_1',['acc_t',['../_l_m_a___port_8h.html#a422350b1b3594f62fcc13248a2d210ed',1,'LMA_Port.h']]],
-  ['accs_2',['accs',['../struct_l_m_a___phase.html#ac1649b6fd9039364ef67e37f45b7e1bc',1,'LMA_Phase::accs'],['../struct_l_m_a___workspace.html#ac1649b6fd9039364ef67e37f45b7e1bc',1,'LMA_Workspace::accs']]],
+  ['acc_5ft_1',['acc_t',['../group___porting.html#ga422350b1b3594f62fcc13248a2d210ed',1,'LMA_Types.h']]],
+  ['accs_2',['accs',['../struct_l_m_a___neutral.html#a6eb6a4e61ac741d742adec20b42993b6',1,'LMA_Neutral::accs'],['../struct_l_m_a___phase.html#a6b226e3613e3d13f54d7daff19dfe33a',1,'LMA_Phase::accs']]],
   ['accumulator_3',['accumulator',['../struct_l_m_a___system_energy_1_1energy_1_1accumulator.html',1,'LMA_SystemEnergy::energy::accumulator'],['../struct_l_m_a___system_energy_1_1energy.html#a94312c50d23716dbb185bd67c0554257',1,'LMA_SystemEnergy::energy::accumulator']]],
   ['accumulators_5fready_4',['accumulators_ready',['../struct_l_m_a___signals.html#a32143e3df8c4e6ebdd44000e9ec90e0b',1,'LMA_Signals']]],
   ['accuracy_20standards_5',['Accuracy Standards',['../_a_c_metering.html#Accuracy',1,'']]],

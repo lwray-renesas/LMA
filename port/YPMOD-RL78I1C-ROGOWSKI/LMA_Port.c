@@ -8,33 +8,7 @@
 #include "r_cg_rtc.h"
 #include "r_cg_tau.h"
 
-float LMA_AccToFloat(acc_t acc)
-{
-  return (float)acc;
-}
-
-float LMA_FPMul_Fast(float a, float b)
-{
-  return a * b;
-}
-
-float LMA_FPDiv_Fast(float a, float b)
-{
-  return a / b;
-}
-
-float LMA_FPSqrt_Fast(float a)
-{
-  return sqrt(a);
-}
-
-float LMA_FPAbs_Fast(float a)
-{
-  uint32_t tmp = *(uint32_t *)(&a) & 0x7FFFFFFF;
-  return *(float *)&tmp;
-}
-
-void LMA_AccReset(LMA_Workspace *const p_ws, const uint32_t phase_id)
+void LMA_AccReset(LMA_TempData *const p_ws, const uint32_t phase_id)
 {
   (void)phase_id;
 
@@ -92,7 +66,7 @@ void LMA_AccReset(LMA_Workspace *const p_ws, const uint32_t phase_id)
   p_ws->accs.sample_count = 1;
 }
 
-void LMA_AccRun(LMA_Workspace *const p_ws, const uint32_t phase_id)
+void LMA_AccRun(LMA_TempData *const p_ws, const uint32_t phase_id)
 {
   (void)phase_id;
 
@@ -169,7 +143,7 @@ void LMA_AccRun(LMA_Workspace *const p_ws, const uint32_t phase_id)
   ++p_ws->accs.sample_count;
 }
 
-void LMA_AccLoad(LMA_Workspace *const p_ws, LMA_Accumulators *const p_accs, const uint32_t phase_id)
+void LMA_AccLoad(LMA_TempData *const p_ws, LMA_Accumulators *const p_accs, const uint32_t phase_id)
 {
   (void)phase_id;
   p_accs->iacc = p_ws->accs.iacc;

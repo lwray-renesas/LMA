@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['accs_0',['accs',['../struct_l_m_a___phase.html#ac1649b6fd9039364ef67e37f45b7e1bc',1,'LMA_Phase::accs'],['../struct_l_m_a___workspace.html#ac1649b6fd9039364ef67e37f45b7e1bc',1,'LMA_Workspace::accs']]],
+  ['accs_0',['accs',['../struct_l_m_a___neutral.html#a6eb6a4e61ac741d742adec20b42993b6',1,'LMA_Neutral::accs'],['../struct_l_m_a___phase.html#a6b226e3613e3d13f54d7daff19dfe33a',1,'LMA_Phase::accs']]],
   ['accumulator_1',['accumulator',['../struct_l_m_a___system_energy_1_1energy.html#a94312c50d23716dbb185bd67c0554257',1,'LMA_SystemEnergy::energy']]],
   ['accumulators_5fready_2',['accumulators_ready',['../struct_l_m_a___signals.html#a32143e3df8c4e6ebdd44000e9ec90e0b',1,'LMA_Signals']]],
   ['act_3',['act',['../struct_l_m_a___energy_unit.html#acd65ff39e6ad988e189dc854d5ede11b',1,'LMA_EnergyUnit::act'],['../struct_l_m_a___system_energy_1_1energy_1_1unit.html#acd65ff39e6ad988e189dc854d5ede11b',1,'LMA_SystemEnergy::energy::unit::act']]],

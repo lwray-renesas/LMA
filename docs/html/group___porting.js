@@ -1,5 +1,28 @@
 var group___porting =
 [
+    [ "LMA_Types.h", "_l_m_a___types_8h.html", null ],
     [ "LMA_Port.h", "_l_m_a___port_8h.html", null ],
-    [ "LMA_Port.c", "_l_m_a___port_8c.html", null ]
+    [ "LMA_Port.c", "_l_m_a___port_8c.html", null ],
+    [ "LMA_CRITICAL_SECTION_PREPARE", "group___porting.html#ga8a55a9054818cdb9c868401900503ce1", null ],
+    [ "LMA_CRITICAL_SECTION_ENTER", "group___porting.html#gab51473e2196543d8ccb53964cf15c110", null ],
+    [ "LMA_CRITICAL_SECTION_EXIT", "group___porting.html#gade8987d66ab648650135c1d7cf1ec9b3", null ],
+    [ "spl_t", "group___porting.html#gaa2ffd5f89bdc267cc48e9121095696c9", null ],
+    [ "acc_t", "group___porting.html#ga422350b1b3594f62fcc13248a2d210ed", null ],
+    [ "LMA_AccPhaseRun", "group___porting.html#gabf01d7020f6c79b2fd3c707c7902a9e6", null ],
+    [ "LMA_AccPhaseReset", "group___porting.html#ga151e636346e8d70f24bde7fb8e1e541a", null ],
+    [ "LMA_ADC_Init", "group___porting.html#gafc7eb113e0601ffa3a5c43523f4fce09", null ],
+    [ "LMA_ADC_Start", "group___porting.html#ga0ec0a576a1b465cf7aad0ca463fd5bdc", null ],
+    [ "LMA_ADC_Stop", "group___porting.html#ga4b95531c9a4b3eb7ee25789ede359307", null ],
+    [ "LMA_TMR_Init", "group___porting.html#ga689bf9e8fa9038a9ed256ad33d61b9b9", null ],
+    [ "LMA_TMR_Start", "group___porting.html#ga03ee350f945e0f1eb73c0b4d2b92b7d4", null ],
+    [ "LMA_TMR_Stop", "group___porting.html#ga0ed807aa118c3d1c575540889d42a8fc", null ],
+    [ "LMA_RTC_Init", "group___porting.html#ga32ee17e5c7d93ac8cbe0c8a0c29cb7ee", null ],
+    [ "LMA_RTC_Start", "group___porting.html#ga4a5c8b4247c9e9199210186bc3c13b17", null ],
+    [ "LMA_RTC_Stop", "group___porting.html#gaf3c87a640362680ec1b8a1e4c4c5a298", null ],
+    [ "LMA_IMP_ActiveOn", "group___porting.html#gaeb0cb0cfdc39c499463f05085ea3ed40", null ],
+    [ "LMA_IMP_ActiveOff", "group___porting.html#ga7a2aab7f7b061b109a75fc594c6ace9a", null ],
+    [ "LMA_IMP_ReactiveOn", "group___porting.html#ga8937215442fec58dfb4616ea1ca600d2", null ],
+    [ "LMA_IMP_ReactiveOff", "group___porting.html#gaf75b8718f2165ca67649e8cc4562bcd5", null ],
+    [ "LMA_IMP_ApparentOn", "group___porting.html#ga8b4c7d69c1f590571ca7e7106516f500", null ],
+    [ "LMA_IMP_ApparentOff", "group___porting.html#gaebefc389f6e54cc4a0c7d83361e9d1da", null ]
 ];

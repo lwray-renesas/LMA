@@ -16,6 +16,6 @@ var annotated_dup =
     [ "LMA_Signals", "struct_l_m_a___signals.html", "struct_l_m_a___signals" ],
     [ "LMA_SystemEnergy", "struct_l_m_a___system_energy.html", "struct_l_m_a___system_energy" ],
     [ "LMA_Voltage", "struct_l_m_a___voltage.html", "struct_l_m_a___voltage" ],
-    [ "LMA_Workspace", "struct_l_m_a___workspace.html", "struct_l_m_a___workspace" ],
+    [ "LMA_TempData", "struct_l_m_a___workspace.html", "struct_l_m_a___workspace" ],
     [ "LMA_ZeroCross", "struct_l_m_a___zero_cross.html", "struct_l_m_a___zero_cross" ]
 ];

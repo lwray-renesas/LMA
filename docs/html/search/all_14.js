@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ws_0',['ws',['../struct_l_m_a___phase.html#a09d276297970107d6459c1cbbfeb55b2',1,'LMA_Phase']]]
+  ['zero_5fcross_0',['zero_cross',['../struct_l_m_a___phase.html#a474260cee8695a3cd8ac0b9735c15655',1,'LMA_Phase']]]
 ];

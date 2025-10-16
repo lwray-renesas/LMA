@@ -118,21 +118,21 @@ Data Fields</h2></td></tr>
 <tr class="memitem:abef6622503e077b948aad14d9b74eedd" id="r_abef6622503e077b948aad14d9b74eedd"><td class="memItemLeft" align="right" valign="top"><a id="abef6622503e077b948aad14d9b74eedd" name="abef6622503e077b948aad14d9b74eedd"></a>
 <a class="el" href="group___types.html#ga1a9279a8d9641344c3fec53107866c57">LMA_CalibrationStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><b>status</b></td></tr>
 <tr class="memdesc:abef6622503e077b948aad14d9b74eedd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Status of the phase angle computation. <br /></td></tr>
-<tr class="memitem:ab42a800b53c8e59ca7b5c46412b354ba" id="r_ab42a800b53c8e59ca7b5c46412b354ba"><td class="memItemLeft" align="right" valign="top"><a id="ab42a800b53c8e59ca7b5c46412b354ba" name="ab42a800b53c8e59ca7b5c46412b354ba"></a>
-<a class="el" href="_l_m_a___port_8h.html#aa2ffd5f89bdc267cc48e9121095696c9">spl_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>v_last_sample</b></td></tr>
-<tr class="memdesc:ab42a800b53c8e59ca7b5c46412b354ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Storing previous samples of voltage for simplified zero cross. <br /></td></tr>
-<tr class="memitem:a4d22b8ea2b93c4507f3dac01da5a6559" id="r_a4d22b8ea2b93c4507f3dac01da5a6559"><td class="memItemLeft" align="right" valign="top"><a id="a4d22b8ea2b93c4507f3dac01da5a6559" name="a4d22b8ea2b93c4507f3dac01da5a6559"></a>
-<a class="el" href="_l_m_a___port_8h.html#aa2ffd5f89bdc267cc48e9121095696c9">spl_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>i_last_sample</b></td></tr>
-<tr class="memdesc:a4d22b8ea2b93c4507f3dac01da5a6559"><td class="mdescLeft">&#160;</td><td class="mdescRight">Storing previous samples of current for simplified zero cross. <br /></td></tr>
+<tr class="memitem:ae2b68483c78bf42d1169dd1521192757" id="r_ae2b68483c78bf42d1169dd1521192757"><td class="memItemLeft" align="right" valign="top"><a id="ae2b68483c78bf42d1169dd1521192757" name="ae2b68483c78bf42d1169dd1521192757"></a>
+<a class="el" href="struct_l_m_a___zero_cross.html">LMA_ZeroCross</a>&#160;</td><td class="memItemRight" valign="bottom"><b>v_zero_cross</b></td></tr>
+<tr class="memdesc:ae2b68483c78bf42d1169dd1521192757"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zero cross structure for voltage signal. <br /></td></tr>
+<tr class="memitem:a00c5906ed6b283d031dfde1da2bd4d2e" id="r_a00c5906ed6b283d031dfde1da2bd4d2e"><td class="memItemLeft" align="right" valign="top"><a id="a00c5906ed6b283d031dfde1da2bd4d2e" name="a00c5906ed6b283d031dfde1da2bd4d2e"></a>
+<a class="el" href="struct_l_m_a___zero_cross.html">LMA_ZeroCross</a>&#160;</td><td class="memItemRight" valign="bottom"><b>i_zero_cross</b></td></tr>
+<tr class="memdesc:a00c5906ed6b283d031dfde1da2bd4d2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zero cross structure for current signal. <br /></td></tr>
 <tr class="memitem:a7d6f47304549f2a68af206f2e60e5ed3" id="r_a7d6f47304549f2a68af206f2e60e5ed3"><td class="memItemLeft" align="right" valign="top"><a id="a7d6f47304549f2a68af206f2e60e5ed3" name="a7d6f47304549f2a68af206f2e60e5ed3"></a>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>sample_counter</b></td></tr>
 <tr class="memdesc:a7d6f47304549f2a68af206f2e60e5ed3"><td class="mdescLeft">&#160;</td><td class="mdescRight">counter to track the number of phase angle computations taken for averaging <br /></td></tr>
 <tr class="memitem:a5d40ce22d15900fc7d7bb0233a68f6ac" id="r_a5d40ce22d15900fc7d7bb0233a68f6ac"><td class="memItemLeft" align="right" valign="top"><a id="a5d40ce22d15900fc7d7bb0233a68f6ac" name="a5d40ce22d15900fc7d7bb0233a68f6ac"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>v_fraction</b></td></tr>
-<tr class="memdesc:a5d40ce22d15900fc7d7bb0233a68f6ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">the fractional component of the zero cross on the voltage (Q32.32 format) <br /></td></tr>
+<tr class="memdesc:a5d40ce22d15900fc7d7bb0233a68f6ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">the fractional component of the zero cross on the voltage <br /></td></tr>
 <tr class="memitem:afafe4a51830ec3be20304c239e812418" id="r_afafe4a51830ec3be20304c239e812418"><td class="memItemLeft" align="right" valign="top"><a id="afafe4a51830ec3be20304c239e812418" name="afafe4a51830ec3be20304c239e812418"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>i_fraction</b></td></tr>
-<tr class="memdesc:afafe4a51830ec3be20304c239e812418"><td class="mdescLeft">&#160;</td><td class="mdescRight">the fractional component of the zero cross on the current (Q32.32 format) <br /></td></tr>
+<tr class="memdesc:afafe4a51830ec3be20304c239e812418"><td class="mdescLeft">&#160;</td><td class="mdescRight">the fractional component of the zero cross on the current <br /></td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

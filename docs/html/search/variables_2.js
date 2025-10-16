@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['deg_5fper_5fsample_0',['deg_per_sample',['../struct_l_m_a___global_calibration.html#ab1038044388de12949822380ce594ae5',1,'LMA_GlobalCalibration']]]
+  ['debounce_0',['debounce',['../struct_l_m_a___zero_cross.html#a0a9390b5d6ac67f4b941d32c83932e51',1,'LMA_ZeroCross']]],
+  ['deg_5fper_5fsample_1',['deg_per_sample',['../struct_l_m_a___global_calibration.html#ab1038044388de12949822380ce594ae5',1,'LMA_GlobalCalibration']]]
 ];

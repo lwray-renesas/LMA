@@ -129,9 +129,15 @@ Functions</h2></td></tr>
 <tr class="memitem:gaf31bec4a4c8ff8b3e466d7b4fa64408d" id="r_gaf31bec4a4c8ff8b3e466d7b4fa64408d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gaf31bec4a4c8ff8b3e466d7b4fa64408d">LMA_Deinit</a> (void)</td></tr>
 <tr class="memdesc:gaf31bec4a4c8ff8b3e466d7b4fa64408d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deinitialises LMA.  <br /></td></tr>
 <tr class="memitem:ga6c54cbc1a418aa6b14d3ac9b89820b2f" id="r_ga6c54cbc1a418aa6b14d3ac9b89820b2f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga6c54cbc1a418aa6b14d3ac9b89820b2f">LMA_PhaseRegister</a> (<a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const p_phase)</td></tr>
-<tr class="memdesc:ga6c54cbc1a418aa6b14d3ac9b89820b2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a phase to the library - once on power up.  <br /></td></tr>
+<tr class="memdesc:ga6c54cbc1a418aa6b14d3ac9b89820b2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a phase to the library.  <br /></td></tr>
+<tr class="memitem:ga7f279a0e6e30f511c1ae98b7a7491ab5" id="r_ga7f279a0e6e30f511c1ae98b7a7491ab5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga7f279a0e6e30f511c1ae98b7a7491ab5">LMA_NeutralRegister</a> (<a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const p_phase, <a class="el" href="struct_l_m_a___neutral.html">LMA_Neutral</a> *const p_neutral)</td></tr>
+<tr class="memdesc:ga7f279a0e6e30f511c1ae98b7a7491ab5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers the systems neutral line to the library (if used)  <br /></td></tr>
+<tr class="memitem:ga1edc37f06d0b20a36f8a71ae6cddb9d8" id="r_ga1edc37f06d0b20a36f8a71ae6cddb9d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga1edc37f06d0b20a36f8a71ae6cddb9d8">LMA_ComputationHookRegister</a> (<a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const p_phase, float(*comp_hook)(float *i, float *v, float *f))</td></tr>
+<tr class="memdesc:ga1edc37f06d0b20a36f8a71ae6cddb9d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a hook to be called during paramter computations.  <br /></td></tr>
 <tr class="memitem:gad53d8441d05b0ee5b7930963171bc199" id="r_gad53d8441d05b0ee5b7930963171bc199"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gad53d8441d05b0ee5b7930963171bc199">LMA_PhaseLoadCalibration</a> (<a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const p_phase, const <a class="el" href="struct_l_m_a___phase_calibration.html">LMA_PhaseCalibration</a> *const p_calib)</td></tr>
 <tr class="memdesc:gad53d8441d05b0ee5b7930963171bc199"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads calibration data to a phase.  <br /></td></tr>
+<tr class="memitem:ga58095d16c30d20417f8850f9ffc19b9f" id="r_ga58095d16c30d20417f8850f9ffc19b9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga58095d16c30d20417f8850f9ffc19b9f">LMA_NeutralLoadCalibration</a> (<a class="el" href="struct_l_m_a___neutral.html">LMA_Neutral</a> *const p_neutral, const <a class="el" href="struct_l_m_a___neutral_calibration.html">LMA_NeutralCalibration</a> *const p_calib)</td></tr>
+<tr class="memdesc:ga58095d16c30d20417f8850f9ffc19b9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads calibration data to a neutral.  <br /></td></tr>
 <tr class="memitem:ga04171703dd9ebc3622dbddeead01e116" id="r_ga04171703dd9ebc3622dbddeead01e116"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga04171703dd9ebc3622dbddeead01e116">LMA_Start</a> (void)</td></tr>
 <tr class="memdesc:ga04171703dd9ebc3622dbddeead01e116"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts LMA Operation.  <br /></td></tr>
 <tr class="memitem:ga57e7b7b8d130377ab64560a44237c772" id="r_ga57e7b7b8d130377ab64560a44237c772"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga57e7b7b8d130377ab64560a44237c772">LMA_Stop</a> (void)</td></tr>
@@ -176,17 +182,17 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="group___control_ga56c88b00e4f3d1abab426811b54cd85a_cgraph.png" border="0" usemap="#agroup___control_ga56c88b00e4f3d1abab426811b54cd85a_cgraph" loading="lazy" alt=""/></div>
 <map name="agroup___control_ga56c88b00e4f3d1abab426811b54cd85a_cgraph" id="agroup___control_ga56c88b00e4f3d1abab426811b54cd85a_cgraph">
 <area shape="rect" title="Initalises the Light&#45;Weight Metrology for AC Framework according to the config." alt="" coords="5,132,79,159"/>
-<area shape="rect" href="_l_m_a___port_8c.html#afc7eb113e0601ffa3a5c43523f4fce09" title="Initialises ADC." alt="" coords="150,5,259,32"/>
+<area shape="rect" href="group___porting.html#gafc7eb113e0601ffa3a5c43523f4fce09" title="Initialises ADC." alt="" coords="150,5,259,32"/>
 <area shape="poly" title=" " alt="" coords="49,130,79,87,100,63,125,42,134,36,137,41,128,46,104,67,83,90,53,133"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a7a2aab7f7b061b109a75fc594c6ace9a" title="Callback to turn off active impulse LED." alt="" coords="134,56,274,83"/>
+<area shape="rect" href="group___porting.html#ga7a2aab7f7b061b109a75fc594c6ace9a" title="Callback to turn off active impulse LED." alt="" coords="134,56,274,83"/>
 <area shape="poly" title=" " alt="" coords="62,129,125,92,140,86,142,91,128,97,65,134"/>
-<area shape="rect" href="_l_m_a___port_8c.html#aebefc389f6e54cc4a0c7d83361e9d1da" title="Callback to turn off apparent impulse LED." alt="" coords="127,107,282,133"/>
+<area shape="rect" href="group___porting.html#gaebefc389f6e54cc4a0c7d83361e9d1da" title="Callback to turn off apparent impulse LED." alt="" coords="127,107,282,133"/>
 <area shape="poly" title=" " alt="" coords="79,137,111,132,112,137,80,142"/>
-<area shape="rect" href="_l_m_a___port_8c.html#af75b8718f2165ca67649e8cc4562bcd5" title="Callback to turn off reactive impulse LED." alt="" coords="127,157,282,184"/>
+<area shape="rect" href="group___porting.html#gaf75b8718f2165ca67649e8cc4562bcd5" title="Callback to turn off reactive impulse LED." alt="" coords="127,157,282,184"/>
 <area shape="poly" title=" " alt="" coords="80,148,112,153,111,159,79,154"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a32ee17e5c7d93ac8cbe0c8a0c29cb7ee" title="Initialises RTC." alt="" coords="151,208,258,235"/>
+<area shape="rect" href="group___porting.html#ga32ee17e5c7d93ac8cbe0c8a0c29cb7ee" title="Initialises RTC." alt="" coords="151,208,258,235"/>
 <area shape="poly" title=" " alt="" coords="65,157,128,194,142,200,140,205,125,198,62,161"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a689bf9e8fa9038a9ed256ad33d61b9b9" title="Initialises TMR." alt="" coords="150,259,259,285"/>
+<area shape="rect" href="group___porting.html#ga689bf9e8fa9038a9ed256ad33d61b9b9" title="Initialises TMR." alt="" coords="150,259,259,285"/>
 <area shape="poly" title=" " alt="" coords="53,158,83,201,104,224,128,245,137,250,134,254,125,249,100,228,79,204,49,161"/>
 </map>
 </div>
@@ -228,10 +234,72 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Registers a phase to the library - once on power up. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Registers a phase to the library. </p>
+<p>Do once on power up. This function also initialises the phase, so should be called BEFORE LMA_NeutralRegister LMA_ComputationHookRegister </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">p_phase</td><td>- pointer to the phase </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga7f279a0e6e30f511c1ae98b7a7491ab5" name="ga7f279a0e6e30f511c1ae98b7a7491ab5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7f279a0e6e30f511c1ae98b7a7491ab5">&#9670;&#160;</a></span>LMA_NeutralRegister()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_NeutralRegister </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const</td>          <td class="paramname"><span class="paramname"><em>p_phase</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_l_m_a___neutral.html">LMA_Neutral</a> *const</td>          <td class="paramname"><span class="paramname"><em>p_neutral</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Registers the systems neutral line to the library (if used) </p>
+<dl class="section warning"><dt>Warning</dt><dd>Must be performed AFTER a phase is registered - registering a phase nullifys this. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_phase</td><td>- pointer to the phase structure to link to </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_neutral</td><td>- pointer to the neutral structure </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga1edc37f06d0b20a36f8a71ae6cddb9d8" name="ga1edc37f06d0b20a36f8a71ae6cddb9d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1edc37f06d0b20a36f8a71ae6cddb9d8">&#9670;&#160;</a></span>LMA_ComputationHookRegister()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_ComputationHookRegister </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const</td>          <td class="paramname"><span class="paramname"><em>p_phase</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float(*</td>          <td class="paramname"><span class="paramname"><em>comp_hook&#160;</em></span>)(float *i, float *v, float *f)&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Registers a hook to be called during paramter computations. </p>
+<dl class="section warning"><dt>Warning</dt><dd>Must be performed AFTER a phase is registered - registering a phase nullifys this.</dd></dl>
+<p>provides a function which is called after voltage and current are computed. This function can modify the voltage and current and also return a compensation factor which is applied to the computed power values, from which the energy values are derived. This is useful for linearisation and compensation techniques used for accuracy improvements at run time. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_phase</td><td>- pointer to the phase structure to link to </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">comp_hook</td><td>- function pointer that should point to a function which accepts two pointers to floats and returns a float. the first argument is a pointer to the computed current, the second to the voltage and the third to the frequency it returns a compensation factor which is multiplied by ALL power values and propogates to the energy values. If no compensation is desired, return 1.00f - if no computation hook is set, no compensation is applied. </td></tr>
   </table>
   </dd>
 </dl>
@@ -268,6 +336,36 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
+<a id="ga58095d16c30d20417f8850f9ffc19b9f" name="ga58095d16c30d20417f8850f9ffc19b9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga58095d16c30d20417f8850f9ffc19b9f">&#9670;&#160;</a></span>LMA_NeutralLoadCalibration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_NeutralLoadCalibration </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_l_m_a___neutral.html">LMA_Neutral</a> *const</td>          <td class="paramname"><span class="paramname"><em>p_neutral</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="struct_l_m_a___neutral_calibration.html">LMA_NeutralCalibration</a> *const</td>          <td class="paramname"><span class="paramname"><em>p_calib</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Loads calibration data to a neutral. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">p_neutral</td><td>- pointer to the neutral object. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_calib</td><td>- pointer to the calibration data to load. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ga04171703dd9ebc3622dbddeead01e116" name="ga04171703dd9ebc3622dbddeead01e116"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga04171703dd9ebc3622dbddeead01e116">&#9670;&#160;</a></span>LMA_Start()</h2>
 
@@ -291,11 +389,11 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="group___control_ga04171703dd9ebc3622dbddeead01e116_cgraph.png" border="0" usemap="#agroup___control_ga04171703dd9ebc3622dbddeead01e116_cgraph" loading="lazy" alt=""/></div>
 <map name="agroup___control_ga04171703dd9ebc3622dbddeead01e116_cgraph" id="agroup___control_ga04171703dd9ebc3622dbddeead01e116_cgraph">
 <area shape="rect" title="Starts LMA Operation." alt="" coords="5,56,89,83"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a0ec0a576a1b465cf7aad0ca463fd5bdc" title="Starts the ADC running." alt="" coords="137,5,256,32"/>
+<area shape="rect" href="group___porting.html#ga0ec0a576a1b465cf7aad0ca463fd5bdc" title="Starts the ADC running." alt="" coords="137,5,256,32"/>
 <area shape="poly" title=" " alt="" coords="88,53,139,35,141,40,90,58"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a4a5c8b4247c9e9199210186bc3c13b17" title="Starts the RTC running." alt="" coords="138,56,255,83"/>
+<area shape="rect" href="group___porting.html#ga4a5c8b4247c9e9199210186bc3c13b17" title="Starts the RTC running." alt="" coords="138,56,255,83"/>
 <area shape="poly" title=" " alt="" coords="89,67,122,67,122,72,89,72"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a03ee350f945e0f1eb73c0b4d2b92b7d4" title="Starts the TMR running." alt="" coords="137,107,256,133"/>
+<area shape="rect" href="group___porting.html#ga03ee350f945e0f1eb73c0b4d2b92b7d4" title="Starts the TMR running." alt="" coords="137,107,256,133"/>
 <area shape="poly" title=" " alt="" coords="90,81,141,99,139,104,88,86"/>
 </map>
 </div>
@@ -325,11 +423,11 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="group___control_ga57e7b7b8d130377ab64560a44237c772_cgraph.png" border="0" usemap="#agroup___control_ga57e7b7b8d130377ab64560a44237c772_cgraph" loading="lazy" alt=""/></div>
 <map name="agroup___control_ga57e7b7b8d130377ab64560a44237c772_cgraph" id="agroup___control_ga57e7b7b8d130377ab64560a44237c772_cgraph">
 <area shape="rect" title="Stops LMA Operation." alt="" coords="5,56,88,83"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a4b95531c9a4b3eb7ee25789ede359307" title="Stops the ADC running." alt="" coords="136,5,254,32"/>
+<area shape="rect" href="group___porting.html#ga4b95531c9a4b3eb7ee25789ede359307" title="Stops the ADC running." alt="" coords="136,5,254,32"/>
 <area shape="poly" title=" " alt="" coords="87,53,138,35,140,40,89,58"/>
-<area shape="rect" href="_l_m_a___port_8c.html#af3c87a640362680ec1b8a1e4c4c5a298" title="Stops the RTC running." alt="" coords="137,56,253,83"/>
+<area shape="rect" href="group___porting.html#gaf3c87a640362680ec1b8a1e4c4c5a298" title="Stops the RTC running." alt="" coords="137,56,253,83"/>
 <area shape="poly" title=" " alt="" coords="88,67,122,67,122,72,88,72"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a0ed807aa118c3d1c575540889d42a8fc" title="Stops the TMR running." alt="" coords="136,107,254,133"/>
+<area shape="rect" href="group___porting.html#ga0ed807aa118c3d1c575540889d42a8fc" title="Stops the TMR running." alt="" coords="136,107,254,133"/>
 <area shape="poly" title=" " alt="" coords="89,81,140,99,138,104,87,86"/>
 </map>
 </div>
@@ -366,17 +464,15 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group___control_ga1cccfc7d6139fc9ae382c71b9e4da524_cgraph.png" border="0" usemap="#agroup___control_ga1cccfc7d6139fc9ae382c71b9e4da524_cgraph" loading="lazy" alt=""/></div>
 <map name="agroup___control_ga1cccfc7d6139fc9ae382c71b9e4da524_cgraph" id="agroup___control_ga1cccfc7d6139fc9ae382c71b9e4da524_cgraph">
-<area shape="rect" title="Performs a calibration command according to the flags passed." alt="" coords="5,107,150,133"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a0ec0a576a1b465cf7aad0ca463fd5bdc" title="Starts the ADC running." alt="" coords="203,5,322,32"/>
-<area shape="poly" title=" " alt="" coords="96,104,141,74,196,42,208,36,210,41,199,46,144,78,99,108"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a4b95531c9a4b3eb7ee25789ede359307" title="Stops the ADC running." alt="" coords="203,56,322,83"/>
-<area shape="poly" title=" " alt="" coords="128,103,196,85,197,90,130,109"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a35e2a464220416b435202e65c49f081e" title="Returns the square root of the float passed." alt="" coords="198,107,327,133"/>
-<area shape="poly" title=" " alt="" coords="150,117,182,117,182,123,150,123"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a03ee350f945e0f1eb73c0b4d2b92b7d4" title="Starts the TMR running." alt="" coords="203,157,322,184"/>
-<area shape="poly" title=" " alt="" coords="130,131,197,150,196,155,128,137"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a0ed807aa118c3d1c575540889d42a8fc" title="Stops the TMR running." alt="" coords="203,208,322,235"/>
-<area shape="poly" title=" " alt="" coords="99,132,144,162,199,194,210,199,208,204,196,198,141,166,96,136"/>
+<area shape="rect" title="Performs a calibration command according to the flags passed." alt="" coords="5,81,150,108"/>
+<area shape="rect" href="group___porting.html#ga0ec0a576a1b465cf7aad0ca463fd5bdc" title="Starts the ADC running." alt="" coords="198,5,317,32"/>
+<area shape="poly" title=" " alt="" coords="110,78,209,36,211,41,112,83"/>
+<area shape="rect" href="group___porting.html#ga4b95531c9a4b3eb7ee25789ede359307" title="Stops the ADC running." alt="" coords="198,56,316,83"/>
+<area shape="poly" title=" " alt="" coords="149,82,182,77,183,82,150,87"/>
+<area shape="rect" href="group___porting.html#ga03ee350f945e0f1eb73c0b4d2b92b7d4" title="Starts the TMR running." alt="" coords="198,107,317,133"/>
+<area shape="poly" title=" " alt="" coords="150,102,183,107,182,112,149,107"/>
+<area shape="rect" href="group___porting.html#ga0ed807aa118c3d1c575540889d42a8fc" title="Stops the TMR running." alt="" coords="198,157,316,184"/>
+<area shape="poly" title=" " alt="" coords="112,106,211,148,209,153,110,111"/>
 </map>
 </div>
 
@@ -407,13 +503,13 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="group___control_gaf99c92bd7cb9c347b51c1f70650ed14e_cgraph.png" border="0" usemap="#agroup___control_gaf99c92bd7cb9c347b51c1f70650ed14e_cgraph" loading="lazy" alt=""/></div>
 <map name="agroup___control_gaf99c92bd7cb9c347b51c1f70650ed14e_cgraph" id="agroup___control_gaf99c92bd7cb9c347b51c1f70650ed14e_cgraph">
 <area shape="rect" title="Performs a calibration command according to the flags passed." alt="" coords="5,81,150,108"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a0ec0a576a1b465cf7aad0ca463fd5bdc" title="Starts the ADC running." alt="" coords="198,5,317,32"/>
+<area shape="rect" href="group___porting.html#ga0ec0a576a1b465cf7aad0ca463fd5bdc" title="Starts the ADC running." alt="" coords="198,5,317,32"/>
 <area shape="poly" title=" " alt="" coords="110,78,209,36,211,41,112,83"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a4b95531c9a4b3eb7ee25789ede359307" title="Stops the ADC running." alt="" coords="198,56,316,83"/>
+<area shape="rect" href="group___porting.html#ga4b95531c9a4b3eb7ee25789ede359307" title="Stops the ADC running." alt="" coords="198,56,316,83"/>
 <area shape="poly" title=" " alt="" coords="149,82,182,77,183,82,150,87"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a03ee350f945e0f1eb73c0b4d2b92b7d4" title="Starts the TMR running." alt="" coords="198,107,317,133"/>
+<area shape="rect" href="group___porting.html#ga03ee350f945e0f1eb73c0b4d2b92b7d4" title="Starts the TMR running." alt="" coords="198,107,317,133"/>
 <area shape="poly" title=" " alt="" coords="150,102,183,107,182,112,149,107"/>
-<area shape="rect" href="_l_m_a___port_8c.html#a0ed807aa118c3d1c575540889d42a8fc" title="Stops the TMR running." alt="" coords="198,157,316,184"/>
+<area shape="rect" href="group___porting.html#ga0ed807aa118c3d1c575540889d42a8fc" title="Stops the TMR running." alt="" coords="198,157,316,184"/>
 <area shape="poly" title=" " alt="" coords="112,106,211,148,209,153,110,111"/>
 </map>
 </div>

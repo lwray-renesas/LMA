@@ -62,7 +62,7 @@ typedef struct LMA_Accumulators
  * @details Data structure containing some glue logic between the phases and porting layer to enable work on a phase between
  * systems
  */
-typedef struct LMA_Workspace
+typedef struct LMA_TempData
 {
   /** @brief dedicated struct for a sample set */
   struct LMA_Samples
@@ -73,41 +73,7 @@ typedef struct LMA_Workspace
   } samples;
 
   LMA_Accumulators accs; /**< Block of accumulators to work with*/
-} LMA_Workspace;
-
-/** @brief Converts an accumulator type to a floating point type.
- * @param acc - accumulator for conversion.
- * @return floating point representation.
- */
-float LMA_AccToFloat(acc_t acc);
-
-/** @brief Multiplies two floating point numbers.
- * @details - does not handle special cases ! NaN, denorm and norm etc.
- * @param a - first operand.
- * @param b - second operand.
- * @return a * b
- */
-float LMA_FPMul_Fast(float a, float b);
-
-/** @brief Divides two floating point numbers.
- * @details - does not handle special cases ! NaN, denorm and norm etc.
- * @param a - first operand.
- * @param b - second operand.
- * @return a / b
- */
-float LMA_FPDiv_Fast(float a, float b);
-
-/** @brief Returns the square root of the float passed.
- * @param a - number to be sqrt.
- * @return sqrt(a)
- */
-float LMA_FPSqrt_Fast(float a);
-
-/** @brief Returns the absolute of the float passed
- * @param a - number to be absoluted.
- * @return abs(a)
- */
-float LMA_FPAbs_Fast(float a);
+} LMA_TempData;
 
 /** @brief handles sample reset between cycles.
  * @details Performs:
@@ -118,7 +84,7 @@ float LMA_FPAbs_Fast(float a);
  * @param[inout] pointer to data to work with.
  * @param[in] phase_id - phase identifier for managing porting resources.
  */
-void LMA_AccReset(LMA_Workspace *const p_ws, const uint32_t phase_id);
+void LMA_AccReset(LMA_TempData *const p_ws, const uint32_t phase_id);
 
 /** @brief handles sample accumulation
  * @details Performs:
@@ -129,14 +95,14 @@ void LMA_AccReset(LMA_Workspace *const p_ws, const uint32_t phase_id);
  * @param[inout] pointer to data to work with.
  * @param[in] phase_id - phase identifier for managing porting resources.
  */
-void LMA_AccRun(LMA_Workspace *const p_ws, const uint32_t phase_id);
+void LMA_AccRun(LMA_TempData *const p_ws, const uint32_t phase_id);
 
 /** @brief Loads the accumulators into the accumulator structure.
  * @param[inout] pointer to data to work with.
  * @param[inout] pointer to accumulators to copy results to.
  * @param[in] phase_id - phase identifier for managing porting resources.
  */
-void LMA_AccLoad(LMA_Workspace *const p_ws, LMA_Accumulators *const p_accs, const uint32_t phase_id);
+void LMA_AccLoad(LMA_TempData *const p_ws, LMA_Accumulators *const p_accs, const uint32_t phase_id);
 
 /** @brief phase shifts voltage signal
  * @details

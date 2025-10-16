@@ -1,6 +1,4 @@
-src/LMA_Utils/LMA_Types.h
-src/LMA_Utils/LMA_Utils.h
-src/LMA_Utils/LMA_Utils.c
+src/LMA_Types.h
 src/LMA_Core.h
 src/LMA_Core.c
 examples/windows/src/simulation/simulation.cpp
@@ -12,8 +10,8 @@ examples/YPMOD_RA2A2_3PH/LMA_YPMOD_RA2A2/src/hal_entry.c
 examples/YPMOD_RA2A2_3PH/LMA_YPMOD_RA2A2/src/Benchmark/Benchmark.c
 examples/YPMOD_RA2A2_3PH/LMA_YPMOD_RA2A2/src/Benchmark/Benchmark.h
 examples/YPMOD_RL78I1C_ROGOWSKI/LMA_YPMOD_RL78I1C_ROGOWSKI/src/LMA_YPMOD_RL78I1C_ROGOWSKI.c
-port/0_Generic/LMA_Port.h
-port/0_Generic/LMA_Port.c
+port/LMA_Port.h
+port/LMA_Port.c
 port/Windows/LMA_Port.h
 port/Windows/LMA_Port.c
 port/YPMOD-RA2A2-3PH/LMA_Port.h

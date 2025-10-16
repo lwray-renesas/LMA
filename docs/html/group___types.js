@@ -1,24 +1,43 @@
 var group___types =
 [
     [ "Storage", "group___storage.html", "group___storage" ],
+    [ "LMA_PhaseInputs", "struct_l_m_a___phase_inputs.html", [
+      [ "v_sample", "struct_l_m_a___phase_inputs.html#a45c30ca7051c2cc180c9aa8cb581c097", null ],
+      [ "v90_sample", "struct_l_m_a___phase_inputs.html#ad35ecf75edaba447f19800c7874b0b42", null ],
+      [ "i_sample", "struct_l_m_a___phase_inputs.html#acb3938b5b354f2c68c4d3f16dca6409a", null ]
+    ] ],
+    [ "LMA_NeutralInputs", "struct_l_m_a___neutral_inputs.html", [
+      [ "i_sample", "struct_l_m_a___neutral_inputs.html#acb3938b5b354f2c68c4d3f16dca6409a", null ]
+    ] ],
+    [ "LMA_Accs", "struct_l_m_a___accs.html", [
+      [ "v_acc", "struct_l_m_a___accs.html#ac627113e6d816c11b6fa0581629ecc2c", null ],
+      [ "i_acc", "struct_l_m_a___accs.html#a171191423222e39abfd9b8d36ce5f639", null ],
+      [ "p_acc", "struct_l_m_a___accs.html#a74bcf50df2363ca10b1565d165fda6c7", null ],
+      [ "q_acc", "struct_l_m_a___accs.html#af3ab6b98955377c1fa68c6d2896d7f74", null ],
+      [ "sample_count", "struct_l_m_a___accs.html#a1090838c106af7b7afaaec0ee969e174", null ]
+    ] ],
+    [ "LMA_PhaseAccs", "struct_l_m_a___phase_accs.html", [
+      [ "temp", "struct_l_m_a___phase_accs.html#a8ff2cd5972000e56ac2d09908306c735", null ],
+      [ "snapshot", "struct_l_m_a___phase_accs.html#a4fac31df8690732d6560ec27ab7a14c2", null ]
+    ] ],
+    [ "LMA_NeutralAccs", "struct_l_m_a___neutral_accs.html", [
+      [ "i_acc_temp", "struct_l_m_a___neutral_accs.html#ac3f5ab82975a20b2c9a7514c76fa1f3d", null ],
+      [ "i_acc_snapshot", "struct_l_m_a___neutral_accs.html#a3ed8aea202d285d6aa17fc52909d3377", null ]
+    ] ],
     [ "LMA_ZeroCross", "struct_l_m_a___zero_cross.html", [
-      [ "zero_cross_counter", "struct_l_m_a___zero_cross.html#a6ef1929b24e8e5e4fb03a765bb4ddc4a", null ],
+      [ "count", "struct_l_m_a___zero_cross.html#a86988a65e0d3ece7990c032c159786d6", null ],
       [ "last_sample", "struct_l_m_a___zero_cross.html#ae22556af986df1148376a91159ff4d3d", null ],
-      [ "zero_cross_debounce", "struct_l_m_a___zero_cross.html#a5125b78fbaca3cbd049dc87e45c35b51", null ],
-      [ "sync_zc", "struct_l_m_a___zero_cross.html#aea16ba8bdd695ea084a8b7ff6f4b2dcb", null ]
+      [ "debounce", "struct_l_m_a___zero_cross.html#a0a9390b5d6ac67f4b941d32c83932e51", null ],
+      [ "first_event", "struct_l_m_a___zero_cross.html#a3fe02cc253a00285c9e740ae9792f127", null ]
     ] ],
-    [ "LMA_Voltage", "struct_l_m_a___voltage.html", [
-      [ "v_rms", "struct_l_m_a___voltage.html#a4eb7fc32354c4a9ee8afd828172827c2", null ],
-      [ "fline", "struct_l_m_a___voltage.html#a77bbe7b4cb72c5c01fe307ce5f4786f6", null ],
-      [ "zc", "struct_l_m_a___voltage.html#aa9825913f4c58ecacffea7c8e7dee4b8", null ]
-    ] ],
-    [ "LMA_Current", "struct_l_m_a___current.html", [
-      [ "i_rms", "struct_l_m_a___current.html#a7d08473bbd4be5618a3e17ee70809d2e", null ]
-    ] ],
-    [ "LMA_Power", "struct_l_m_a___power.html", [
-      [ "p", "struct_l_m_a___power.html#a1922a551816a2725c69a086db7c12a03", null ],
-      [ "q", "struct_l_m_a___power.html#a0a19a0620af7373e3ddba0ce4e1058e1", null ],
-      [ "s", "struct_l_m_a___power.html#a874f74a4dc1c9a0cd9c6e0d79c298f55", null ]
+    [ "LMA_Measurements", "struct_l_m_a___measurements.html", [
+      [ "vrms", "struct_l_m_a___measurements.html#a1466cf22de01e2faf786b69e44e4902f", null ],
+      [ "irms", "struct_l_m_a___measurements.html#af9b0db3f42bdf3f755afe229084986a8", null ],
+      [ "irms_neutral", "struct_l_m_a___measurements.html#a012be894eb62e2d24060c954086306d5", null ],
+      [ "fline", "struct_l_m_a___measurements.html#a77bbe7b4cb72c5c01fe307ce5f4786f6", null ],
+      [ "p", "struct_l_m_a___measurements.html#a1922a551816a2725c69a086db7c12a03", null ],
+      [ "q", "struct_l_m_a___measurements.html#a0a19a0620af7373e3ddba0ce4e1058e1", null ],
+      [ "s", "struct_l_m_a___measurements.html#a874f74a4dc1c9a0cd9c6e0d79c298f55", null ]
     ] ],
     [ "LMA_ConsumptionData", "struct_l_m_a___consumption_data.html", [
       [ "act_imp_energy_wh", "struct_l_m_a___consumption_data.html#ab4f6b6d541f43500be88bc7cb7d7ab6b", null ],
@@ -37,8 +56,8 @@ var group___types =
     ] ],
     [ "LMA_PhaseAngleError", "struct_l_m_a___phase_angle_error.html", [
       [ "status", "struct_l_m_a___phase_angle_error.html#abef6622503e077b948aad14d9b74eedd", null ],
-      [ "v_last_sample", "struct_l_m_a___phase_angle_error.html#ab42a800b53c8e59ca7b5c46412b354ba", null ],
-      [ "i_last_sample", "struct_l_m_a___phase_angle_error.html#a4d22b8ea2b93c4507f3dac01da5a6559", null ],
+      [ "v_zero_cross", "struct_l_m_a___phase_angle_error.html#ae2b68483c78bf42d1169dd1521192757", null ],
+      [ "i_zero_cross", "struct_l_m_a___phase_angle_error.html#a00c5906ed6b283d031dfde1da2bd4d2e", null ],
       [ "sample_counter", "struct_l_m_a___phase_angle_error.html#a7d6f47304549f2a68af206f2e60e5ed3", null ],
       [ "v_fraction", "struct_l_m_a___phase_angle_error.html#a5d40ce22d15900fc7d7bb0233a68f6ac", null ],
       [ "i_fraction", "struct_l_m_a___phase_angle_error.html#afafe4a51830ec3be20304c239e812418", null ]
@@ -48,18 +67,24 @@ var group___types =
       [ "measurements_ready", "struct_l_m_a___signals.html#aae5e47753af8186703115c1eab867b1b", null ],
       [ "calibrate_angle_error", "struct_l_m_a___signals.html#a2416727b9fc7ec17b46b76064cf4ba0a", null ]
     ] ],
+    [ "LMA_Neutral", "struct_l_m_a___neutral.html", [
+      [ "inputs", "struct_l_m_a___neutral.html#a50ffb4ce7f2d0aae04de0dab8a715fbc", null ],
+      [ "accs", "struct_l_m_a___neutral.html#a6eb6a4e61ac741d742adec20b42993b6", null ],
+      [ "calib", "struct_l_m_a___neutral.html#a32685b9703e5f085c421dbf3566ddbaf", null ]
+    ] ],
     [ "LMA_Phase", "struct_l_m_a___phase.html", [
       [ "p_next", "struct_l_m_a___phase.html#adc61b9c9349681d6ce2a1e04acd930c2", null ],
+      [ "inputs", "struct_l_m_a___phase.html#a75aeedb156268e8506a1ca550c7ca54e", null ],
+      [ "accs", "struct_l_m_a___phase.html#a6b226e3613e3d13f54d7daff19dfe33a", null ],
+      [ "zero_cross", "struct_l_m_a___phase.html#a474260cee8695a3cd8ac0b9735c15655", null ],
       [ "calib", "struct_l_m_a___phase.html#a33d042d78f3b0a02b5300db90d3bf64d", null ],
       [ "pa_error", "struct_l_m_a___phase.html#a41ad9ab80f53d2e6d7888d59366407cb", null ],
-      [ "voltage", "struct_l_m_a___phase.html#abc84882319fbd3efe7afcfa4901b2bbd", null ],
-      [ "current", "struct_l_m_a___phase.html#ae7926b5e346751d90dc0cd7107cf4d98", null ],
-      [ "power", "struct_l_m_a___phase.html#aa41b88783f1e3ce7855e0380141a8deb", null ],
+      [ "measurements", "struct_l_m_a___phase.html#ab8956205dee0aaf630ac02162a7f29c0", null ],
       [ "energy_units", "struct_l_m_a___phase.html#aeed1605a94f0430ec85e3e0d75b89159", null ],
-      [ "ws", "struct_l_m_a___phase.html#a09d276297970107d6459c1cbbfeb55b2", null ],
-      [ "accs", "struct_l_m_a___phase.html#ac1649b6fd9039364ef67e37f45b7e1bc", null ],
       [ "status", "struct_l_m_a___phase.html#a02a90f197eb1c7a061f6d191470923b0", null ],
       [ "sigs", "struct_l_m_a___phase.html#a6e022fe1bf493dc9374b9513e6d4a97d", null ],
+      [ "p_neutral", "struct_l_m_a___phase.html#a8a312ad1af62908508cb5d4d69cf4dc4", null ],
+      [ "p_computation_hook", "struct_l_m_a___phase.html#aca572f3b596444c1f64dc7ecd149e6be", null ],
       [ "phase_number", "struct_l_m_a___phase.html#aac26d3dd27ddd60cc49254a07eafbdf8", null ]
     ] ],
     [ "LMA_PhaseCalibArgs", "struct_l_m_a___phase_calib_args.html", [
@@ -83,14 +108,6 @@ var group___types =
       [ "no_load_p", "struct_l_m_a___config.html#ae9fdf57c23b4217359c905fa7a7adffb", null ],
       [ "v_sag", "struct_l_m_a___config.html#a2215e9e27bb49dbf03560763185b1455", null ],
       [ "v_swell", "struct_l_m_a___config.html#a44488a881b3dd75f42ae1f53481aca2e", null ]
-    ] ],
-    [ "LMA_Measurements", "struct_l_m_a___measurements.html", [
-      [ "vrms", "struct_l_m_a___measurements.html#a1466cf22de01e2faf786b69e44e4902f", null ],
-      [ "irms", "struct_l_m_a___measurements.html#af9b0db3f42bdf3f755afe229084986a8", null ],
-      [ "fline", "struct_l_m_a___measurements.html#a77bbe7b4cb72c5c01fe307ce5f4786f6", null ],
-      [ "p", "struct_l_m_a___measurements.html#a1922a551816a2725c69a086db7c12a03", null ],
-      [ "q", "struct_l_m_a___measurements.html#a0a19a0620af7373e3ddba0ce4e1058e1", null ],
-      [ "s", "struct_l_m_a___measurements.html#a874f74a4dc1c9a0cd9c6e0d79c298f55", null ]
     ] ],
     [ "LMA_Status", "group___types.html#gab40ee89230639dd5a514744d23fee390", [
       [ "LMA_OK", "group___types.html#ggab40ee89230639dd5a514744d23fee390a22e72e6817684807afbda190a3c05cb5", null ],

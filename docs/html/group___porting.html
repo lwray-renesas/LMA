@@ -105,22 +105,723 @@ $(function(){initNavTree('group___porting.html','',''); });
 
 <div class="header">
   <div class="summary">
-<a href="#files">Files</a>  </div>
+<a href="#files">Files</a> &#124;
+<a href="#define-members">Macros</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">Porting </div></div>
 </div><!--header-->
 <div class="contents">
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Description</h2>
-<p>LMA Porting Layer </p>
+<p>LMA Porting Layer</p>
 <p>The LMA porting layer is used to perform most (ideally all) porting activities between platforms to enable LMA to run across different different cores. To perform a port, ensure you fulfill the functional requirements of the API in the porting files - using an existing port as reference may help.</p>
 <dl class="section note"><dt>Note</dt><dd>The documentation here is based on empty "skeleton" porting files and should be used to aid with creating a new port or navigating existing ports. </dd></dl>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-files" class="groupheader"><a id="files" name="files"></a>
 Files</h2></td></tr>
+<tr class="memitem:LMA_5FTypes_2Eh" id="r_LMA_5FTypes_2Eh"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_l_m_a___types_8h.html">LMA_Types.h</a></td></tr>
+<tr class="memdesc:_l_m_a___types_8h"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type definitions for LMA. <br /></td></tr>
 <tr class="memitem:LMA_5FPort_2Eh" id="r_LMA_5FPort_2Eh"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_l_m_a___port_8h.html">LMA_Port.h</a></td></tr>
 <tr class="memdesc:_l_m_a___port_8h"><td class="mdescLeft">&#160;</td><td class="mdescRight">Porting file declarations for the LMA codebase. <br /></td></tr>
 <tr class="memitem:LMA_5FPort_2Ec" id="r_LMA_5FPort_2Ec"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_l_m_a___port_8c.html">LMA_Port.c</a></td></tr>
 <tr class="memdesc:_l_m_a___port_8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Porting file definitions for the LMA codebase. <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:ga8a55a9054818cdb9c868401900503ce1" id="r_ga8a55a9054818cdb9c868401900503ce1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga8a55a9054818cdb9c868401900503ce1">LMA_CRITICAL_SECTION_PREPARE</a>()</td></tr>
+<tr class="memdesc:ga8a55a9054818cdb9c868401900503ce1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Macro to prepare function/code block for a crticial section.  <br /></td></tr>
+<tr class="memitem:gab51473e2196543d8ccb53964cf15c110" id="r_gab51473e2196543d8ccb53964cf15c110"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gab51473e2196543d8ccb53964cf15c110">LMA_CRITICAL_SECTION_ENTER</a>()</td></tr>
+<tr class="memdesc:gab51473e2196543d8ccb53964cf15c110"><td class="mdescLeft">&#160;</td><td class="mdescRight">Macro used to enter critical section.  <br /></td></tr>
+<tr class="memitem:gade8987d66ab648650135c1d7cf1ec9b3" id="r_gade8987d66ab648650135c1d7cf1ec9b3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gade8987d66ab648650135c1d7cf1ec9b3">LMA_CRITICAL_SECTION_EXIT</a>()</td></tr>
+<tr class="memdesc:gade8987d66ab648650135c1d7cf1ec9b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Macro used to exit critical section.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:gaa2ffd5f89bdc267cc48e9121095696c9" id="r_gaa2ffd5f89bdc267cc48e9121095696c9"><td class="memItemLeft" align="right" valign="top">typedef int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gaa2ffd5f89bdc267cc48e9121095696c9">spl_t</a></td></tr>
+<tr class="memdesc:gaa2ffd5f89bdc267cc48e9121095696c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raw ADC sample type.  <br /></td></tr>
+<tr class="memitem:ga422350b1b3594f62fcc13248a2d210ed" id="r_ga422350b1b3594f62fcc13248a2d210ed"><td class="memItemLeft" align="right" valign="top">typedef int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga422350b1b3594f62fcc13248a2d210ed">acc_t</a></td></tr>
+<tr class="memdesc:ga422350b1b3594f62fcc13248a2d210ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accumulator type.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:gabf01d7020f6c79b2fd3c707c7902a9e6" id="r_gabf01d7020f6c79b2fd3c707c7902a9e6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gabf01d7020f6c79b2fd3c707c7902a9e6">LMA_AccPhaseRun</a> (<a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const p_phase)</td></tr>
+<tr class="memdesc:gabf01d7020f6c79b2fd3c707c7902a9e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">handles sample accumulation for a phase  <br /></td></tr>
+<tr class="memitem:ga151e636346e8d70f24bde7fb8e1e541a" id="r_ga151e636346e8d70f24bde7fb8e1e541a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga151e636346e8d70f24bde7fb8e1e541a">LMA_AccPhaseReset</a> (<a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const p_phase)</td></tr>
+<tr class="memdesc:ga151e636346e8d70f24bde7fb8e1e541a"><td class="mdescLeft">&#160;</td><td class="mdescRight">handles sample reset between cycles for a phase  <br /></td></tr>
+<tr class="memitem:gafc7eb113e0601ffa3a5c43523f4fce09" id="r_gafc7eb113e0601ffa3a5c43523f4fce09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gafc7eb113e0601ffa3a5c43523f4fce09">LMA_ADC_Init</a> (void)</td></tr>
+<tr class="memdesc:gafc7eb113e0601ffa3a5c43523f4fce09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises ADC.  <br /></td></tr>
+<tr class="memitem:ga0ec0a576a1b465cf7aad0ca463fd5bdc" id="r_ga0ec0a576a1b465cf7aad0ca463fd5bdc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga0ec0a576a1b465cf7aad0ca463fd5bdc">LMA_ADC_Start</a> (void)</td></tr>
+<tr class="memdesc:ga0ec0a576a1b465cf7aad0ca463fd5bdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the ADC running.  <br /></td></tr>
+<tr class="memitem:ga4b95531c9a4b3eb7ee25789ede359307" id="r_ga4b95531c9a4b3eb7ee25789ede359307"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga4b95531c9a4b3eb7ee25789ede359307">LMA_ADC_Stop</a> (void)</td></tr>
+<tr class="memdesc:ga4b95531c9a4b3eb7ee25789ede359307"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops the ADC running.  <br /></td></tr>
+<tr class="memitem:ga689bf9e8fa9038a9ed256ad33d61b9b9" id="r_ga689bf9e8fa9038a9ed256ad33d61b9b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga689bf9e8fa9038a9ed256ad33d61b9b9">LMA_TMR_Init</a> (void)</td></tr>
+<tr class="memdesc:ga689bf9e8fa9038a9ed256ad33d61b9b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises TMR.  <br /></td></tr>
+<tr class="memitem:ga03ee350f945e0f1eb73c0b4d2b92b7d4" id="r_ga03ee350f945e0f1eb73c0b4d2b92b7d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga03ee350f945e0f1eb73c0b4d2b92b7d4">LMA_TMR_Start</a> (void)</td></tr>
+<tr class="memdesc:ga03ee350f945e0f1eb73c0b4d2b92b7d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the TMR running.  <br /></td></tr>
+<tr class="memitem:ga0ed807aa118c3d1c575540889d42a8fc" id="r_ga0ed807aa118c3d1c575540889d42a8fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga0ed807aa118c3d1c575540889d42a8fc">LMA_TMR_Stop</a> (void)</td></tr>
+<tr class="memdesc:ga0ed807aa118c3d1c575540889d42a8fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops the TMR running.  <br /></td></tr>
+<tr class="memitem:ga32ee17e5c7d93ac8cbe0c8a0c29cb7ee" id="r_ga32ee17e5c7d93ac8cbe0c8a0c29cb7ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga32ee17e5c7d93ac8cbe0c8a0c29cb7ee">LMA_RTC_Init</a> (void)</td></tr>
+<tr class="memdesc:ga32ee17e5c7d93ac8cbe0c8a0c29cb7ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises RTC.  <br /></td></tr>
+<tr class="memitem:ga4a5c8b4247c9e9199210186bc3c13b17" id="r_ga4a5c8b4247c9e9199210186bc3c13b17"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga4a5c8b4247c9e9199210186bc3c13b17">LMA_RTC_Start</a> (void)</td></tr>
+<tr class="memdesc:ga4a5c8b4247c9e9199210186bc3c13b17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the RTC running.  <br /></td></tr>
+<tr class="memitem:gaf3c87a640362680ec1b8a1e4c4c5a298" id="r_gaf3c87a640362680ec1b8a1e4c4c5a298"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gaf3c87a640362680ec1b8a1e4c4c5a298">LMA_RTC_Stop</a> (void)</td></tr>
+<tr class="memdesc:gaf3c87a640362680ec1b8a1e4c4c5a298"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops the RTC running.  <br /></td></tr>
+<tr class="memitem:gaeb0cb0cfdc39c499463f05085ea3ed40" id="r_gaeb0cb0cfdc39c499463f05085ea3ed40"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gaeb0cb0cfdc39c499463f05085ea3ed40">LMA_IMP_ActiveOn</a> (void)</td></tr>
+<tr class="memdesc:gaeb0cb0cfdc39c499463f05085ea3ed40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback to turn on active impulse LED.  <br /></td></tr>
+<tr class="memitem:ga7a2aab7f7b061b109a75fc594c6ace9a" id="r_ga7a2aab7f7b061b109a75fc594c6ace9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga7a2aab7f7b061b109a75fc594c6ace9a">LMA_IMP_ActiveOff</a> (void)</td></tr>
+<tr class="memdesc:ga7a2aab7f7b061b109a75fc594c6ace9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback to turn off active impulse LED.  <br /></td></tr>
+<tr class="memitem:ga8937215442fec58dfb4616ea1ca600d2" id="r_ga8937215442fec58dfb4616ea1ca600d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga8937215442fec58dfb4616ea1ca600d2">LMA_IMP_ReactiveOn</a> (void)</td></tr>
+<tr class="memdesc:ga8937215442fec58dfb4616ea1ca600d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback to turn on reactive impulse LED.  <br /></td></tr>
+<tr class="memitem:gaf75b8718f2165ca67649e8cc4562bcd5" id="r_gaf75b8718f2165ca67649e8cc4562bcd5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gaf75b8718f2165ca67649e8cc4562bcd5">LMA_IMP_ReactiveOff</a> (void)</td></tr>
+<tr class="memdesc:gaf75b8718f2165ca67649e8cc4562bcd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback to turn off reactive impulse LED.  <br /></td></tr>
+<tr class="memitem:ga8b4c7d69c1f590571ca7e7106516f500" id="r_ga8b4c7d69c1f590571ca7e7106516f500"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga8b4c7d69c1f590571ca7e7106516f500">LMA_IMP_ApparentOn</a> (void)</td></tr>
+<tr class="memdesc:ga8b4c7d69c1f590571ca7e7106516f500"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback to turn on apparent impulse LED.  <br /></td></tr>
+<tr class="memitem:gaebefc389f6e54cc4a0c7d83361e9d1da" id="r_gaebefc389f6e54cc4a0c7d83361e9d1da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gaebefc389f6e54cc4a0c7d83361e9d1da">LMA_IMP_ApparentOff</a> (void)</td></tr>
+<tr class="memdesc:gaebefc389f6e54cc4a0c7d83361e9d1da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback to turn off apparent impulse LED.  <br /></td></tr>
 </table>
+<a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Macro Definition Documentation</h2>
+<a id="ga8a55a9054818cdb9c868401900503ce1" name="ga8a55a9054818cdb9c868401900503ce1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8a55a9054818cdb9c868401900503ce1">&#9670;&#160;</a></span>LMA_CRITICAL_SECTION_PREPARE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LMA_CRITICAL_SECTION_PREPARE</td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Macro to prepare function/code block for a crticial section. </p>
+<p>Generally stores interrupt state information for restoration on exit of critical section. </p>
+
+</div>
+</div>
+<a id="gab51473e2196543d8ccb53964cf15c110" name="gab51473e2196543d8ccb53964cf15c110"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab51473e2196543d8ccb53964cf15c110">&#9670;&#160;</a></span>LMA_CRITICAL_SECTION_ENTER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LMA_CRITICAL_SECTION_ENTER</td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Macro used to enter critical section. </p>
+<p>Generally disables interrupts. </p>
+
+</div>
+</div>
+<a id="gade8987d66ab648650135c1d7cf1ec9b3" name="gade8987d66ab648650135c1d7cf1ec9b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gade8987d66ab648650135c1d7cf1ec9b3">&#9670;&#160;</a></span>LMA_CRITICAL_SECTION_EXIT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LMA_CRITICAL_SECTION_EXIT</td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Macro used to exit critical section. </p>
+<p>Generally restores interrupts state. </p>
+
+</div>
+</div>
+<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
+<a id="gaa2ffd5f89bdc267cc48e9121095696c9" name="gaa2ffd5f89bdc267cc48e9121095696c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa2ffd5f89bdc267cc48e9121095696c9">&#9670;&#160;</a></span>spl_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef int32_t <a class="el" href="#gaa2ffd5f89bdc267cc48e9121095696c9">spl_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Raw ADC sample type. </p>
+<p>This type should accomodate the raw ADC sample type. </p>
+
+</div>
+</div>
+<a id="ga422350b1b3594f62fcc13248a2d210ed" name="ga422350b1b3594f62fcc13248a2d210ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga422350b1b3594f62fcc13248a2d210ed">&#9670;&#160;</a></span>acc_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef int64_t <a class="el" href="#ga422350b1b3594f62fcc13248a2d210ed">acc_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Accumulator type. </p>
+<p>This type should accomodate the accumulation of the product of raw ADC sample types. Generally a good idea to be double the bit width of <a class="el" href="#gaa2ffd5f89bdc267cc48e9121095696c9" title="Raw ADC sample type.">spl_t</a>. </p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="gabf01d7020f6c79b2fd3c707c7902a9e6" name="gabf01d7020f6c79b2fd3c707c7902a9e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabf01d7020f6c79b2fd3c707c7902a9e6">&#9670;&#160;</a></span>LMA_AccPhaseRun()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_AccPhaseRun </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const</td>          <td class="paramname"><span class="paramname"><em>p_phase</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>handles sample accumulation for a phase </p>
+<p>Performs: vacc += v_sample ^ 2 iacc += i_sample ^ 2 pacc += i_sample * v_sample qacc += i_sample * v90_sample and where applicable iacc_neutral += i_neutral_sample ^ 2 </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">p_phase</td><td>- pointer to the phase we are working with. </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_gabf01d7020f6c79b2fd3c707c7902a9e6_icgraph.png" border="0" usemap="#agroup___porting_gabf01d7020f6c79b2fd3c707c7902a9e6_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_gabf01d7020f6c79b2fd3c707c7902a9e6_icgraph" id="agroup___porting_gabf01d7020f6c79b2fd3c707c7902a9e6_icgraph">
+<area shape="rect" title="handles sample accumulation for a phase" alt="" coords="164,5,303,32"/>
+<area shape="rect" href="group___callbacks.html#ga0b562fb3faedc4cabaceb4f9cf1edcf1" title="ADC CALLBACK &#45; Processes the ADC samples according to the number of phases registered." alt="" coords="5,5,116,32"/>
+<area shape="poly" title=" " alt="" coords="148,21,116,21,116,16,148,16"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ga151e636346e8d70f24bde7fb8e1e541a" name="ga151e636346e8d70f24bde7fb8e1e541a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga151e636346e8d70f24bde7fb8e1e541a">&#9670;&#160;</a></span>LMA_AccPhaseReset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_AccPhaseReset </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const</td>          <td class="paramname"><span class="paramname"><em>p_phase</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>handles sample reset between cycles for a phase </p>
+<p>Performs: vacc = v_sample ^ 2 iacc = i_sample ^ 2 pacc = i_sample * v_sample qacc = i_sample * v90_sample and where applicable iacc_neutral = i_neutral_sample ^ 2 </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">p_phase</td><td>- pointer to the phase we are working with. </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_ga151e636346e8d70f24bde7fb8e1e541a_icgraph.png" border="0" usemap="#agroup___porting_ga151e636346e8d70f24bde7fb8e1e541a_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_ga151e636346e8d70f24bde7fb8e1e541a_icgraph" id="agroup___porting_ga151e636346e8d70f24bde7fb8e1e541a_icgraph">
+<area shape="rect" title="handles sample reset between cycles for a phase" alt="" coords="164,5,314,32"/>
+<area shape="rect" href="group___callbacks.html#ga0b562fb3faedc4cabaceb4f9cf1edcf1" title="ADC CALLBACK &#45; Processes the ADC samples according to the number of phases registered." alt="" coords="5,5,116,32"/>
+<area shape="poly" title=" " alt="" coords="148,21,116,21,116,16,148,16"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="gafc7eb113e0601ffa3a5c43523f4fce09" name="gafc7eb113e0601ffa3a5c43523f4fce09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gafc7eb113e0601ffa3a5c43523f4fce09">&#9670;&#160;</a></span>LMA_ADC_Init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_ADC_Init </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialises ADC. </p>
+<p>Doesn't start it, just prepares it. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_gafc7eb113e0601ffa3a5c43523f4fce09_icgraph.png" border="0" usemap="#agroup___porting_gafc7eb113e0601ffa3a5c43523f4fce09_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_gafc7eb113e0601ffa3a5c43523f4fce09_icgraph" id="agroup___porting_gafc7eb113e0601ffa3a5c43523f4fce09_icgraph">
+<area shape="rect" title="Initialises ADC." alt="" coords="127,5,236,32"/>
+<area shape="rect" href="group___control.html#ga56c88b00e4f3d1abab426811b54cd85a" title="Initalises the Light&#45;Weight Metrology for AC Framework according to the config." alt="" coords="5,5,79,32"/>
+<area shape="poly" title=" " alt="" coords="111,21,79,21,79,16,111,16"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ga0ec0a576a1b465cf7aad0ca463fd5bdc" name="ga0ec0a576a1b465cf7aad0ca463fd5bdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0ec0a576a1b465cf7aad0ca463fd5bdc">&#9670;&#160;</a></span>LMA_ADC_Start()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_ADC_Start </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Starts the ADC running. </p>
+<p>This function should start the ADC in a such a way that it results in a periodic "sampling complete" interrupt which enters the ISR that calls LMA_CB_ADC. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_ga0ec0a576a1b465cf7aad0ca463fd5bdc_icgraph.png" border="0" usemap="#agroup___porting_ga0ec0a576a1b465cf7aad0ca463fd5bdc_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_ga0ec0a576a1b465cf7aad0ca463fd5bdc_icgraph" id="agroup___porting_ga0ec0a576a1b465cf7aad0ca463fd5bdc_icgraph">
+<area shape="rect" title="Starts the ADC running." alt="" coords="198,81,317,108"/>
+<area shape="rect" href="group___callbacks.html#gab41c65d554e2487a1c7c98ade1c417de" title="RTC CALLBACK &#45; Process periodic rtc interrupt." alt="" coords="23,5,132,32"/>
+<area shape="poly" title=" " alt="" coords="214,77,149,46,119,35,121,30,151,42,216,72"/>
+<area shape="rect" href="group___control.html#gaf99c92bd7cb9c347b51c1f70650ed14e" title="Performs a calibration command according to the flags passed." alt="" coords="5,56,150,83"/>
+<area shape="poly" title=" " alt="" coords="182,87,149,82,150,77,183,81"/>
+<area shape="rect" href="group___control.html#ga1cccfc7d6139fc9ae382c71b9e4da524" title="Performs a calibration command according to the flags passed." alt="" coords="5,107,150,133"/>
+<area shape="poly" title=" " alt="" coords="183,108,150,112,149,107,182,103"/>
+<area shape="rect" href="group___control.html#ga04171703dd9ebc3622dbddeead01e116" title="Starts LMA Operation." alt="" coords="36,157,119,184"/>
+<area shape="poly" title=" " alt="" coords="216,118,151,148,121,159,119,154,149,143,214,113"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ga4b95531c9a4b3eb7ee25789ede359307" name="ga4b95531c9a4b3eb7ee25789ede359307"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4b95531c9a4b3eb7ee25789ede359307">&#9670;&#160;</a></span>LMA_ADC_Stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_ADC_Stop </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Stops the ADC running. </p>
+<p>This function should stop the ADC in a such a way that it stops the periodic "sampling complete" interrupt which enters the ISR that calls LMA_CB_ADC. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_ga4b95531c9a4b3eb7ee25789ede359307_icgraph.png" border="0" usemap="#agroup___porting_ga4b95531c9a4b3eb7ee25789ede359307_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_ga4b95531c9a4b3eb7ee25789ede359307_icgraph" id="agroup___porting_ga4b95531c9a4b3eb7ee25789ede359307_icgraph">
+<area shape="rect" title="Stops the ADC running." alt="" coords="198,81,316,108"/>
+<area shape="rect" href="group___callbacks.html#gab41c65d554e2487a1c7c98ade1c417de" title="RTC CALLBACK &#45; Process periodic rtc interrupt." alt="" coords="23,5,132,32"/>
+<area shape="poly" title=" " alt="" coords="214,77,149,46,119,35,121,30,151,42,216,72"/>
+<area shape="rect" href="group___control.html#gaf99c92bd7cb9c347b51c1f70650ed14e" title="Performs a calibration command according to the flags passed." alt="" coords="5,56,150,83"/>
+<area shape="poly" title=" " alt="" coords="182,87,150,82,150,77,182,81"/>
+<area shape="rect" href="group___control.html#ga1cccfc7d6139fc9ae382c71b9e4da524" title="Performs a calibration command according to the flags passed." alt="" coords="5,107,150,133"/>
+<area shape="poly" title=" " alt="" coords="182,108,150,112,150,107,182,103"/>
+<area shape="rect" href="group___control.html#ga57e7b7b8d130377ab64560a44237c772" title="Stops LMA Operation." alt="" coords="36,157,119,184"/>
+<area shape="poly" title=" " alt="" coords="216,118,151,148,120,160,118,155,149,143,214,113"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ga689bf9e8fa9038a9ed256ad33d61b9b9" name="ga689bf9e8fa9038a9ed256ad33d61b9b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga689bf9e8fa9038a9ed256ad33d61b9b9">&#9670;&#160;</a></span>LMA_TMR_Init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_TMR_Init </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialises TMR. </p>
+<p>Doesn't start it, just prepares it. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_ga689bf9e8fa9038a9ed256ad33d61b9b9_icgraph.png" border="0" usemap="#agroup___porting_ga689bf9e8fa9038a9ed256ad33d61b9b9_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_ga689bf9e8fa9038a9ed256ad33d61b9b9_icgraph" id="agroup___porting_ga689bf9e8fa9038a9ed256ad33d61b9b9_icgraph">
+<area shape="rect" title="Initialises TMR." alt="" coords="127,5,236,32"/>
+<area shape="rect" href="group___control.html#ga56c88b00e4f3d1abab426811b54cd85a" title="Initalises the Light&#45;Weight Metrology for AC Framework according to the config." alt="" coords="5,5,79,32"/>
+<area shape="poly" title=" " alt="" coords="111,21,79,21,79,16,111,16"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ga03ee350f945e0f1eb73c0b4d2b92b7d4" name="ga03ee350f945e0f1eb73c0b4d2b92b7d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga03ee350f945e0f1eb73c0b4d2b92b7d4">&#9670;&#160;</a></span>LMA_TMR_Start()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_TMR_Start </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Starts the TMR running. </p>
+<p>This function should start the TMR in a such a way that it results in a periodic interrupt which enters the ISR that calls LMA_CB_TMR. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_ga03ee350f945e0f1eb73c0b4d2b92b7d4_icgraph.png" border="0" usemap="#agroup___porting_ga03ee350f945e0f1eb73c0b4d2b92b7d4_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_ga03ee350f945e0f1eb73c0b4d2b92b7d4_icgraph" id="agroup___porting_ga03ee350f945e0f1eb73c0b4d2b92b7d4_icgraph">
+<area shape="rect" title="Starts the TMR running." alt="" coords="198,56,317,83"/>
+<area shape="rect" href="group___control.html#gaf99c92bd7cb9c347b51c1f70650ed14e" title="Performs a calibration command according to the flags passed." alt="" coords="5,5,150,32"/>
+<area shape="poly" title=" " alt="" coords="192,54,127,35,128,30,193,49"/>
+<area shape="rect" href="group___control.html#ga1cccfc7d6139fc9ae382c71b9e4da524" title="Performs a calibration command according to the flags passed." alt="" coords="5,56,150,83"/>
+<area shape="poly" title=" " alt="" coords="182,72,150,72,150,67,182,67"/>
+<area shape="rect" href="group___control.html#ga04171703dd9ebc3622dbddeead01e116" title="Starts LMA Operation." alt="" coords="36,107,119,133"/>
+<area shape="poly" title=" " alt="" coords="193,90,121,111,119,106,192,85"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ga0ed807aa118c3d1c575540889d42a8fc" name="ga0ed807aa118c3d1c575540889d42a8fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0ed807aa118c3d1c575540889d42a8fc">&#9670;&#160;</a></span>LMA_TMR_Stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_TMR_Stop </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Stops the TMR running. </p>
+<p>This function should stop the TMR in a such a way that it stops the periodic interrupt which enters the ISR that calls LMA_CB_TMR. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_ga0ed807aa118c3d1c575540889d42a8fc_icgraph.png" border="0" usemap="#agroup___porting_ga0ed807aa118c3d1c575540889d42a8fc_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_ga0ed807aa118c3d1c575540889d42a8fc_icgraph" id="agroup___porting_ga0ed807aa118c3d1c575540889d42a8fc_icgraph">
+<area shape="rect" title="Stops the TMR running." alt="" coords="198,56,316,83"/>
+<area shape="rect" href="group___control.html#gaf99c92bd7cb9c347b51c1f70650ed14e" title="Performs a calibration command according to the flags passed." alt="" coords="5,5,150,32"/>
+<area shape="poly" title=" " alt="" coords="192,54,127,35,128,30,193,49"/>
+<area shape="rect" href="group___control.html#ga1cccfc7d6139fc9ae382c71b9e4da524" title="Performs a calibration command according to the flags passed." alt="" coords="5,56,150,83"/>
+<area shape="poly" title=" " alt="" coords="182,72,150,72,150,67,182,67"/>
+<area shape="rect" href="group___control.html#ga57e7b7b8d130377ab64560a44237c772" title="Stops LMA Operation." alt="" coords="36,107,119,133"/>
+<area shape="poly" title=" " alt="" coords="193,90,120,111,118,106,191,85"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ga32ee17e5c7d93ac8cbe0c8a0c29cb7ee" name="ga32ee17e5c7d93ac8cbe0c8a0c29cb7ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga32ee17e5c7d93ac8cbe0c8a0c29cb7ee">&#9670;&#160;</a></span>LMA_RTC_Init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_RTC_Init </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialises RTC. </p>
+<p>Doesn't start it, just prepares it. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_ga32ee17e5c7d93ac8cbe0c8a0c29cb7ee_icgraph.png" border="0" usemap="#agroup___porting_ga32ee17e5c7d93ac8cbe0c8a0c29cb7ee_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_ga32ee17e5c7d93ac8cbe0c8a0c29cb7ee_icgraph" id="agroup___porting_ga32ee17e5c7d93ac8cbe0c8a0c29cb7ee_icgraph">
+<area shape="rect" title="Initialises RTC." alt="" coords="127,5,234,32"/>
+<area shape="rect" href="group___control.html#ga56c88b00e4f3d1abab426811b54cd85a" title="Initalises the Light&#45;Weight Metrology for AC Framework according to the config." alt="" coords="5,5,79,32"/>
+<area shape="poly" title=" " alt="" coords="111,21,79,21,79,16,111,16"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ga4a5c8b4247c9e9199210186bc3c13b17" name="ga4a5c8b4247c9e9199210186bc3c13b17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4a5c8b4247c9e9199210186bc3c13b17">&#9670;&#160;</a></span>LMA_RTC_Start()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_RTC_Start </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Starts the RTC running. </p>
+<p>This function should start the RTC in a such a way that it results in a periodic interrupt which enters the ISR that calls LMA_CB_RTC. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_ga4a5c8b4247c9e9199210186bc3c13b17_icgraph.png" border="0" usemap="#agroup___porting_ga4a5c8b4247c9e9199210186bc3c13b17_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_ga4a5c8b4247c9e9199210186bc3c13b17_icgraph" id="agroup___porting_ga4a5c8b4247c9e9199210186bc3c13b17_icgraph">
+<area shape="rect" title="Starts the RTC running." alt="" coords="137,5,254,32"/>
+<area shape="rect" href="group___control.html#ga04171703dd9ebc3622dbddeead01e116" title="Starts LMA Operation." alt="" coords="5,5,89,32"/>
+<area shape="poly" title=" " alt="" coords="121,21,89,21,89,16,121,16"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="gaf3c87a640362680ec1b8a1e4c4c5a298" name="gaf3c87a640362680ec1b8a1e4c4c5a298"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf3c87a640362680ec1b8a1e4c4c5a298">&#9670;&#160;</a></span>LMA_RTC_Stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_RTC_Stop </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Stops the RTC running. </p>
+<p>This function should stop the RTC in a such a way that it stops the periodic interrupt which enters the ISR that calls LMA_CB_RTC. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_gaf3c87a640362680ec1b8a1e4c4c5a298_icgraph.png" border="0" usemap="#agroup___porting_gaf3c87a640362680ec1b8a1e4c4c5a298_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_gaf3c87a640362680ec1b8a1e4c4c5a298_icgraph" id="agroup___porting_gaf3c87a640362680ec1b8a1e4c4c5a298_icgraph">
+<area shape="rect" title="Stops the RTC running." alt="" coords="136,5,252,32"/>
+<area shape="rect" href="group___control.html#ga57e7b7b8d130377ab64560a44237c772" title="Stops LMA Operation." alt="" coords="5,5,88,32"/>
+<area shape="poly" title=" " alt="" coords="120,21,88,21,88,16,120,16"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="gaeb0cb0cfdc39c499463f05085ea3ed40" name="gaeb0cb0cfdc39c499463f05085ea3ed40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaeb0cb0cfdc39c499463f05085ea3ed40">&#9670;&#160;</a></span>LMA_IMP_ActiveOn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_IMP_ActiveOn </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Callback to turn on active impulse LED. </p>
+<p>This function is called by the library to turn on the active impulse LED. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_gaeb0cb0cfdc39c499463f05085ea3ed40_icgraph.png" border="0" usemap="#agroup___porting_gaeb0cb0cfdc39c499463f05085ea3ed40_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_gaeb0cb0cfdc39c499463f05085ea3ed40_icgraph" id="agroup___porting_gaeb0cb0cfdc39c499463f05085ea3ed40_icgraph">
+<area shape="rect" title="Callback to turn on active impulse LED." alt="" coords="164,5,304,32"/>
+<area shape="rect" href="group___callbacks.html#ga0b562fb3faedc4cabaceb4f9cf1edcf1" title="ADC CALLBACK &#45; Processes the ADC samples according to the number of phases registered." alt="" coords="5,5,116,32"/>
+<area shape="poly" title=" " alt="" coords="148,21,116,21,116,16,148,16"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ga7a2aab7f7b061b109a75fc594c6ace9a" name="ga7a2aab7f7b061b109a75fc594c6ace9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7a2aab7f7b061b109a75fc594c6ace9a">&#9670;&#160;</a></span>LMA_IMP_ActiveOff()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_IMP_ActiveOff </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Callback to turn off active impulse LED. </p>
+<p>This function is called by the library to turn off the active impulse LED. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_ga7a2aab7f7b061b109a75fc594c6ace9a_icgraph.png" border="0" usemap="#agroup___porting_ga7a2aab7f7b061b109a75fc594c6ace9a_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_ga7a2aab7f7b061b109a75fc594c6ace9a_icgraph" id="agroup___porting_ga7a2aab7f7b061b109a75fc594c6ace9a_icgraph">
+<area shape="rect" title="Callback to turn off active impulse LED." alt="" coords="164,31,304,57"/>
+<area shape="rect" href="group___callbacks.html#ga0b562fb3faedc4cabaceb4f9cf1edcf1" title="ADC CALLBACK &#45; Processes the ADC samples according to the number of phases registered." alt="" coords="5,5,116,32"/>
+<area shape="poly" title=" " alt="" coords="148,34,116,29,116,24,149,29"/>
+<area shape="rect" href="group___control.html#ga56c88b00e4f3d1abab426811b54cd85a" title="Initalises the Light&#45;Weight Metrology for AC Framework according to the config." alt="" coords="24,56,97,83"/>
+<area shape="poly" title=" " alt="" coords="149,59,98,67,97,61,148,54"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ga8937215442fec58dfb4616ea1ca600d2" name="ga8937215442fec58dfb4616ea1ca600d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8937215442fec58dfb4616ea1ca600d2">&#9670;&#160;</a></span>LMA_IMP_ReactiveOn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_IMP_ReactiveOn </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Callback to turn on reactive impulse LED. </p>
+<p>This function is called by the library to turn on the reactive impulse LED. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_ga8937215442fec58dfb4616ea1ca600d2_icgraph.png" border="0" usemap="#agroup___porting_ga8937215442fec58dfb4616ea1ca600d2_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_ga8937215442fec58dfb4616ea1ca600d2_icgraph" id="agroup___porting_ga8937215442fec58dfb4616ea1ca600d2_icgraph">
+<area shape="rect" title="Callback to turn on reactive impulse LED." alt="" coords="164,5,319,32"/>
+<area shape="rect" href="group___callbacks.html#ga0b562fb3faedc4cabaceb4f9cf1edcf1" title="ADC CALLBACK &#45; Processes the ADC samples according to the number of phases registered." alt="" coords="5,5,116,32"/>
+<area shape="poly" title=" " alt="" coords="148,21,116,21,116,16,148,16"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="gaf75b8718f2165ca67649e8cc4562bcd5" name="gaf75b8718f2165ca67649e8cc4562bcd5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf75b8718f2165ca67649e8cc4562bcd5">&#9670;&#160;</a></span>LMA_IMP_ReactiveOff()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_IMP_ReactiveOff </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Callback to turn off reactive impulse LED. </p>
+<p>This function is called by the library to turn off the reactive impulse LED. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_gaf75b8718f2165ca67649e8cc4562bcd5_icgraph.png" border="0" usemap="#agroup___porting_gaf75b8718f2165ca67649e8cc4562bcd5_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_gaf75b8718f2165ca67649e8cc4562bcd5_icgraph" id="agroup___porting_gaf75b8718f2165ca67649e8cc4562bcd5_icgraph">
+<area shape="rect" title="Callback to turn off reactive impulse LED." alt="" coords="164,31,319,57"/>
+<area shape="rect" href="group___callbacks.html#ga0b562fb3faedc4cabaceb4f9cf1edcf1" title="ADC CALLBACK &#45; Processes the ADC samples according to the number of phases registered." alt="" coords="5,5,116,32"/>
+<area shape="poly" title=" " alt="" coords="148,34,116,29,117,24,149,28"/>
+<area shape="rect" href="group___control.html#ga56c88b00e4f3d1abab426811b54cd85a" title="Initalises the Light&#45;Weight Metrology for AC Framework according to the config." alt="" coords="24,56,97,83"/>
+<area shape="poly" title=" " alt="" coords="149,60,98,67,97,62,148,54"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ga8b4c7d69c1f590571ca7e7106516f500" name="ga8b4c7d69c1f590571ca7e7106516f500"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8b4c7d69c1f590571ca7e7106516f500">&#9670;&#160;</a></span>LMA_IMP_ApparentOn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_IMP_ApparentOn </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Callback to turn on apparent impulse LED. </p>
+<p>This function is called by the library to turn on the apparent impulse LED. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_ga8b4c7d69c1f590571ca7e7106516f500_icgraph.png" border="0" usemap="#agroup___porting_ga8b4c7d69c1f590571ca7e7106516f500_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_ga8b4c7d69c1f590571ca7e7106516f500_icgraph" id="agroup___porting_ga8b4c7d69c1f590571ca7e7106516f500_icgraph">
+<area shape="rect" title="Callback to turn on apparent impulse LED." alt="" coords="164,5,319,32"/>
+<area shape="rect" href="group___callbacks.html#ga0b562fb3faedc4cabaceb4f9cf1edcf1" title="ADC CALLBACK &#45; Processes the ADC samples according to the number of phases registered." alt="" coords="5,5,116,32"/>
+<area shape="poly" title=" " alt="" coords="148,21,116,21,116,16,148,16"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="gaebefc389f6e54cc4a0c7d83361e9d1da" name="gaebefc389f6e54cc4a0c7d83361e9d1da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaebefc389f6e54cc4a0c7d83361e9d1da">&#9670;&#160;</a></span>LMA_IMP_ApparentOff()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_IMP_ApparentOff </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Callback to turn off apparent impulse LED. </p>
+<p>This function is called by the library to turn off the apparent impulse LED. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_gaebefc389f6e54cc4a0c7d83361e9d1da_icgraph.png" border="0" usemap="#agroup___porting_gaebefc389f6e54cc4a0c7d83361e9d1da_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_gaebefc389f6e54cc4a0c7d83361e9d1da_icgraph" id="agroup___porting_gaebefc389f6e54cc4a0c7d83361e9d1da_icgraph">
+<area shape="rect" title="Callback to turn off apparent impulse LED." alt="" coords="164,31,319,57"/>
+<area shape="rect" href="group___callbacks.html#ga0b562fb3faedc4cabaceb4f9cf1edcf1" title="ADC CALLBACK &#45; Processes the ADC samples according to the number of phases registered." alt="" coords="5,5,116,32"/>
+<area shape="poly" title=" " alt="" coords="148,34,116,29,117,24,149,28"/>
+<area shape="rect" href="group___control.html#ga56c88b00e4f3d1abab426811b54cd85a" title="Initalises the Light&#45;Weight Metrology for AC Framework according to the config." alt="" coords="24,56,97,83"/>
+<area shape="poly" title=" " alt="" coords="149,60,98,67,97,62,148,54"/>
+</map>
+</div>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

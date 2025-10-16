@@ -8,7 +8,7 @@
 #ifndef _LMA_CORE_H
 #define _LMA_CORE_H
 
-#include "LMA_Utils.h"
+#include "LMA_Port.h"
 
 /** @addtogroup API
  * @brief LMA API
@@ -35,16 +35,47 @@ void LMA_Init(LMA_Config *const p_config_arg);
  */
 void LMA_Deinit(void);
 
-/** @brief Registers a phase to the library - once on power up.
+/** @brief Registers a phase to the library
+ * @details Do once on power up.
+ * This function also initialises the phase, so should be called BEFORE
+ * LMA_NeutralRegister
+ * LMA_ComputationHookRegister
  * @param[in] p_phase - pointer to the phase
  */
 void LMA_PhaseRegister(LMA_Phase *const p_phase);
+
+/** @brief Registers the systems neutral line to the library (if used)
+ * @warning Must be performed AFTER a phase is registered - registering a phase nullifys this.
+ * @param[in] p_phase - pointer to the phase structure to link to
+ * @param[in] p_neutral - pointer to the neutral structure
+ */
+void LMA_NeutralRegister(LMA_Phase *const p_phase, LMA_Neutral *const p_neutral);
+
+/** @brief Registers a hook to be called during paramter computations.
+ * @warning Must be performed AFTER a phase is registered - registering a phase nullifys this.
+ * @details provides a function which is called after voltage and current are computed.
+ * This function can modify the voltage and current and also return a compensation factor which is applied
+ * to the computed power values, from which the energy values are derived.
+ * This is useful for linearisation and compensation techniques used for accuracy improvements at run time.
+ * @param[in] p_phase - pointer to the phase structure to link to
+ * @param[in] comp_hook - function pointer that should point to a function which accepts two pointers to floats and returns a
+ * float. the first argument is a pointer to the computed current, the second to the voltage and the third to the frequency it
+ * returns a compensation factor which is multiplied by ALL power values and propogates to the energy values. If no compensation
+ * is desired, return 1.00f - if no computation hook is set, no compensation is applied.
+ */
+void LMA_ComputationHookRegister(LMA_Phase *const p_phase, float (*comp_hook)(float *i, float *v, float *f));
 
 /** @brief Loads calibration data to a phase.
  * @param[inout] p_phase - pointer to the phase
  * @param[in] p_calib - pointer to the calibration data to load.
  */
 void LMA_PhaseLoadCalibration(LMA_Phase *const p_phase, const LMA_PhaseCalibration *const p_calib);
+
+/** @brief Loads calibration data to a neutral.
+ * @param[inout] p_neutral - pointer to the neutral object.
+ * @param[in] p_calib - pointer to the calibration data to load.
+ */
+void LMA_NeutralLoadCalibration(LMA_Neutral *const p_neutral, const LMA_NeutralCalibration *const p_calib);
 
 /** @brief Starts LMA Operation
  * @details Starts the metering state machine and all associated drivers.
@@ -93,42 +124,6 @@ LMA_Status LMA_StatusGet(const LMA_Phase *const p_phase);
  * @details The LMA Measurement API is used to retrieve measurement metrics from LMA at runtime.
  *  @{
  */
-
-/** @brief Returns VRMS of particular phase
- * @param[inout] p_phase - pointer to the phase block on which to get vrms from.
- * @return phase vrms
- */
-float LMA_VrmsGet(LMA_Phase *const p_phase);
-
-/** @brief Returns IRMS of particular phase
- * @param[inout] p_phase - pointer to the phase block on which to get irms from.
- * @return phase irms
- */
-float LMA_IrmsGet(LMA_Phase *const p_phase);
-
-/** @brief Returns Line Frequency of particular phase
- * @param[inout] p_phase - pointer to the phase block on which to get fline from.
- * @return phase line frequency
- */
-float LMA_FLineGet(LMA_Phase *const p_phase);
-
-/** @brief Returns Active Power of particular phase
- * @param[inout] p_phase - pointer to the phase block on which to get active power from.
- * @return phase active power
- */
-float LMA_ActivePowerGet(const LMA_Phase *const p_phase);
-
-/** @brief Returns Reactive Power of particular phase
- * @param[inout] p_phase - pointer to the phase block on which to get reactive power from.
- * @return phase reactive power
- */
-float LMA_ReactivePowerGet(const LMA_Phase *const p_phase);
-
-/** @brief Returns Apparent Power of particular phase
- * @param[inout] p_phase - pointer to the phase block on which to get reactive power from.
- * @return phase apparent power
- */
-float LMA_ApparentPowerGet(const LMA_Phase *const p_phase);
 
 /** @brief Outputs current snap shot of measurement set
  * @param[inout] p_phase - pointer to the phase block on which to get measurements from.

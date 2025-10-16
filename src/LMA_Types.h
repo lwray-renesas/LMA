@@ -1,14 +1,38 @@
 /**
+ * @addtogroup Porting
+ * @{
+ *
  * @file LMA_Types.h
  * @brief Type definitions for LMA.
  *
  * @details This file defines/declares the type definitions of the LMA codebase.
+ *
+ * @}
  */
 
 #ifndef _LMA_TYPES_H
 #define _LMA_TYPES_H
 
-#include "LMA_Port.h"
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+
+/** @addtogroup Porting
+ *  @{
+ */
+
+/** @brief Raw ADC sample type
+ * @details This type should accomodate the raw ADC sample type.
+ */
+typedef int32_t spl_t;
+
+/** @brief Accumulator type
+ * @details This type should accomodate the accumulation of the product of raw ADC sample types.
+ Generally a good idea to be double the bit width of spl_t.
+ */
+typedef int64_t acc_t;
+
+/** @}*/
 
 /** @addtogroup API
  *  @{
@@ -47,47 +71,84 @@ typedef enum LMA_CalibrationStatus_e
 } LMA_CalibrationStatus;
 
 /**
+ * @brief Structure for defining the inputs to a phase object in terms of samples.
+ * @details Use this structure to load samples in a phase object before calling LMA_CB_ADC
+ */
+typedef struct LMA_PhaseInputs_str
+{
+  spl_t v_sample;   /**< Raw ADC Voltage Sample*/
+  spl_t v90_sample; /**< 90 degreephase shifted ADC Voltage Sample*/
+  spl_t i_sample;   /**< Raw ADC Current Sample*/
+} LMA_PhaseInputs;
+
+/**
+ * @brief Structure for defining the inputs to a neutral object in terms of samples.
+ * @details Use this structure to load samples in a neutral object before calling LMA_CB_ADC
+ */
+typedef struct LMA_NeutralInputs_str
+{
+  spl_t i_sample; /**< Raw ADC Current Sample*/
+} LMA_NeutralInputs;
+
+/**
+ * @brief General Accumulator structure
+ * @details Data structure containing all accumulators in a phase.
+ */
+typedef struct LMA_Accs_str
+{
+  acc_t v_acc;           /**< Voltage accumulator*/
+  acc_t i_acc;           /**< Current accumulator*/
+  acc_t p_acc;           /**< Active power accumulator*/
+  acc_t q_acc;           /**< Reactive power accumulator*/
+  uint32_t sample_count; /**< Sample counter, used to track number of samples during accumulation period.*/
+} LMA_Accs;
+
+/**
+ * @brief Phase accumulators
+ * @details Data structure containing all accumulators for use in phase computations.
+ */
+typedef struct LMA_PhaseAccs_str
+{
+  LMA_Accs temp;     /**< Object holding running accumulators*/
+  LMA_Accs snapshot; /**< Object holding snapshot of accumulators after computation window finished*/
+} LMA_PhaseAccs;
+
+/**
+ * @brief Neutral accumulators
+ * @details Data structure containing all accumulators for use in neutral computations.
+ */
+typedef struct LMA_NeutralAccs_str
+{
+  acc_t i_acc_temp;     /**< Running current accumulator*/
+  acc_t i_acc_snapshot; /**< Snapshot of current accumulator after computation window finished*/
+} LMA_NeutralAccs;
+
+/**
  * @brief Zero cross detection data
  * @details Data structure containing all parameters for use in zero-cross detection on AC voltage line.
  */
 typedef struct LMA_ZeroCross_str
 {
-  uint32_t zero_cross_counter; /**< running counter to count the number of zero cross */
-  spl_t last_sample;           /**< Last voltage sample to check for zero cross */
-  bool zero_cross_debounce;    /**< zerocross debounce flag*/
-  bool sync_zc;                /**< flag indicating we have already detected a zero cross (synch'd) */
+  uint32_t count;    /**< running counter to count the number of zero cross */
+  spl_t last_sample; /**< Tracked/filtered voltage */
+  bool debounce;     /**< zerocross debounce flag*/
+  bool first_event;  /**< flag indicating we have already detected a zero cross (synch'd) */
 } LMA_ZeroCross;
 
 /**
- * @brief Voltage computation data
- * @details Data structure containing all parameters for use in computing/computed AC voltage parameters.
+ * @brief Measurement output
+ * @details Convenience data structure to store snapshot of measurements.
  */
-typedef struct LMA_Voltage_str
+typedef struct LMA_Measurements_str
 {
-  float v_rms;      /**< Temporary value to store voltage computation [V] */
-  float fline;      /**< Computed line frequency [Hz]*/
-  LMA_ZeroCross zc; /**< Zero cross tracking variables for voltage */
-} LMA_Voltage;
-
-/**
- * @brief Current computation data
- * @details Data structure containing all parameters for use in computing/computed AC current parameters.
- */
-typedef struct LMA_Current_str
-{
-  float i_rms; /**< Temporary value to store current computation */
-} LMA_Current;
-
-/**
- * @brief Power computation data
- * @details Data structure containing all parameters for use in computing/computed AC power parameters (P, Q & S).
- */
-typedef struct LMA_Power_str
-{
-  float p; /**< Variable to store active power consumption */
-  float q; /**< Variable to store reactive power consumption */
-  float s; /**< Variable to store apparent power consumption */
-} LMA_Power;
+  float vrms;         /**< RMS Voltage */
+  float irms;         /**< RMS Current */
+  float irms_neutral; /**< RMS Current (Neutral Sensing) */
+  float fline;        /**< Line Frequency */
+  float p;            /**< Active Power */
+  float q;            /**< Reactive Power */
+  float s;            /**< Apparent Power */
+} LMA_Measurements;
 
 /**
  * @brief Energy computation data
@@ -153,6 +214,15 @@ typedef struct LMA_PhaseCalibration_str
   float p_coeff;             /**< Power coefficient*/
 } LMA_PhaseCalibration;
 
+/**
+ * @brief Neutral calibration data
+ * @details Data structure containing neutral calibration data
+ */
+typedef struct LMA_NeutralCalibration_str
+{
+  float irms_coeff; /**< Irms coefficient (Neutral channel)*/
+} LMA_NeutralCalibration;
+
 /** @} */
 
 /** @} */
@@ -164,11 +234,11 @@ typedef struct LMA_PhaseCalibration_str
 typedef struct LMA_PhaseAngleError_str
 {
   LMA_CalibrationStatus status; /**< Status of the phase angle computation*/
-  spl_t v_last_sample;          /**< Storing previous samples of voltage for simplified zero cross*/
-  spl_t i_last_sample;          /**< Storing previous samples of current for simplified zero cross*/
+  LMA_ZeroCross v_zero_cross;   /**< Zero cross structure for voltage signal*/
+  LMA_ZeroCross i_zero_cross;   /**< Zero cross structure for current signal*/
   uint32_t sample_counter;      /**< counter to track the number of phase angle computations taken for averaging*/
-  float v_fraction;             /**< the fractional component of the zero cross on the voltage (Q32.32 format)*/
-  float i_fraction;             /**< the fractional component of the zero cross on the current (Q32.32 format)*/
+  float v_fraction;             /**< the fractional component of the zero cross on the voltage */
+  float i_fraction;             /**< the fractional component of the zero cross on the current */
 } LMA_PhaseAngleError;
 
 /**
@@ -183,23 +253,36 @@ typedef struct LMA_Signals_str
 } LMA_Signals;
 
 /**
+ * @brief Neutral data
+ * @details Data structure neutral only signal processing parameters.
+ */
+typedef struct LMA_Neutral_str
+{
+  LMA_NeutralInputs inputs;     /**< Area to load inputs (ADC Samples) for processing */
+  LMA_NeutralAccs accs;         /**< Object holding accumulator data*/
+  LMA_NeutralCalibration calib; /**< Instance of the neautrals calibration data block */
+} LMA_Neutral;
+
+/**
  * @brief Phase data
  * @details Data structure containing phase (V & I pair) signal processing parameters.
  */
 typedef struct LMA_Phase_str
 {
-  struct LMA_Phase_str *p_next; /**< Forms singly linked list of phases (null terminated) */
-  LMA_PhaseCalibration calib;   /**< Instance of the phases calibration data block */
-  LMA_PhaseAngleError pa_error; /**< phase angle error data*/
-  LMA_Voltage voltage;          /**< Voltage data processing block */
-  LMA_Current current;          /**< Current data processing block */
-  LMA_Power power;              /**< Power data processing block */
-  LMA_EnergyUnit energy_units;  /**< Energy processing block */
-  LMA_Workspace ws;             /**< Porting glue - contains samples!*/
-  LMA_Accumulators accs;        /**< snapshot of last updated accumulators*/
-  LMA_Status status;            /**< Phase status */
-  LMA_Signals sigs;             /**< Phase signals */
-  uint32_t phase_number;        /**< zero indexed phase number for identification*/
+  struct LMA_Phase_str *p_next;  /**< Forms singly linked list of phases (null terminated) */
+  LMA_PhaseInputs inputs;        /**< Area to load inputs (ADC Samples) for processing */
+  LMA_PhaseAccs accs;            /**< Object holding accumulator data*/
+  LMA_ZeroCross zero_cross;      /**< Zero cross tracking variables for voltage */
+  LMA_PhaseCalibration calib;    /**< Instance of the phases calibration data block */
+  LMA_PhaseAngleError pa_error;  /**< phase angle error data*/
+  LMA_Measurements measurements; /**< Object holding measurements from last computation window update*/
+  LMA_EnergyUnit energy_units;   /**< Energy processing block */
+  LMA_Status status;             /**< Phase status */
+  LMA_Signals sigs;              /**< Phase signals */
+  LMA_Neutral *p_neutral;        /**< Pointer to neutral channel (if present)*/
+  float (*p_computation_hook)(float *i, float *v,
+                              float *f); /**< Hook to enable applying a compensation factor to power based on i, v and f args*/
+  uint32_t phase_number;                 /**< zero indexed phase number for identification*/
 } LMA_Phase;
 
 /** @addtogroup Storage
@@ -321,22 +404,6 @@ typedef struct LMA_Config_str
   float v_sag;                  /**< Voltage sag value */
   float v_swell;                /**< Voltage swell value */
 } LMA_Config;
-
-/** @brief  */
-
-/**
- * @brief Measurement output
- * @details Convenience data structure enabling dump of all measurement parameters.
- */
-typedef struct LMA_Measurements_str
-{
-  float vrms;  /**< RMS Voltage */
-  float irms;  /**< RMS Current */
-  float fline; /**< Line Frequency */
-  float p;     /**< Active Power */
-  float q;     /**< Reactive Power */
-  float s;     /**< Apparent Power */
-} LMA_Measurements;
 
 /** @} */
 

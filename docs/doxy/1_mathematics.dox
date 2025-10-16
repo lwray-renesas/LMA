@@ -210,9 +210,9 @@ And energy is the integral of power over time:
 In a discrete digital system, we process data in finite computation windows of samples (\f$ N \f$).<br>
 This means energy per unit time becomes:
 \f[ 
-    E = P \cdot dt
+    E = P \cdot \delta
 \f]
-In a system with a fixed sampling period \f$ dt \f$ becomes \f$ \frac{1}{f_s} \f$ and an energy quanta per sampling period can be defined:
+In a system with a fixed sampling period \f$ \delta \f$ becomes \f$ \frac{1}{f_s} \f$ and an energy quanta per sampling period can be defined:
 \f[ 
     E_\mathrm{unit} = \frac{P}{f_s}
 \f]
