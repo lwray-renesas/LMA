@@ -65,6 +65,11 @@ void LMA_NeutralRegister(LMA_Phase *const p_phase, LMA_Neutral *const p_neutral)
  */
 void LMA_ComputationHookRegister(LMA_Phase *const p_phase, float (*comp_hook)(float *i, float *v, float *f));
 
+/** @brief Loads calibration data to a system (and config).
+ * @param[in] p_calib - pointer to the calibration data to load.
+ */
+void LMA_GlobalLoadCalibration(const LMA_GlobalCalibration *const p_calib);
+
 /** @brief Loads calibration data to a phase.
  * @param[inout] p_phase - pointer to the phase
  * @param[in] p_calib - pointer to the calibration data to load.

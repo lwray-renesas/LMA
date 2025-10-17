@@ -95,12 +95,12 @@ var group___types =
     ] ],
     [ "LMA_GlobalCalibArgs", "struct_l_m_a___global_calib_args.html", [
       [ "rtc_period", "struct_l_m_a___global_calib_args.html#a4e6dd696a48d2478fdda746725a7c277", null ],
+      [ "fline_target", "struct_l_m_a___global_calib_args.html#acd6b23c37ad5efcb478576e4cf2a9b0f", null ],
       [ "rtc_cycles", "struct_l_m_a___global_calib_args.html#ad2943ab4cbb7e8befad05af96b279620", null ]
     ] ],
     [ "LMA_Config", "struct_l_m_a___config.html", [
       [ "gcalib", "struct_l_m_a___config.html#ab755d86b188bdd802c119af3c15ba529", null ],
       [ "update_interval", "struct_l_m_a___config.html#aebd458237c32b742a7d60aa34e3ac694", null ],
-      [ "fline_target", "struct_l_m_a___config.html#acd6b23c37ad5efcb478576e4cf2a9b0f", null ],
       [ "fline_tol_low", "struct_l_m_a___config.html#a1ff127f2be969a7ec32d34ce62728b3c", null ],
       [ "fline_tol_high", "struct_l_m_a___config.html#a57e68a5d34018f5a1d80ae6b6842fbea", null ],
       [ "meter_constant", "struct_l_m_a___config.html#ae4c3ceb932667afd254b051a6fc92173", null ],

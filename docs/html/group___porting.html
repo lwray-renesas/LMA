@@ -148,6 +148,8 @@ Functions</h2></td></tr>
 <tr class="memdesc:gabf01d7020f6c79b2fd3c707c7902a9e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">handles sample accumulation for a phase  <br /></td></tr>
 <tr class="memitem:ga151e636346e8d70f24bde7fb8e1e541a" id="r_ga151e636346e8d70f24bde7fb8e1e541a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga151e636346e8d70f24bde7fb8e1e541a">LMA_AccPhaseReset</a> (<a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const p_phase)</td></tr>
 <tr class="memdesc:ga151e636346e8d70f24bde7fb8e1e541a"><td class="mdescLeft">&#160;</td><td class="mdescRight">handles sample reset between cycles for a phase  <br /></td></tr>
+<tr class="memitem:ga5e53cc31bbfcf4e6cbbfbb4de4bda1ef" id="r_ga5e53cc31bbfcf4e6cbbfbb4de4bda1ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga5e53cc31bbfcf4e6cbbfbb4de4bda1ef">LMA_AccPhaseLoad</a> (<a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const p_phase)</td></tr>
+<tr class="memdesc:ga5e53cc31bbfcf4e6cbbfbb4de4bda1ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move accumulators from temp to snapshot.  <br /></td></tr>
 <tr class="memitem:gafc7eb113e0601ffa3a5c43523f4fce09" id="r_gafc7eb113e0601ffa3a5c43523f4fce09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gafc7eb113e0601ffa3a5c43523f4fce09">LMA_ADC_Init</a> (void)</td></tr>
 <tr class="memdesc:gafc7eb113e0601ffa3a5c43523f4fce09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises ADC.  <br /></td></tr>
 <tr class="memitem:ga0ec0a576a1b465cf7aad0ca463fd5bdc" id="r_ga0ec0a576a1b465cf7aad0ca463fd5bdc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga0ec0a576a1b465cf7aad0ca463fd5bdc">LMA_ADC_Start</a> (void)</td></tr>
@@ -339,6 +341,41 @@ Here is the caller graph for this function:</div>
 <div class="center"><img src="group___porting_ga151e636346e8d70f24bde7fb8e1e541a_icgraph.png" border="0" usemap="#agroup___porting_ga151e636346e8d70f24bde7fb8e1e541a_icgraph" loading="lazy" alt=""/></div>
 <map name="agroup___porting_ga151e636346e8d70f24bde7fb8e1e541a_icgraph" id="agroup___porting_ga151e636346e8d70f24bde7fb8e1e541a_icgraph">
 <area shape="rect" title="handles sample reset between cycles for a phase" alt="" coords="164,5,314,32"/>
+<area shape="rect" href="group___callbacks.html#ga0b562fb3faedc4cabaceb4f9cf1edcf1" title="ADC CALLBACK &#45; Processes the ADC samples according to the number of phases registered." alt="" coords="5,5,116,32"/>
+<area shape="poly" title=" " alt="" coords="148,21,116,21,116,16,148,16"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ga5e53cc31bbfcf4e6cbbfbb4de4bda1ef" name="ga5e53cc31bbfcf4e6cbbfbb4de4bda1ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga5e53cc31bbfcf4e6cbbfbb4de4bda1ef">&#9670;&#160;</a></span>LMA_AccPhaseLoad()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_AccPhaseLoad </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const</td>          <td class="paramname"><span class="paramname"><em>p_phase</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Move accumulators from temp to snapshot. </p>
+<p>This could be done directly in LMA_Core, however with devices supporting hardware accumulator buffers, the temp values might not be stored where expected for efficiency. So we leave it to the porting layer to manage the accumulators in this way. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">p_phase</td><td>- pointer to the phase we are working with. </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group___porting_ga5e53cc31bbfcf4e6cbbfbb4de4bda1ef_icgraph.png" border="0" usemap="#agroup___porting_ga5e53cc31bbfcf4e6cbbfbb4de4bda1ef_icgraph" loading="lazy" alt=""/></div>
+<map name="agroup___porting_ga5e53cc31bbfcf4e6cbbfbb4de4bda1ef_icgraph" id="agroup___porting_ga5e53cc31bbfcf4e6cbbfbb4de4bda1ef_icgraph">
+<area shape="rect" title="Move accumulators from temp to snapshot." alt="" coords="164,5,307,32"/>
 <area shape="rect" href="group___callbacks.html#ga0b562fb3faedc4cabaceb4f9cf1edcf1" title="ADC CALLBACK &#45; Processes the ADC samples according to the number of phases registered." alt="" coords="5,5,116,32"/>
 <area shape="poly" title=" " alt="" coords="148,21,116,21,116,16,148,16"/>
 </map>

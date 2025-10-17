@@ -384,6 +384,7 @@ typedef struct LMA_PhaseCalibArgs_str
 typedef struct LMA_GlobalCalibArgs_str
 {
   float rtc_period;    /**< period of the RTC for fs calibration */
+  float fline_target;  /**< Target line frequency */
   uint32_t rtc_cycles; /**< number of RTC periods to accumulate for frequency calibration */
 } LMA_GlobalCalibArgs;
 
@@ -395,7 +396,6 @@ typedef struct LMA_Config_str
 {
   LMA_GlobalCalibration gcalib; /**< Global calibration data block */
   uint32_t update_interval;     /**< Number of V line cycles to between computation updates. */
-  float fline_target;           /**< Frequency of the target system */
   float fline_tol_low;          /**< Lower tolerance of system frequency*/
   float fline_tol_high;         /**< Upper tolerance of system frequency*/
   float meter_constant;         /**< Ws/imp ... translated Ws/imp = 3,600,000 / [imp/kwh]*/

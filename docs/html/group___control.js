@@ -5,6 +5,7 @@ var group___control =
     [ "LMA_PhaseRegister", "group___control.html#ga6c54cbc1a418aa6b14d3ac9b89820b2f", null ],
     [ "LMA_NeutralRegister", "group___control.html#ga7f279a0e6e30f511c1ae98b7a7491ab5", null ],
     [ "LMA_ComputationHookRegister", "group___control.html#ga1edc37f06d0b20a36f8a71ae6cddb9d8", null ],
+    [ "LMA_GlobalLoadCalibration", "group___control.html#ga89d1810189c1c5dddff9206e77024b79", null ],
     [ "LMA_PhaseLoadCalibration", "group___control.html#gad53d8441d05b0ee5b7930963171bc199", null ],
     [ "LMA_NeutralLoadCalibration", "group___control.html#ga58095d16c30d20417f8850f9ffc19b9f", null ],
     [ "LMA_Start", "group___control.html#ga04171703dd9ebc3622dbddeead01e116", null ],

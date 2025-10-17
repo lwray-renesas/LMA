@@ -1,5 +1,5 @@
 /*
- * SysTick_Benchmark.h
+ * Benchmark.h
  *
  *  Created on: 28 Jan 2025
  *      Author: a5126135
@@ -8,7 +8,8 @@
 #ifndef BENCHMARK_BENCHMARK_H_
 #define BENCHMARK_BENCHMARK_H_
 
-#include "hal_data.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 /** @brief benchmarking object*/
 typedef struct benchmark_t

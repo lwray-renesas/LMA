@@ -1,11 +1,12 @@
 /*
- * SysTick_Benchmark.c
+ * Benchmark.c
  *
  *  Created on: 28 Jan 2025
  *      Author: a5126135
  */
 
-#include <Benchmark/Benchmark.h>
+#include "Benchmark.h"
+#include "hal_data.h"
 
 /** @brief macros used to red current interrupt state */
 #define BM_CRITICAL_SECTION_PREPARE() uint32_t interrupt_save = __get_PRIMASK()

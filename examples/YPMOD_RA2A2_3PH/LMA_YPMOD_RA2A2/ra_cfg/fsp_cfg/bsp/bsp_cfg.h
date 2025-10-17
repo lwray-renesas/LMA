@@ -7,7 +7,9 @@
 
 #include "bsp_clock_cfg.h"
 #include "bsp_mcu_family_cfg.h"
+#include "bsp_mcu_ofs_cfg.h"
 #include "board_cfg.h"
+#include "vector_data.h"
 #define RA_NOT_DEFINED 0
 #ifndef BSP_CFG_RTOS
 #if (RA_NOT_DEFINED) != (RA_NOT_DEFINED)
@@ -26,11 +28,10 @@
              #define BSP_CFG_BOOT_IMAGE (1)
             #endif
 #define BSP_CFG_MCU_VCC_MV (3300)
-#define BSP_CFG_STACK_MAIN_BYTES (0x400)
-#define BSP_CFG_HEAP_BYTES (0)
+#define BSP_CFG_STACK_MAIN_BYTES (0x800)
+#define BSP_CFG_HEAP_BYTES (0x800)
 #define BSP_CFG_PARAM_CHECKING_ENABLE (0)
 #define BSP_CFG_ASSERT (0)
-#define BSP_CFG_ERROR_LOG (0)
 
 #define BSP_CFG_PFS_PROTECT ((1))
 

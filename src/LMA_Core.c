@@ -22,7 +22,7 @@ typedef struct LMA_CalibFs_str
   bool finished;        /**< flag to indicate calibration is finished */
   uint32_t rtc_counter; /**< counter to count rtc cycles for accumulation */
   uint32_t adc_counter; /**< counter to count number of ADC cycles have accumulated. */
-  LMA_Phase *p_phase;   /**< ointer to phase to work on */
+  LMA_Phase *p_phase;   /**< pinter to phase to work on */
 } LMA_CalibFs;
 
 /**
@@ -329,6 +329,11 @@ void LMA_ComputationHookRegister(LMA_Phase *const p_phase, float (*comp_hook)(fl
   p_phase->p_computation_hook = comp_hook;
 }
 
+void LMA_GlobalLoadCalibration(const LMA_GlobalCalibration *const p_calib)
+{
+  memcpy(&(p_config->gcalib), p_calib, sizeof(LMA_GlobalCalibration));
+}
+
 void LMA_PhaseLoadCalibration(LMA_Phase *const p_phase, const LMA_PhaseCalibration *const p_calib)
 {
   memcpy(&(p_phase->calib), p_calib, sizeof(LMA_PhaseCalibration));
@@ -341,6 +346,16 @@ void LMA_NeutralLoadCalibration(LMA_Neutral *const p_neutral, const LMA_NeutralC
 
 void LMA_Start(void)
 {
+  LMA_Phase *tmp = phase_list.p_first_phase;
+
+  /* Reset phases before starting LMA*/
+  while (NULL != tmp->p_next)
+  {
+    Phase_hard_reset(tmp);
+    tmp = tmp->p_next;
+  }
+  Phase_hard_reset(tmp);
+
   LMA_ADC_Start();
   LMA_TMR_Start();
   LMA_RTC_Start();
@@ -452,7 +467,7 @@ void LMA_GlobalCalibrate(LMA_GlobalCalibArgs *const calib_args)
   /* Care more about accuracy here than speed*/
   p_config->gcalib.fs = (float)calib_fs.adc_counter / ((float)calib_args->rtc_period * (float)calib_args->rtc_cycles);
   p_config->gcalib.fline_coeff = p_config->gcalib.fs * (float)p_config->update_interval;
-  p_config->gcalib.deg_per_sample = (360.00f * p_config->fline_target) / p_config->gcalib.fs;
+  p_config->gcalib.deg_per_sample = (360.00f * calib_args->fline_target) / p_config->gcalib.fs;
 
   LMA_TMR_Start();
   LMA_ADC_Start();
@@ -586,18 +601,8 @@ void LMA_CB_ADC(void)
           /* If appropriate number of line cycles have passed - process results*/
           if (p_phase->zero_cross.count >= p_config->update_interval)
           {
-            /* Copy the accumulators across*/
-            memcpy(&(p_phase->accs.snapshot), &(p_phase->accs.temp), sizeof(LMA_Accs));
-
-            p_phase->accs.snapshot.v_acc = p_phase->accs.temp.v_acc;
-            p_phase->accs.snapshot.i_acc = p_phase->accs.temp.i_acc;
-            p_phase->accs.snapshot.p_acc = p_phase->accs.temp.p_acc;
-            p_phase->accs.snapshot.q_acc = p_phase->accs.temp.q_acc;
-            p_phase->accs.snapshot.sample_count = p_phase->accs.temp.sample_count;
-            if (NULL != p_phase->p_neutral)
-            {
-              p_phase->p_neutral->accs.i_acc_snapshot = p_phase->p_neutral->accs.i_acc_temp;
-            }
+            /* Get snapshot of accumulators*/
+            LMA_AccPhaseLoad(p_phase);
 
             /* Signal Accumulators are ready*/
             p_phase->sigs.accumulators_ready = true;

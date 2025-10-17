@@ -41,7 +41,20 @@ void LMA_AccPhaseReset(LMA_Phase *const p_phase)
         ((acc_t)p_phase->p_neutral->inputs.i_sample * (acc_t)p_phase->p_neutral->inputs.i_sample);
   }
 
-  ++p_phase->accs.temp.sample_count;
+  p_phase->accs.temp.sample_count = (uint32_t)0;
+}
+
+void LMA_AccPhaseLoad(LMA_Phase *const p_phase)
+{
+  p_phase->accs.snapshot.v_acc = p_phase->accs.temp.v_acc;
+  p_phase->accs.snapshot.i_acc = p_phase->accs.temp.i_acc;
+  p_phase->accs.snapshot.p_acc = p_phase->accs.temp.p_acc;
+  p_phase->accs.snapshot.q_acc = p_phase->accs.temp.q_acc;
+  p_phase->accs.snapshot.sample_count = p_phase->accs.temp.sample_count;
+  if (NULL != p_phase->p_neutral)
+  {
+    p_phase->p_neutral->accs.i_acc_snapshot = p_phase->p_neutral->accs.i_acc_temp;
+  }
 }
 
 void LMA_ADC_Init(void)

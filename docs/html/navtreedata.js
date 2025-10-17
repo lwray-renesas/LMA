@@ -34,7 +34,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_a_c_metering.html",
-"struct_l_m_a___system_energy_1_1impulse.html#a2443f2697b184b89b7a84f68a42e058a"
+"struct_l_m_a___system_energy_1_1impulse.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

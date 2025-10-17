@@ -1,5 +1,7 @@
 var NAVTREEINDEX1 =
 {
+"struct_l_m_a___system_energy_1_1impulse.html":[2,0,2,0,1,0,1],
+"struct_l_m_a___system_energy_1_1impulse.html#a04823b37b1d59045800adfd8d5efe7f3":[2,0,2,0,1,0,1,0],
 "struct_l_m_a___system_energy_1_1impulse.html#a2443f2697b184b89b7a84f68a42e058a":[2,0,2,0,1,0,1,6],
 "struct_l_m_a___system_energy_1_1impulse.html#a3425dc8f64f03ccdebd5b4e82622c90a":[2,0,2,0,1,0,1,3],
 "struct_l_m_a___system_energy_1_1impulse.html#a93ab0db4eedcaacb4fe96a63aad274ab":[2,0,2,0,1,0,1,2],

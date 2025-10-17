@@ -58,6 +58,14 @@ void LMA_AccPhaseRun(LMA_Phase *const p_phase);
  */
 void LMA_AccPhaseReset(LMA_Phase *const p_phase);
 
+/** @brief Move accumulators from temp to snapshot.
+ * @details This could be done directly in LMA_Core, however with devices supporting hardware accumulator
+ * buffers, the temp values might not be stored where expected for efficiency.
+ * So we leave it to the porting layer to manage the accumulators in this way.
+ * @param[inout] p_phase - pointer to the phase we are working with.
+ */
+void LMA_AccPhaseLoad(LMA_Phase *const p_phase);
+
 /******************
  * DRIVERS
  ******************/

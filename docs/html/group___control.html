@@ -134,6 +134,8 @@ Functions</h2></td></tr>
 <tr class="memdesc:ga7f279a0e6e30f511c1ae98b7a7491ab5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers the systems neutral line to the library (if used)  <br /></td></tr>
 <tr class="memitem:ga1edc37f06d0b20a36f8a71ae6cddb9d8" id="r_ga1edc37f06d0b20a36f8a71ae6cddb9d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga1edc37f06d0b20a36f8a71ae6cddb9d8">LMA_ComputationHookRegister</a> (<a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const p_phase, float(*comp_hook)(float *i, float *v, float *f))</td></tr>
 <tr class="memdesc:ga1edc37f06d0b20a36f8a71ae6cddb9d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a hook to be called during paramter computations.  <br /></td></tr>
+<tr class="memitem:ga89d1810189c1c5dddff9206e77024b79" id="r_ga89d1810189c1c5dddff9206e77024b79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga89d1810189c1c5dddff9206e77024b79">LMA_GlobalLoadCalibration</a> (const <a class="el" href="struct_l_m_a___global_calibration.html">LMA_GlobalCalibration</a> *const p_calib)</td></tr>
+<tr class="memdesc:ga89d1810189c1c5dddff9206e77024b79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads calibration data to a system (and config).  <br /></td></tr>
 <tr class="memitem:gad53d8441d05b0ee5b7930963171bc199" id="r_gad53d8441d05b0ee5b7930963171bc199"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gad53d8441d05b0ee5b7930963171bc199">LMA_PhaseLoadCalibration</a> (<a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const p_phase, const <a class="el" href="struct_l_m_a___phase_calibration.html">LMA_PhaseCalibration</a> *const p_calib)</td></tr>
 <tr class="memdesc:gad53d8441d05b0ee5b7930963171bc199"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads calibration data to a phase.  <br /></td></tr>
 <tr class="memitem:ga58095d16c30d20417f8850f9ffc19b9f" id="r_ga58095d16c30d20417f8850f9ffc19b9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga58095d16c30d20417f8850f9ffc19b9f">LMA_NeutralLoadCalibration</a> (<a class="el" href="struct_l_m_a___neutral.html">LMA_Neutral</a> *const p_neutral, const <a class="el" href="struct_l_m_a___neutral_calibration.html">LMA_NeutralCalibration</a> *const p_calib)</td></tr>
@@ -300,6 +302,31 @@ Here is the call graph for this function:</div>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">p_phase</td><td>- pointer to the phase structure to link to </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">comp_hook</td><td>- function pointer that should point to a function which accepts two pointers to floats and returns a float. the first argument is a pointer to the computed current, the second to the voltage and the third to the frequency it returns a compensation factor which is multiplied by ALL power values and propogates to the energy values. If no compensation is desired, return 1.00f - if no computation hook is set, no compensation is applied. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga89d1810189c1c5dddff9206e77024b79" name="ga89d1810189c1c5dddff9206e77024b79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga89d1810189c1c5dddff9206e77024b79">&#9670;&#160;</a></span>LMA_GlobalLoadCalibration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LMA_GlobalLoadCalibration </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_l_m_a___global_calibration.html">LMA_GlobalCalibration</a> *const</td>          <td class="paramname"><span class="paramname"><em>p_calib</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Loads calibration data to a system (and config). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_calib</td><td>- pointer to the calibration data to load. </td></tr>
   </table>
   </dd>
 </dl>
