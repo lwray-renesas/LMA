@@ -133,7 +133,7 @@ Functions</h2></td></tr>
 <tr class="memitem:ga7f279a0e6e30f511c1ae98b7a7491ab5" id="r_ga7f279a0e6e30f511c1ae98b7a7491ab5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga7f279a0e6e30f511c1ae98b7a7491ab5">LMA_NeutralRegister</a> (<a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const p_phase, <a class="el" href="struct_l_m_a___neutral.html">LMA_Neutral</a> *const p_neutral)</td></tr>
 <tr class="memdesc:ga7f279a0e6e30f511c1ae98b7a7491ab5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers the systems neutral line to the library (if used)  <br /></td></tr>
 <tr class="memitem:ga1edc37f06d0b20a36f8a71ae6cddb9d8" id="r_ga1edc37f06d0b20a36f8a71ae6cddb9d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga1edc37f06d0b20a36f8a71ae6cddb9d8">LMA_ComputationHookRegister</a> (<a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const p_phase, float(*comp_hook)(float *i, float *v, float *f))</td></tr>
-<tr class="memdesc:ga1edc37f06d0b20a36f8a71ae6cddb9d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a hook to be called during paramter computations.  <br /></td></tr>
+<tr class="memdesc:ga1edc37f06d0b20a36f8a71ae6cddb9d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a hook to be called during parameter computations.  <br /></td></tr>
 <tr class="memitem:ga89d1810189c1c5dddff9206e77024b79" id="r_ga89d1810189c1c5dddff9206e77024b79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga89d1810189c1c5dddff9206e77024b79">LMA_GlobalLoadCalibration</a> (const <a class="el" href="struct_l_m_a___global_calibration.html">LMA_GlobalCalibration</a> *const p_calib)</td></tr>
 <tr class="memdesc:ga89d1810189c1c5dddff9206e77024b79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads calibration data to a system (and config).  <br /></td></tr>
 <tr class="memitem:gad53d8441d05b0ee5b7930963171bc199" id="r_gad53d8441d05b0ee5b7930963171bc199"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gad53d8441d05b0ee5b7930963171bc199">LMA_PhaseLoadCalibration</a> (<a class="el" href="struct_l_m_a___phase.html">LMA_Phase</a> *const p_phase, const <a class="el" href="struct_l_m_a___phase_calibration.html">LMA_PhaseCalibration</a> *const p_calib)</td></tr>
@@ -296,7 +296,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Registers a hook to be called during paramter computations. </p>
+<p>Registers a hook to be called during parameter computations. </p>
 <dl class="section warning"><dt>Warning</dt><dd>Must be performed AFTER a phase is registered - registering a phase nullifys this.</dd></dl>
 <p>provides a function which is called after voltage and current are computed. This function can modify the voltage and current and also return a compensation factor which is applied to the computed power values, from which the energy values are derived. This is useful for linearisation and compensation techniques used for accuracy improvements at run time. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

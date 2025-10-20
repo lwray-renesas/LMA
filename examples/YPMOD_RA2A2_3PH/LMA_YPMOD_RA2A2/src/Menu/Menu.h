@@ -38,7 +38,7 @@ typedef struct Menu_str
 typedef union options_un
 {
 	void (*action)(char * p_args); /**< Action to perform upon detection of cmd*/
-	Menu * p_submenu; /**< Submenu to enter upon detection of cmd*/
+	Menu * p_menu; /**< Submenu to enter upon detection of cmd*/
 }options_u;
 
 /**

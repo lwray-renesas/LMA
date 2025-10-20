@@ -51,7 +51,7 @@ void LMA_PhaseRegister(LMA_Phase *const p_phase);
  */
 void LMA_NeutralRegister(LMA_Phase *const p_phase, LMA_Neutral *const p_neutral);
 
-/** @brief Registers a hook to be called during paramter computations.
+/** @brief Registers a hook to be called during parameter computations.
  * @warning Must be performed AFTER a phase is registered - registering a phase nullifys this.
  * @details provides a function which is called after voltage and current are computed.
  * This function can modify the voltage and current and also return a compensation factor which is applied

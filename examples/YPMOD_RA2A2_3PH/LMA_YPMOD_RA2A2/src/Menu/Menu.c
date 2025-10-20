@@ -333,7 +333,7 @@ void Menu_handler(void)
 						}
 						else if(MENU_CHANGE == p_current_menu->p_options[i]->option_type)
 						{
-							p_current_menu = p_current_menu->p_options[i]->option.p_submenu;
+							p_current_menu = p_current_menu->p_options[i]->option.p_menu;
 							Menu_print_help();
 							successful_command = true;
 							break;
