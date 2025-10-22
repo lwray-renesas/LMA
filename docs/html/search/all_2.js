@@ -16,7 +16,7 @@ var searchData=
   ['coil_13',['Rogowski Coil',['../_a_c_metering.html#Rogowski',1,'']]],
   ['compliance_14',['Compliance',['../_a_c_metering.html#Compliance',1,'']]],
   ['compliance_20path_20eu_20uk_15',['Compliance Path (EU/UK)',['../_a_c_metering.html#CompliancePath',1,'']]],
-  ['considerations_16',['Considerations',['../_a_c_metering.html#ArchitectureConsiderations',1,'Architecture Considerations'],['../todo.html#_todo000004',1,'Architecture Considerations']]],
+  ['considerations_16',['Considerations',['../_a_c_metering.html#ArchitectureConsiderations',1,'Architecture Considerations'],['../todo.html#_todo000005',1,'Architecture Considerations']]],
   ['context_17',['Context',['../_mathematics.html#Context',1,'']]],
   ['control_18',['Control',['../group___control.html',1,'']]],
   ['count_19',['count',['../struct_l_m_a___zero_cross.html#a86988a65e0d3ece7990c032c159786d6',1,'LMA_ZeroCross']]],

@@ -478,7 +478,9 @@ Here is the call graph for this function:</div>
 
 <p>Performs a calibration command according to the flags passed. </p>
 <ul>
-<li>for calibration of the phase angle error - the result is stored in each phases phase.calib.vi_phase_correction. Because it depends on whether your ADC supports phase correction in hardware, it is left to the programmer to use this parameter as they see fit. <dl class="params"><dt>Parameters</dt><dd>
+<li>for calibration of the phase angle error - the result is stored in each phases phase.calib.vi_phase_correction. Because it depends on whether your ADC supports phase correction in hardware, it is left to the programmer to use this parameter as they see fit. <dl class="section remark"><dt>Remarks</dt><dd>This function also calibrates neutral if the a pointer to the neutral structure in the phase is non-NULL. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo</a></b></dt><dd>Calculate neutral phase angle error? </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">calib_args</td><td>- Arguments and data structure use for a calibration. </td></tr>
   </table>
