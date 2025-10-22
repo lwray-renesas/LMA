@@ -3,6 +3,7 @@
 #include "Menu.h"
 #include "hal_data.h"
 #include "stdio.h"
+#include "Storage.h"
 
 FSP_CPP_HEADER
 void R_BSP_WarmStart(bsp_warm_start_event_t event);
@@ -77,9 +78,6 @@ static LMA_Phase phase3;
 /* Benchmarking*/
 static benchmark_t benchmark;
 
-/* Used for eeprom access*/
-static bool veeprom_callback_called = false;
-
 /** @brief Modifies ADC phase shift registers based on phase errors in calibration data
  * Must be called after loading calibration data to phases.
  */
@@ -100,6 +98,8 @@ static void Energy_log(char *p_args);
 static void Energy_clear(char *p_args);
 /** @brief Display measurement results*/
 static void Display_measurements(char *p_args);
+/** @brief Dumps dataflash contents to terminal*/
+static void Mem_dump(char *p_args);
 /** @brief Direct call to NVIC_SystemReset*/
 static void System_reset(char *p_args);
 
@@ -139,19 +139,22 @@ Menu_option display_option = {.p_cmd = "display",
 				.option_type = ACTION,
 				.option.action = &Display_measurements};
 
+Menu_option memdump_option = {.p_cmd = "memdump",
+		.p_help = "Dumps dataflash contents to terminal",
+		.option_type = ACTION,
+		.option.action = &Mem_dump};
+
 Menu_option reset_option = {.p_cmd = "reset",
 		.p_help = "Immediately calls NVIC_SystemReset()",
 				.option_type = ACTION,
 				.option.action = &System_reset};
 
+static LMA_PhaseCalibration veeprom_phase_calib;
+static LMA_GlobalCalibration veeprom_global_calib;
+static LMA_SystemEnergy veeprom_sys_energy;
+
 void hal_entry(void)
 {
-	fsp_err_t err = FSP_SUCCESS;
-	LMA_PhaseCalibration *p_phase_calib = NULL;
-	LMA_GlobalCalibration *p_global_calib = NULL;
-	LMA_SystemEnergy *p_sys_energy = NULL;
-	uint32_t num_bytes = 0;
-
 	/* Turn the MACL on*/
 	R_MSTP->MSTPCRC_b.MSTPC15 = 0U;
 	R_MACL->MULC_b.MULSM = 1;
@@ -164,6 +167,7 @@ void hal_entry(void)
 	Menu_register_option(&main_menu, &energy_log_option);
 	Menu_register_option(&main_menu, &energy_clear_option);
 	Menu_register_option(&main_menu, &display_option);
+	Menu_register_option(&main_menu, &memdump_option);
 	Menu_register_option(&main_menu, &reset_option);
 
 	/* Init benchmarking system*/
@@ -174,22 +178,17 @@ void hal_entry(void)
 	Menu_printf("\033[H");
 	Menu_printf("Initialising LMA...\r\n");
 
-	/* Open the VEEPROM*/
-	err = RM_VEE_FLASH_Open(&g_vee0_ctrl, &g_vee0_cfg);
-	if (FSP_SUCCESS != err)
-	{
-		__BKPT(0);
-	}
-
 	/* Initialise the framework*/
 	LMA_Init(&config);
 
+	/* Prepare*/
+	Storage_startup();
+
 	/* Load Global Calibration*/
-	err = RM_VEE_FLASH_RecordPtrGet(&g_vee0_ctrl, GLOBAL_CALIB_ID, (uint8_t **)&p_global_calib, &num_bytes);
-	if (FSP_SUCCESS == err)
+	if (Storage_read(GLOBAL_CALIB_ID, (uint8_t *)&veeprom_global_calib))
 	{
 		Menu_printf("Global Calibration Found in VEEPROM!\r\n");
-		LMA_GlobalLoadCalibration(p_global_calib);
+		LMA_GlobalLoadCalibration(&veeprom_global_calib);
 	}
 	else
 	{
@@ -198,11 +197,10 @@ void hal_entry(void)
 	}
 
 	/* Load System Energy*/
-	err = RM_VEE_FLASH_RecordPtrGet(&g_vee0_ctrl, ENERGY_LOG_ID, (uint8_t **)&p_sys_energy, &num_bytes);
-	if (FSP_SUCCESS == err)
+	if (Storage_read(ENERGY_LOG_ID, (uint8_t *)&veeprom_sys_energy))
 	{
 		Menu_printf("System Energy Log found in VEEPROM!\r\n");
-		LMA_EnergySet(p_sys_energy);
+		LMA_EnergySet(&veeprom_sys_energy);
 	}
 	else
 	{
@@ -218,11 +216,10 @@ void hal_entry(void)
 	/* Load calibration data*/
 
 	/* Phase 1 calibration*/
-	err = RM_VEE_FLASH_RecordPtrGet(&g_vee0_ctrl, PHASE1_CALIB_ID, (uint8_t **)&p_phase_calib, &num_bytes);
-	if (FSP_SUCCESS == err)
+	if (Storage_read(PHASE1_CALIB_ID, (uint8_t *)&veeprom_phase_calib))
 	{
 		Menu_printf("Phase 1 Calibration Found in VEEPROM!\r\n");
-		LMA_PhaseLoadCalibration(&phase1, p_phase_calib);
+		LMA_PhaseLoadCalibration(&phase1, &veeprom_phase_calib);
 	}
 	else
 	{
@@ -231,11 +228,10 @@ void hal_entry(void)
 	}
 
 	/* Phase 2 calibration*/
-	err = RM_VEE_FLASH_RecordPtrGet(&g_vee0_ctrl, PHASE2_CALIB_ID, (uint8_t **)&p_phase_calib, &num_bytes);
-	if (FSP_SUCCESS == err)
+	if (Storage_read(PHASE2_CALIB_ID, (uint8_t *)&veeprom_phase_calib))
 	{
 		Menu_printf("Phase 2 Calibration Found in VEEPROM!\r\n");
-		LMA_PhaseLoadCalibration(&phase2, p_phase_calib);
+		LMA_PhaseLoadCalibration(&phase2, &veeprom_phase_calib);
 	}
 	else
 	{
@@ -244,11 +240,10 @@ void hal_entry(void)
 	}
 
 	/* Phase 3 calibration*/
-	err = RM_VEE_FLASH_RecordPtrGet(&g_vee0_ctrl, PHASE3_CALIB_ID, (uint8_t **)&p_phase_calib, &num_bytes);
-	if (FSP_SUCCESS == err)
+	if (Storage_read(PHASE3_CALIB_ID, (uint8_t *)&veeprom_phase_calib))
 	{
 		Menu_printf("Phase 3 Calibration Found in VEEPROM!\r\n");
-		LMA_PhaseLoadCalibration(&phase3, p_phase_calib);
+		LMA_PhaseLoadCalibration(&phase3, &veeprom_phase_calib);
 	}
 	else
 	{
@@ -256,11 +251,8 @@ void hal_entry(void)
 		LMA_PhaseLoadCalibration(&phase3, &default_phase_calib);
 	}
 
-	err = RM_VEE_FLASH_Close(&g_vee0_ctrl);
-	if (FSP_SUCCESS != err)
-	{
-		__BKPT(0);
-	}
+	/* Clearup*/
+	Storage_shutdown();
 
 	/* Calibrate ADC*/
 	Calibrate_adc_phase();
@@ -355,69 +347,16 @@ static void Calibrate_adc_phase(void)
 
 static void Store_calibration_data(void)
 {
-	fsp_err_t err = RM_VEE_FLASH_Open(&g_vee0_ctrl, &g_vee0_cfg);
-	if (FSP_SUCCESS != err)
-	{
-		__BKPT(0);
-	}
+	/* Prepare*/
+	Storage_startup();
 
-	/* Write Phase 1 record */
-	veeprom_callback_called = false;
-	err = RM_VEE_FLASH_RecordWrite(&g_vee0_ctrl, PHASE1_CALIB_ID, (uint8_t *)&phase1.calib, sizeof(LMA_PhaseCalibration));
-	if (FSP_SUCCESS != err)
-	{
-		__BKPT(0);
-	}
-	/* Wait for the Virtual EEPROM callback to indicate it finished writing data. */
-	while (false == veeprom_callback_called)
-	{
-		__NOP();
-	}
+	Storage_write(PHASE1_CALIB_ID, (uint8_t *)&phase1.calib, sizeof(LMA_PhaseCalibration));
+	Storage_write(PHASE2_CALIB_ID, (uint8_t *)&phase2.calib, sizeof(LMA_PhaseCalibration));
+	Storage_write(PHASE3_CALIB_ID, (uint8_t *)&phase3.calib, sizeof(LMA_PhaseCalibration));
+	Storage_write(GLOBAL_CALIB_ID, (uint8_t *)&config.gcalib, sizeof(LMA_GlobalCalibration));
 
-	/* Write Phase 2 record */
-	veeprom_callback_called = false;
-	err = RM_VEE_FLASH_RecordWrite(&g_vee0_ctrl, PHASE2_CALIB_ID, (uint8_t *)&phase2.calib, sizeof(LMA_PhaseCalibration));
-	if (FSP_SUCCESS != err)
-	{
-		__BKPT(0);
-	}
-	/* Wait for the Virtual EEPROM callback to indicate it finished writing data. */
-	while (false == veeprom_callback_called)
-	{
-		__NOP();
-	}
-
-	/* Write Phase 3 record */
-	veeprom_callback_called = false;
-	err = RM_VEE_FLASH_RecordWrite(&g_vee0_ctrl, PHASE3_CALIB_ID, (uint8_t *)&phase3.calib, sizeof(LMA_PhaseCalibration));
-	if (FSP_SUCCESS != err)
-	{
-		__BKPT(0);
-	}
-	/* Wait for the Virtual EEPROM callback to indicate it finished writing data. */
-	while (false == veeprom_callback_called)
-	{
-		__NOP();
-	}
-
-	/* Write Global record */
-	veeprom_callback_called = false;
-	err = RM_VEE_FLASH_RecordWrite(&g_vee0_ctrl, GLOBAL_CALIB_ID, (uint8_t *)&config.gcalib, sizeof(LMA_GlobalCalibration));
-	if (FSP_SUCCESS != err)
-	{
-		__BKPT(0);
-	}
-	/* Wait for the Virtual EEPROM callback to indicate it finished writing data. */
-	while (false == veeprom_callback_called)
-	{
-		__NOP();
-	}
-
-	err = RM_VEE_FLASH_Close(&g_vee0_ctrl);
-	if (FSP_SUCCESS != err)
-	{
-		__BKPT(0);
-	}
+	/* Clearup*/
+	Storage_shutdown();
 }
 
 static void Cpu_load(char *p_args)
@@ -515,38 +454,22 @@ static void Restore_default_calibration(char *p_args)
 
 static void Energy_log(char *p_args)
 {
-	fsp_err_t err = FSP_SUCCESS;
 	(void)p_args;
 
 	Menu_printf("\r\nRetrieving energy log...");
 	LMA_EnergyGet(&system_energy);
 	Menu_printf("Done!\r\n");
 
-	err = RM_VEE_FLASH_Open(&g_vee0_ctrl, &g_vee0_cfg);
-	if (FSP_SUCCESS != err)
-	{
-		__BKPT(0);
-	}
-
 	Menu_printf("\r\nWriting log to VEEPROM...");
-	/* Write System Energy Record */
-	veeprom_callback_called = false;
-	err = RM_VEE_FLASH_RecordWrite(&g_vee0_ctrl, ENERGY_LOG_ID, (uint8_t *)&system_energy, sizeof(LMA_SystemEnergy));
-	if (FSP_SUCCESS != err)
-	{
-		__BKPT(0);
-	}
-	/* Wait for the Virtual EEPROM callback to indicate it finished writing data. */
-	while (false == veeprom_callback_called)
-	{
-		__NOP();
-	}
 
-	err = RM_VEE_FLASH_Close(&g_vee0_ctrl);
-	if (FSP_SUCCESS != err)
-	{
-		__BKPT(0);
-	}
+	/* Prepare*/
+	Storage_startup();
+
+	Storage_write(ENERGY_LOG_ID, (uint8_t *)&system_energy, sizeof(LMA_SystemEnergy));
+
+	/* Clearup*/
+	Storage_shutdown();
+
 	Menu_printf("Done!\r\n");
 }
 
@@ -571,24 +494,15 @@ static void Energy_clear(char *p_args)
 	}
 
 	Menu_printf("\r\nWriting empty log to VEEPROM...");
-	/* Write System Energy Record */
-	veeprom_callback_called = false;
-	err = RM_VEE_FLASH_RecordWrite(&g_vee0_ctrl, ENERGY_LOG_ID, (uint8_t *)&system_energy, sizeof(LMA_SystemEnergy));
-	if (FSP_SUCCESS != err)
-	{
-		__BKPT(0);
-	}
-	/* Wait for the Virtual EEPROM callback to indicate it finished writing data. */
-	while (false == veeprom_callback_called)
-	{
-		__NOP();
-	}
 
-	err = RM_VEE_FLASH_Close(&g_vee0_ctrl);
-	if (FSP_SUCCESS != err)
-	{
-		__BKPT(0);
-	}
+	/* Prepare*/
+	Storage_startup();
+
+	Storage_write(ENERGY_LOG_ID, (uint8_t *)&system_energy, sizeof(LMA_SystemEnergy));
+
+	/* Clearup*/
+	Storage_shutdown();
+
 	Menu_printf("Done!\r\n");
 
 	Menu_printf("\r\nStarting LMA...");
@@ -653,6 +567,26 @@ static void Display_measurements(char *p_args)
 	Menu_printf("\tReactive Export (C): %.4f [VARh]\r\n", energy_consumed.c_exp_energy_wh);
 	Menu_printf("\tReactive Import (L): %.4f [VARh]\r\n", energy_consumed.l_imp_energy_wh);
 	Menu_printf("\tReactive Export (L): %.4f [VARh]\r\n", energy_consumed.l_exp_energy_wh);
+}
+
+static void Mem_dump(char *p_args)
+{
+	(void)p_args;
+
+	Menu_printf("\r\nDataflash Contents:\r\n");
+
+	for(uint8_t * ptr = (uint8_t *)0x40101000; ptr < (uint8_t *)0x40102000; ptr+=16)
+	{
+		Menu_printf("0x%X: 0x%02X%02X, 0x%02X%02X, 0x%02X%02X, 0x%02X%02X, 0x%02X%02X, 0x%02X%02X, 0x%02X%02X, 0x%02X%02X\r\n", (uint32_t)ptr,
+				(uint8_t)(*(ptr)), (uint8_t)(*(ptr+1)),
+				(uint8_t)(*(ptr+2)), (uint8_t)(*(ptr+3)),
+				(uint8_t)(*(ptr+4)), (uint16_t)(*(ptr+5)),
+				(uint8_t)(*(ptr+6)), (uint8_t)(*(ptr+7)),
+				(uint8_t)(*(ptr+8)), (uint8_t)(*(ptr+9)),
+				(uint8_t)(*(ptr+10)), (uint8_t)(*(ptr+11)),
+				(uint8_t)(*(ptr+12)), (uint8_t)(*(ptr+13)),
+				(uint8_t)(*(ptr+14)), (uint8_t)(*(ptr+15)));
+	}
 }
 
 static void System_reset(char *p_args)
@@ -762,10 +696,4 @@ void RTC_Callback(rtc_callback_args_t *p_args)
 		break;
 	}
 	}
-}
-
-void VEE_Callback(rm_vee_callback_args_t *p_args)
-{
-	(void)p_args;
-	veeprom_callback_called = true;
 }

@@ -114,7 +114,7 @@ static void System_reset(char *p_args);
 /* Menuing*/
 Menu main_menu = {.p_name = "Main Menu"};
 Menu_option cpu_load_option = {
-		.p_cmd = "cpu", .p_help = "Performs CPU Load Test", .option_type = ACTION, .option.action = &Cpu_load};
+		.p_cmd = "cpu", .p_help = "Currently Unsupported", .option_type = ACTION, .option.action = &Cpu_load};
 
 Menu_option calib_option = {.p_cmd = "calib",
 		.p_help = "Calibrates device, stores in lib and VEEPROM\r\n"
@@ -294,7 +294,7 @@ static void Store_calibration_data(void)
 static void Cpu_load(char *p_args)
 {
 	(void)(p_args);
-	/* TODO: */
+	Menu_printf("\r\nCurrently Unsupported!");
 }
 
 static void Calibrate(char *p_args)
@@ -453,11 +453,10 @@ static void Display_measurements(char *p_args)
 static void Mem_dump(char *p_args)
 {
 	(void)p_args;
-	__near uint8_t * ptr = (__near uint8_t *)0x1000;
 
 	Menu_printf("\r\nDataflash Contents:\r\n");
 
-	for(; ptr < (__near uint8_t *)0x1800; ptr+=16)
+	for(__near uint8_t * ptr = (__near uint8_t *)0x1000; ptr < (__near uint8_t *)0x1800; ptr+=16)
 	{
 		Menu_printf("0x%X: 0x%02X%02X, 0x%02X%02X, 0x%02X%02X, 0x%02X%02X, 0x%02X%02X, 0x%02X%02X, 0x%02X%02X, 0x%02X%02X\r\n", (uint16_t)ptr,
 				(uint8_t)(*(ptr)), (uint8_t)(*(ptr+1)),
