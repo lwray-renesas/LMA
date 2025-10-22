@@ -43,6 +43,7 @@ Pragma directive
 
 /* Start user code for pragma. Do not edit comment generated here */
 #include "LMA_Core.h"
+#include "Trap_integrator.h"
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -123,6 +124,9 @@ static void __near r_dsadc_interrupt(void)
 	*((uint16_t *)&phase.inputs.i_sample) = *((uint16_t *)&DSADCR1);
 	*(((uint8_t *)&phase.inputs.i_sample) + 2) = *((uint8_t *)(&DSADCR1)+2);
 	*(((int8_t *)&phase.inputs.i_sample) + 3) = (*((int8_t *)(&DSADCR1)+2)) >> 7;
+
+	/* Integrate*/
+	phase.inputs.i_sample = Trap_integrate(&rogowski_integrator, phase.inputs.i_sample);
 
     LMA_CB_ADC();
 

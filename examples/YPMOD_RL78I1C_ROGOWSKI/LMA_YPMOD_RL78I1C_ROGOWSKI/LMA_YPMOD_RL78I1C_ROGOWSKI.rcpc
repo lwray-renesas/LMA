@@ -14,6 +14,10 @@
       </Category>
       <Category Name="src">
         <Path>src\LMA_YPMOD_RL78I1C_ROGOWSKI.c</Path>
+        <Category Name="Integrator">
+          <Path>src\Integrator\Trap_integrator.c</Path>
+          <Path>src\Integrator\Trap_integrator.h</Path>
+        </Category>
         <Category Name="LMA">
           <Category Name="port">
             <Category Name="YPMOD-RL78I1C-ROGOWSKI">
@@ -81,6 +85,7 @@
           <Option>-c</Option>
           <Option>-dev="C:/Users/a5126135/.eclipse/com.renesas.platform_1802838654/DebugComp/RL78/RL78/Common/DR5F11TLG.DVF"</Option>
           <Option>-I "${ProjDirPath}\generate"</Option>
+          <Option>-I "${ProjDirPath}\src\Integrator"</Option>
           <Option>-I "${ProjDirPath}\src\Storage"</Option>
           <Option>-I "${ProjDirPath}\src\Menu"</Option>
           <Option>-I "${ProjDirPath}\src\hw"</Option>
@@ -141,6 +146,7 @@
         <LinkOrder>
           <Path>HardwareDebug\cstart.obj</Path>
           <Path>HardwareDebug\stkinit.obj</Path>
+          <Path>HardwareDebug\Trap_integrator.obj</Path>
           <Path>HardwareDebug\LMA_Port.obj</Path>
           <Path>HardwareDebug\LMA_Core.obj</Path>
           <Path>HardwareDebug\LMA_YPMOD_RL78I1C_ROGOWSKI.obj</Path>
@@ -167,6 +173,7 @@
         </LinkOrder>
         <CommonOptions>
           <IncludePathForC>"${ProjDirPath}\generate"</IncludePathForC>
+          <IncludePathForC>"${ProjDirPath}\src\Integrator"</IncludePathForC>
           <IncludePathForC>"${ProjDirPath}\src\Storage"</IncludePathForC>
           <IncludePathForC>"${ProjDirPath}\src\Menu"</IncludePathForC>
           <IncludePathForC>"${ProjDirPath}\src\hw"</IncludePathForC>

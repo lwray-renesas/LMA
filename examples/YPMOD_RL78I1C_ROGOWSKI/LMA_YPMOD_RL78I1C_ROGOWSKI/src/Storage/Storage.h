@@ -8,9 +8,9 @@
 #ifndef STORAGE_STORAGE_H_
 #define STORAGE_STORAGE_H_
 
+#include "eel.h"
 #include "fdl.h"
 #include "fdl_descriptor.h"
-#include "eel.h"
 #include "stdbool.h"
 #include "stdint.h"
 
@@ -29,13 +29,13 @@ void Storage_shutdown(void);
  * @param p_out- pointer to buffer to store output data.
  * @return true if successful, false otherwise.
  */
-bool Storage_read(uint8_t id, __near uint8_t * p_out);
+bool Storage_read(uint8_t id, __near uint8_t *p_out);
 
 /**
  * @brief Writes data to eeprom.
  * @param id - id of EEPROM data
  * @param p_in - pointer to buffer containing data to write.
  */
-void Storage_write(uint8_t id, __near uint8_t * p_in);
+void Storage_write(uint8_t id, __near uint8_t *p_in);
 
 #endif /* STORAGE_STORAGE_H_ */

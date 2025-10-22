@@ -9,7 +9,17 @@ examples/windows/src/main.cpp
 examples/YPMOD_RA2A2_3PH/LMA_YPMOD_RA2A2/src/hal_entry.c
 examples/YPMOD_RA2A2_3PH/LMA_YPMOD_RA2A2/src/Benchmark/Benchmark.c
 examples/YPMOD_RA2A2_3PH/LMA_YPMOD_RA2A2/src/Benchmark/Benchmark.h
+examples/YPMOD_RA2A2_3PH/LMA_YPMOD_RA2A2/src/Menu/Menu.c
+examples/YPMOD_RA2A2_3PH/LMA_YPMOD_RA2A2/src/Menu/Menu.h
+examples/YPMOD_RA2A2_3PH/LMA_YPMOD_RA2A2/src/Storage/Storage.c
+examples/YPMOD_RA2A2_3PH/LMA_YPMOD_RA2A2/src/Storage/Storage.h
 examples/YPMOD_RL78I1C_ROGOWSKI/LMA_YPMOD_RL78I1C_ROGOWSKI/src/LMA_YPMOD_RL78I1C_ROGOWSKI.c
+examples/YPMOD_RL78I1C_ROGOWSKI/LMA_YPMOD_RL78I1C_ROGOWSKI/src/Menu/Menu.c
+examples/YPMOD_RL78I1C_ROGOWSKI/LMA_YPMOD_RL78I1C_ROGOWSKI/src/Menu/Menu.h
+examples/YPMOD_RL78I1C_ROGOWSKI/LMA_YPMOD_RL78I1C_ROGOWSKI/src/Storage/Storage.c
+examples/YPMOD_RL78I1C_ROGOWSKI/LMA_YPMOD_RL78I1C_ROGOWSKI/src/Storage/Storage.h
+examples/YPMOD_RL78I1C_ROGOWSKI/LMA_YPMOD_RL78I1C_ROGOWSKI/src/Integrator/Trap_integrator.c
+examples/YPMOD_RL78I1C_ROGOWSKI/LMA_YPMOD_RL78I1C_ROGOWSKI/src/Integrator/Trap_integrator.h
 port/LMA_Port.h
 port/LMA_Port.c
 port/Windows/LMA_Port.h

@@ -105,11 +105,9 @@ void LMA_AccPhaseRun(LMA_Phase *const p_phase)
 
 void LMA_AccPhaseReset(LMA_Phase *const p_phase)
 {
-  R_MACL->MULC = 0xC0; /* MAC, Signed Integer*/
-
+  /* Not using temp accs in p_phase->accs.temp - instead using the MACL registers as buffers*/
   if (0 == p_phase->phase_number)
   {
-    R_MACL->MAC32S = *((uint32_t *)&(p_phase->inputs.i_sample));
     R_MACL->MULR0.MULRL = 0;
     R_MACL->MULR0.MULRH = 0;
     R_MACL->MULR1.MULRL = 0;
@@ -117,40 +115,10 @@ void LMA_AccPhaseReset(LMA_Phase *const p_phase)
     R_MACL->MULR2.MULRL = 0;
     R_MACL->MULR2.MULRH = 0;
 
-    R_MACL->MULB0 = *((uint32_t *)&(p_phase->inputs.i_sample));
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    R_MACL->MULB1 = *((uint32_t *)&(p_phase->inputs.v_sample));
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    R_MACL->MULB2 = *((uint32_t *)&(p_phase->inputs.v90_sample));
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-
-    R_MACL->MAC32S = *((uint32_t *)&(p_phase->inputs.v_sample));
-    R_MACL->MULR3.MULRL = 0;
-    R_MACL->MULR3.MULRH = 0;
-    R_MACL->MULB3 = *((uint32_t *)&(p_phase->inputs.v_sample));
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-
     p_phase->accs.temp.sample_count = 0;
   }
   else if (1 == p_phase->phase_number)
   {
-    R_MACL->MAC32S = *((uint32_t *)&(p_phase->inputs.i_sample));
     R_MACL->MULR4.MULRL = 0;
     R_MACL->MULR4.MULRH = 0;
     R_MACL->MULR5.MULRL = 0;
@@ -158,75 +126,16 @@ void LMA_AccPhaseReset(LMA_Phase *const p_phase)
     R_MACL->MULR6.MULRL = 0;
     R_MACL->MULR6.MULRH = 0;
 
-    R_MACL->MULB4 = *((uint32_t *)&(p_phase->inputs.i_sample));
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    R_MACL->MULB5 = *((uint32_t *)&(p_phase->inputs.v_sample));
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    R_MACL->MULB6 = *((uint32_t *)&(p_phase->inputs.v90_sample));
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-
-    R_MACL->MAC32S = *((uint32_t *)&(p_phase->inputs.v_sample));
-    R_MACL->MULR7.MULRL = 0;
-    R_MACL->MULR7.MULRH = 0;
-    R_MACL->MULB7 = *((uint32_t *)&(p_phase->inputs.v_sample));
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-
     p_phase->accs.temp.sample_count = 0;
   }
   else if (2 == p_phase->phase_number)
   {
-    R_MACL->MAC32S = *((uint32_t *)&(p_phase->inputs.i_sample));
     R_MACL->MULR8.MULRL = 0;
     R_MACL->MULR8.MULRH = 0;
     R_MACL->MULR9.MULRL = 0;
     R_MACL->MULR9.MULRH = 0;
     R_MACL->MULR10.MULRL = 0;
     R_MACL->MULR10.MULRH = 0;
-
-    R_MACL->MULB8 = *((uint32_t *)&(p_phase->inputs.i_sample));
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    R_MACL->MULB9 = *((uint32_t *)&(p_phase->inputs.v_sample));
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    R_MACL->MULB10 = *((uint32_t *)&(p_phase->inputs.v90_sample));
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-
-    R_MACL->MAC32S = *((uint32_t *)&(p_phase->inputs.v_sample));
-    R_MACL->MULR11.MULRL = 0;
-    R_MACL->MULR11.MULRH = 0;
-    R_MACL->MULB11 = *((uint32_t *)&(p_phase->inputs.v_sample));
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
-    __NOP();
 
     p_phase->accs.temp.sample_count = 0;
   }

@@ -23,7 +23,7 @@ void Storage_shutdown(void);
  * @param p_out- pointer to buffer to store output data.
  * @return true if successful, false otherwise.
  */
-bool Storage_read(uint8_t id, uint8_t * p_out);
+bool Storage_read(uint8_t id, uint8_t *p_out);
 
 /**
  * @brief Writes data to eeprom.
@@ -31,6 +31,6 @@ bool Storage_read(uint8_t id, uint8_t * p_out);
  * @param p_in - pointer to buffer containing data to write.
  * @param size - number of bytes to write.
  */
-void Storage_write(uint8_t id, uint8_t * p_in, uint32_t size);
+void Storage_write(uint8_t id, uint8_t *p_in, uint32_t size);
 
 #endif /* STORAGE_STORAGE_H_ */
