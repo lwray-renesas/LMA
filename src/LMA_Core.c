@@ -40,7 +40,7 @@ static LMA_Config *p_config = NULL; /**< Internal copy of the meter configuratio
 static LMA_CalibFs calib_fs = {false, false, false, (uint32_t)0, (uint32_t)0, NULL}; /**< Instance of the fs calibration data */
 static LMA_PhaseList phase_list = {NULL, (uint32_t)0};                               /**< Internal phase list*/
 
-static LMA_SystemEnergy sys_energy = /**< Instance of the fs calibration data */
+static LMA_SystemEnergy sys_energy = /**< System Energy*/
     {
         .energy =
             {

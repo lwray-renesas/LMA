@@ -13,7 +13,7 @@
         <Path>generate\stkinit.asm</Path>
       </Category>
       <Category Name="src">
-        <Path>src\main.c</Path>
+        <Path>src\LMA_YPMOD_RL78I1C_ROGOWSKI.c</Path>
         <Category Name="LMA">
           <Category Name="port">
             <Category Name="YPMOD-RL78I1C-ROGOWSKI">
@@ -24,10 +24,25 @@
           <Category Name="src">
             <Path>..\..\..\src\LMA_Core.c</Path>
             <Path>..\..\..\src\LMA_Core.h</Path>
-            <Category Name="LMA_Utils">
-              <Path>..\..\..\src\LMA_Utils\LMA_Types.h</Path>
-            </Category>
+            <Path>..\..\..\src\LMA_Types.h</Path>
           </Category>
+        </Category>
+        <Category Name="Menu">
+          <Path>src\Menu\Menu.c</Path>
+          <Path>src\Menu\Menu.h</Path>
+        </Category>
+        <Category Name="Storage">
+          <Path>src\Storage\Storage.c</Path>
+          <Path>src\Storage\Storage.h</Path>
+          <Path>src\Storage\eel.h</Path>
+          <Path>src\Storage\eel_descriptor.c</Path>
+          <Path>src\Storage\eel_descriptor.h</Path>
+          <Path>src\Storage\eel_types.h</Path>
+          <Path>src\Storage\eel_user_types.h</Path>
+          <Path>src\Storage\fdl.h</Path>
+          <Path>src\Storage\fdl_descriptor.c</Path>
+          <Path>src\Storage\fdl_descriptor.h</Path>
+          <Path>src\Storage\fdl_types.h</Path>
         </Category>
         <Category Name="hw">
           <Path>src\hw\r_cg_cgc.c</Path>
@@ -64,37 +79,40 @@
         <CompileOptions>
           <Option>-cpu=S3</Option>
           <Option>-c</Option>
-          <Option>-dev="C:/Users/a5126135/.eclipse/com.renesas.platform_246208409/DebugComp/RL78/RL78/Common/DR5F11TLG.DVF"</Option>
+          <Option>-dev="C:/Users/a5126135/.eclipse/com.renesas.platform_1802838654/DebugComp/RL78/RL78/Common/DR5F11TLG.DVF"</Option>
           <Option>-I "${ProjDirPath}\generate"</Option>
+          <Option>-I "${ProjDirPath}\src\Storage"</Option>
+          <Option>-I "${ProjDirPath}\src\Menu"</Option>
           <Option>-I "${ProjDirPath}\src\hw"</Option>
           <Option>-I "${ProjDirPath}\..\..\..\src"</Option>
-          <Option>-I "${ProjDirPath}\..\..\..\src\LMA_Utils"</Option>
           <Option>-I "${ProjDirPath}\..\..\..\port\YPMOD-RL78I1C-ROGOWSKI"</Option>
           <Option>-character_set=utf8</Option>
           <Option>-g</Option>
           <Option>-o ${workspace_loc}\${ProjName}/${ConfigName}</Option>
-          <Option>-Olite</Option>
+          <Option>-Onothing</Option>
           <Option>-lang=c99</Option>
         </CompileOptions>
         <AssembleOptions>
           <Option>-cpu=S3</Option>
           <Option>-c</Option>
-          <Option>-dev="C:/Users/a5126135/.eclipse/com.renesas.platform_246208409/DebugComp/RL78/RL78/Common/DR5F11TLG.DVF"</Option>
+          <Option>-dev="C:/Users/a5126135/.eclipse/com.renesas.platform_1802838654/DebugComp/RL78/RL78/Common/DR5F11TLG.DVF"</Option>
           <Option>-character_set=utf8</Option>
           <Option>-g</Option>
           <Option>-o "${ProjDirPath}\${ConfigName}"</Option>
         </AssembleOptions>
         <LinkOptions>
-          <Option>-device="C:/Users/a5126135/.eclipse/com.renesas.platform_246208409/DebugComp/RL78/RL78/Common/DR5F11TLG.DVF"</Option>
+          <Option>-device="C:/Users/a5126135/.eclipse/com.renesas.platform_1802838654/DebugComp/RL78/RL78/Common/DR5F11TLG.DVF"</Option>
           <Option>-list</Option>
           <Option>-show=symbol</Option>
           <Option>-nooptimize</Option>
           <Option>-entry=_start</Option>
           <Option>-auto_section_layout</Option>
+          <Option>-start=FDL_CODE*,EEL_CODE*/0D8,FDL_CNST*,EEL_CNST*/02000,.sdataR,.sbss,FDL_SDAT*,EEL_SDAT*/0FFE20</Option>
           <Option>-security_id=0</Option>
           <Option>-debug_monitor=1FE00-1FFFF</Option>
           <Option>-user_opt_byte=EFFFE0</Option>
           <Option>-ocdbg=84</Option>
+          <Option>-self</Option>
           <Option>-output="${ProjName}.abs"</Option>
           <Option>-debug</Option>
           <Option>-nocompress</Option>
@@ -102,6 +120,8 @@
           <Option>-rom=.data=.dataR,.sdata=.sdataR</Option>
           <Option>-nomessage</Option>
           <Option>-nologo</Option>
+          <Option>-library="${ProjDirPath}\src\Storage\lib\fdl.lib"</Option>
+          <Option>-library="${ProjDirPath}\src\Storage\lib\eel.lib"</Option>
           <Option>-end</Option>
           <Option>-output="${ProjName}.mot"</Option>
           <Option>-form=stype</Option>
@@ -123,6 +143,11 @@
           <Path>HardwareDebug\stkinit.obj</Path>
           <Path>HardwareDebug\LMA_Port.obj</Path>
           <Path>HardwareDebug\LMA_Core.obj</Path>
+          <Path>HardwareDebug\LMA_YPMOD_RL78I1C_ROGOWSKI.obj</Path>
+          <Path>HardwareDebug\Menu.obj</Path>
+          <Path>HardwareDebug\Storage.obj</Path>
+          <Path>HardwareDebug\eel_descriptor.obj</Path>
+          <Path>HardwareDebug\fdl_descriptor.obj</Path>
           <Path>HardwareDebug\r_cg_cgc.obj</Path>
           <Path>HardwareDebug\r_cg_cgc_user.obj</Path>
           <Path>HardwareDebug\r_cg_dsadc.obj</Path>
@@ -138,14 +163,14 @@
           <Path>HardwareDebug\r_cg_systeminit.obj</Path>
           <Path>HardwareDebug\r_cg_tau.obj</Path>
           <Path>HardwareDebug\r_cg_tau_user.obj</Path>
-          <Path>HardwareDebug\main.obj</Path>
           <Path>HardwareDebug\LMA_YPMOD_RL78I1C_ROGOWSKI.lib</Path>
         </LinkOrder>
         <CommonOptions>
           <IncludePathForC>"${ProjDirPath}\generate"</IncludePathForC>
+          <IncludePathForC>"${ProjDirPath}\src\Storage"</IncludePathForC>
+          <IncludePathForC>"${ProjDirPath}\src\Menu"</IncludePathForC>
           <IncludePathForC>"${ProjDirPath}\src\hw"</IncludePathForC>
           <IncludePathForC>"${ProjDirPath}\..\..\..\src"</IncludePathForC>
-          <IncludePathForC>"${ProjDirPath}\..\..\..\src\LMA_Utils"</IncludePathForC>
           <IncludePathForC>"${ProjDirPath}\..\..\..\port\YPMOD-RL78I1C-ROGOWSKI"</IncludePathForC>
         </CommonOptions>
       </BuildMode>

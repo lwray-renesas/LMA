@@ -317,10 +317,13 @@ void R_UART1_Start(void);
 void R_UART1_Stop(void);
 MD_STATUS R_UART1_Send(uint8_t * const tx_buf, uint16_t tx_num);
 MD_STATUS R_UART1_Receive(uint8_t * const rx_buf, uint16_t rx_num);
-static void r_uart1_callback_receiveend(void);
-static void r_uart1_callback_sendend(void);
-static void r_uart1_callback_error(uint8_t err_type);
-static void r_uart1_callback_softwareoverrun(uint16_t rx_data);
 /* Start user code for function. Do not edit comment generated here */
+
+/**
+ * @brief Sends a UART byte (blocking)
+ * @param b - byte to send.
+ */
+void R_UART1_SendByte(uint8_t b);
+
 /* End user code. Do not edit comment generated here */
 #endif

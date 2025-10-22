@@ -50,7 +50,50 @@ Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
 extern LMA_Phase phase;
-extern LMA_Phase neutral;
+extern LMA_Neutral neutral;
+
+/** @brief phase shifts voltage signal
+ * @details
+ * - 50Hz signal is 20ms.
+ * - 50Hz signal being 360degree of period, to get 90degree we divide by 4.
+ * - 20ms divided by 4 = 5ms.
+ * - to delay 5ms with a 3906Hz clock we can do 0.005/(1/3906) = 19.53 samples - so we do 20
+ * samples.
+ *
+ * @param[in] new_voltage - new voltage to store in the buffer
+ * @return voltage sample 90degree (20 samples) ago.
+ */
+static spl_t PhaseShift90(spl_t new_voltage)
+{
+	static spl_t voltage_buffer[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	static uint8_t buffer_index = 0;
+
+	uint8_t buffer_index_19 = buffer_index + 2;
+	uint8_t buffer_index_20 = buffer_index + 1;
+
+	if (buffer_index_19 > 21)
+	{
+		buffer_index_19 -= 21;
+	}
+
+	if (buffer_index_20 > 21)
+	{
+		buffer_index_20 -= 21;
+	}
+
+	/* Append new voltage*/
+	voltage_buffer[buffer_index] = new_voltage;
+
+	/* Interpolate 19.53 samples - just take the mid point*/
+	int32_t interpolated_value = ((voltage_buffer[buffer_index_19] * 60) >> 7) + ((voltage_buffer[buffer_index_20] * 68) >> 7);
+
+	buffer_index = buffer_index_20;
+
+	/* Convert back to its 32b value*/
+	return interpolated_value;
+}
+
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -62,25 +105,27 @@ extern LMA_Phase neutral;
 static void __near r_dsadc_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
-	/* CT Current - neutral*/
-	*((uint16_t *)&neutral.ws.samples.current) = *((uint16_t *)&DSADCR0);
-	*(((uint8_t *)&neutral.ws.samples.current) + 2) = *((uint8_t *)(&DSADCR0)+2);
-	*(((int8_t *)&neutral.ws.samples.current) + 3) = (*((int8_t *)(&DSADCR0)+2)) >> 7;
 
-	/* Voltage - for neutral computation*/
-	*((uint16_t *)&neutral.ws.samples.voltage) = *((uint16_t *)&DSADCR3);
-	*(((uint8_t *)&neutral.ws.samples.voltage) + 2) = *((uint8_t *)(&DSADCR3)+2);
-	*(((int8_t *)&neutral.ws.samples.voltage) + 3) = (*((int8_t *)(&DSADCR3)+2)) >> 7;
+	/* CT Current - neutral*/
+	*((uint16_t *)&neutral.inputs.i_sample) = *((uint16_t *)&DSADCR0);
+	*(((uint8_t *)&neutral.inputs.i_sample) + 2) = *((uint8_t *)(&DSADCR0)+2);
+	*(((int8_t *)&neutral.inputs.i_sample) + 3) = (*((int8_t *)(&DSADCR0)+2)) >> 7;
+
+	/* Voltage*/
+	*((uint16_t *)&phase.inputs.v_sample) = *((uint16_t *)&DSADCR3);
+	*(((uint8_t *)&phase.inputs.v_sample) + 2) = *((uint8_t *)(&DSADCR3)+2);
+	*(((int8_t *)&phase.inputs.v_sample) + 3) = (*((int8_t *)(&DSADCR3)+2)) >> 7;
+
+	/* Voltage PHase Shifted 90 degrees*/
+	phase.inputs.v90_sample = PhaseShift90(phase.inputs.v_sample);
 
 	/* Rogowski Current*/
-	*((uint16_t *)&phase.ws.samples.current) = *((uint16_t *)&DSADCR1);
-	*(((uint8_t *)&phase.ws.samples.current) + 2) = *((uint8_t *)(&DSADCR1)+2);
-	*(((int8_t *)&phase.ws.samples.current) + 3) = (*((int8_t *)(&DSADCR1)+2)) >> 7;
-
-	/* Voltage - for phase computation*/
-	phase.ws.samples.voltage = neutral.ws.samples.voltage;
+	*((uint16_t *)&phase.inputs.i_sample) = *((uint16_t *)&DSADCR1);
+	*(((uint8_t *)&phase.inputs.i_sample) + 2) = *((uint8_t *)(&DSADCR1)+2);
+	*(((int8_t *)&phase.inputs.i_sample) + 3) = (*((int8_t *)(&DSADCR1)+2)) >> 7;
 
     LMA_CB_ADC();
+
     /* End user code. Do not edit comment generated here */
 }
 

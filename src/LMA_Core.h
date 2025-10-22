@@ -97,6 +97,8 @@ void LMA_Stop(void);
  * phase.calib.vi_phase_correction.
  * Because it depends on whether your ADC supports phase correction in hardware, it is left to the programmer
  * to use this parameter as they see fit.
+ * \remark This function also calibrates neutral if the a pointer to the neutral structure in the phase is non-NULL.
+ * \todo Calculate neutral phase angle error?
  * @param[in] calib_args - Arguments and data structure use for a calibration.
  */
 void LMA_PhaseCalibrate(LMA_PhaseCalibArgs *const calib_args);
