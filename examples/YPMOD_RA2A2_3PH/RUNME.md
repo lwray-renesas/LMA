@@ -86,7 +86,9 @@ If nothing is displayed, hit enter, and the help message should be shown.
 
 ![Terminal Application](imgs/terminal_app.png "Terminal Application")
 
-This example applciation is no running and it allows (among other commands) displaying live measurement parameters and performing a calibration.
+This example application is now running and it allows (among other commands) displaying live measurement parameters and performing a calibration.
 
-It also performs impulse LED control using D1 on the YPMOD-RA2A2-3PH to acumulate energy. This PMOD can now be connected to a live supply and behaviour observed.
+It also performs impulse LED control using D1 on the YPMOD-RA2A2-3PH to acumulate energy.
+
+This PMOD can now be connected to a live supply and behaviour observed.
 
