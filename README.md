@@ -30,7 +30,7 @@ LMA stands for light-weight metering for AC applications and it is a middleware 
 
 ## Getting Started
 
-To get started with LMA, check out one of the linked eamples above (stored in this repo) or jump to the documentation linked above!
+To get started with LMA, check out one of the linked examples above or jump to the documentation also linked above!
 
 ---
 
