@@ -1,8 +1,3 @@
----
-pagination_next: null
-pagination_prev: null
----
-
 # LMA
 
 **Target Devices:** `RA2A2, RL78/I1C & PC`  
