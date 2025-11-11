@@ -66,12 +66,14 @@ Launch RFP and connect to PMOD using the following settings:
 * Interface: SWD
 
 As shown below.
+
 ![RFP Create](imgs/rfp_create.png "RFP Create")
 
 Once connected, add the .srec file from the LMA Example project in the Debug folder and click start:
 `<LMA_root>/examples/YPMOD_RA2A2-3PH/LMA_YPMOD_RA2A2/Debug/LMA_YPMOD_RA2A2.srec`
 
 As shown below.
+
 ![RFP Flash](imgs/rfp_flash.png "RFP Flash")
 
 Now disconnect the cable between J1 and J17 to ensure isolation.
