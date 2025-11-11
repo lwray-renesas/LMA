@@ -319,7 +319,7 @@ void LMA_PhaseCalibrate(LMA_PhaseCalibArgs *const calib_args)
 {
   uint32_t backup_update_interval = p_config->update_interval;
   float sample_count_fp;
-  double q, p = 0.0;
+  float q, p = 0.0f;
   LMA_CRITICAL_SECTION_PREPARE();
 
   LMA_ADC_Stop();
@@ -366,9 +366,9 @@ void LMA_PhaseCalibrate(LMA_PhaseCalibArgs *const calib_args)
   }
 
   /* Phase Correction*/
-  q = (double)calib_args->p_phase->accs.snapshot.q_acc / calib_args->p_phase->calib.p_coeff;
-  p = (double)calib_args->p_phase->accs.snapshot.p_acc / calib_args->p_phase->calib.p_coeff;
-  calib_args->p_phase->calib.vi_phase_correction = atanf((float)q / p) * (180.0f / 3.14159265359f);
+  q = (float)calib_args->p_phase->accs.snapshot.q_acc / calib_args->p_phase->calib.p_coeff;
+  p = (float)calib_args->p_phase->accs.snapshot.p_acc / calib_args->p_phase->calib.p_coeff;
+  calib_args->p_phase->calib.vi_phase_correction = atanf(q / p) * (180.0f / 3.14159265359f);
 
   /* Restore operation*/
   p_config->update_interval = backup_update_interval;
