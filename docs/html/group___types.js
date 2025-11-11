@@ -28,7 +28,8 @@ var group___types =
       [ "count", "struct_l_m_a___zero_cross.html#a86988a65e0d3ece7990c032c159786d6", null ],
       [ "last_sample", "struct_l_m_a___zero_cross.html#ae22556af986df1148376a91159ff4d3d", null ],
       [ "debounce", "struct_l_m_a___zero_cross.html#a0a9390b5d6ac67f4b941d32c83932e51", null ],
-      [ "first_event", "struct_l_m_a___zero_cross.html#a3fe02cc253a00285c9e740ae9792f127", null ]
+      [ "first_event", "struct_l_m_a___zero_cross.html#a3fe02cc253a00285c9e740ae9792f127", null ],
+      [ "already_run", "struct_l_m_a___zero_cross.html#a7cc4bc37d61fb2cb3e0fb1614db35938", null ]
     ] ],
     [ "LMA_Measurements", "struct_l_m_a___measurements.html", [
       [ "vrms", "struct_l_m_a___measurements.html#a1466cf22de01e2faf786b69e44e4902f", null ],
@@ -55,9 +56,6 @@ var group___types =
       [ "react", "struct_l_m_a___energy_unit.html#a155192c9e5d62d45dda41029703fd231", null ]
     ] ],
     [ "LMA_PhaseAngleError", "struct_l_m_a___phase_angle_error.html", [
-      [ "status", "struct_l_m_a___phase_angle_error.html#abef6622503e077b948aad14d9b74eedd", null ],
-      [ "v_zero_cross", "struct_l_m_a___phase_angle_error.html#ae2b68483c78bf42d1169dd1521192757", null ],
-      [ "i_zero_cross", "struct_l_m_a___phase_angle_error.html#a00c5906ed6b283d031dfde1da2bd4d2e", null ],
       [ "sample_counter", "struct_l_m_a___phase_angle_error.html#a7d6f47304549f2a68af206f2e60e5ed3", null ],
       [ "v_fraction", "struct_l_m_a___phase_angle_error.html#a5d40ce22d15900fc7d7bb0233a68f6ac", null ],
       [ "i_fraction", "struct_l_m_a___phase_angle_error.html#afafe4a51830ec3be20304c239e812418", null ]
@@ -65,7 +63,7 @@ var group___types =
     [ "LMA_Signals", "struct_l_m_a___signals.html", [
       [ "accumulators_ready", "struct_l_m_a___signals.html#a32143e3df8c4e6ebdd44000e9ec90e0b", null ],
       [ "measurements_ready", "struct_l_m_a___signals.html#aae5e47753af8186703115c1eab867b1b", null ],
-      [ "calibrate_angle_error", "struct_l_m_a___signals.html#a2416727b9fc7ec17b46b76064cf4ba0a", null ]
+      [ "calibrating", "struct_l_m_a___signals.html#a62151e2863a49b9f9c6e977b8c31560e", null ]
     ] ],
     [ "LMA_Neutral", "struct_l_m_a___neutral.html", [
       [ "inputs", "struct_l_m_a___neutral.html#a50ffb4ce7f2d0aae04de0dab8a715fbc", null ],
@@ -76,9 +74,8 @@ var group___types =
       [ "p_next", "struct_l_m_a___phase.html#adc61b9c9349681d6ce2a1e04acd930c2", null ],
       [ "inputs", "struct_l_m_a___phase.html#a75aeedb156268e8506a1ca550c7ca54e", null ],
       [ "accs", "struct_l_m_a___phase.html#a6b226e3613e3d13f54d7daff19dfe33a", null ],
-      [ "zero_cross", "struct_l_m_a___phase.html#a474260cee8695a3cd8ac0b9735c15655", null ],
+      [ "zero_cross_v", "struct_l_m_a___phase.html#ac72467af070e6547b2d656e582df83d7", null ],
       [ "calib", "struct_l_m_a___phase.html#a33d042d78f3b0a02b5300db90d3bf64d", null ],
-      [ "pa_error", "struct_l_m_a___phase.html#a41ad9ab80f53d2e6d7888d59366407cb", null ],
       [ "measurements", "struct_l_m_a___phase.html#ab8956205dee0aaf630ac02162a7f29c0", null ],
       [ "energy_units", "struct_l_m_a___phase.html#aeed1605a94f0430ec85e3e0d75b89159", null ],
       [ "status", "struct_l_m_a___phase.html#a02a90f197eb1c7a061f6d191470923b0", null ],
@@ -91,7 +88,8 @@ var group___types =
       [ "p_phase", "struct_l_m_a___phase_calib_args.html#ae09edcb4ed438899adffd6e218a97132", null ],
       [ "vrms_tgt", "struct_l_m_a___phase_calib_args.html#a62bb25e9990180da1273196dda5de3dd", null ],
       [ "irms_tgt", "struct_l_m_a___phase_calib_args.html#a6f418b0a7a82081239356b697af2fb16", null ],
-      [ "line_cycles", "struct_l_m_a___phase_calib_args.html#ac8ee6de9bd665a4c63c71d0ee44e22fa", null ]
+      [ "line_cycles", "struct_l_m_a___phase_calib_args.html#ac8ee6de9bd665a4c63c71d0ee44e22fa", null ],
+      [ "line_cycles_stability", "struct_l_m_a___phase_calib_args.html#a08131afb3b0b8d172c6a9f210a3736a9", null ]
     ] ],
     [ "LMA_GlobalCalibArgs", "struct_l_m_a___global_calib_args.html", [
       [ "rtc_period", "struct_l_m_a___global_calib_args.html#a4e6dd696a48d2478fdda746725a7c277", null ],
@@ -116,9 +114,5 @@ var group___types =
       [ "LMA_NO_APPARENT_LOAD", "group___types.html#ggab40ee89230639dd5a514744d23fee390a7eed7c2954bbcb7ea156b4538d14e619", null ],
       [ "LMA_VOLTAGE_SAG", "group___types.html#ggab40ee89230639dd5a514744d23fee390a95e2783ecc6e91d53dd3bc0e24f17f75", null ],
       [ "LMA_VOLTAGE_SWELL", "group___types.html#ggab40ee89230639dd5a514744d23fee390a5a85894fe875272bccdc79efebe82e68", null ]
-    ] ],
-    [ "LMA_CalibrationStatus", "group___types.html#ga1a9279a8d9641344c3fec53107866c57", [
-      [ "LMA_CALIB_OK", "group___types.html#gga1a9279a8d9641344c3fec53107866c57a42367061b65c4f86a92c83b4af6e457e", null ],
-      [ "LMA_CALIB_PHASE_ANGLE_ERROR", "group___types.html#gga1a9279a8d9641344c3fec53107866c57a68d540df5774a08aab76a18a53846589", null ]
     ] ]
 ];

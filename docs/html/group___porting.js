@@ -11,6 +11,7 @@ var group___porting =
     [ "LMA_AccPhaseRun", "group___porting.html#gabf01d7020f6c79b2fd3c707c7902a9e6", null ],
     [ "LMA_AccPhaseReset", "group___porting.html#ga151e636346e8d70f24bde7fb8e1e541a", null ],
     [ "LMA_AccPhaseLoad", "group___porting.html#ga5e53cc31bbfcf4e6cbbfbb4de4bda1ef", null ],
+    [ "LMA_PhaseResetHook", "group___porting.html#gab5fe446a6359136fff86a53e977f2a53", null ],
     [ "LMA_ADC_Init", "group___porting.html#gafc7eb113e0601ffa3a5c43523f4fce09", null ],
     [ "LMA_ADC_Start", "group___porting.html#ga0ec0a576a1b465cf7aad0ca463fd5bdc", null ],
     [ "LMA_ADC_Stop", "group___porting.html#ga4b95531c9a4b3eb7ee25789ede359307", null ],

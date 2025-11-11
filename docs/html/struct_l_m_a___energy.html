@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.14.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>LMA: Globals</title>
+<title>LMA: LMA_Energy Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -78,7 +78,7 @@ $(function() { codefold.init(); });
   </div>
 </div>
 <script type="text/javascript">
-$(function(){initNavTree('globals_enum.html','',''); });
+$(function(){initNavTree('struct_l_m_a___energy.html','',''); });
 </script>
 <div id="container">
 <div id="doc-content">
@@ -103,16 +103,44 @@ $(function(){initNavTree('globals_enum.html','',''); });
 </div>
 </div>
 
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Data Structures</a> &#124;
+<a href="#pub-attribs">Data Fields</a>  </div>
+  <div class="headertitle"><div class="title">LMA_Energy Struct Reference<div class="ingroups"><a class="el" href="group___a_p_i.html">API</a> &raquo; <a class="el" href="group___types.html">Types</a> &raquo; <a class="el" href="group___storage.html">Storage</a> &raquo; <a class="el" href="group___logging.html">Logging</a></div></div></div>
+</div><!--header-->
 <div class="contents">
-<div class="textblock">Here is a list of all documented enums with links to the documentation:</div><ul>
-<li>LMA_Status&#160;:&#160;<a class="el" href="group___types.html#gab40ee89230639dd5a514744d23fee390">LMA_Types.h</a></li>
-</ul>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Description</h2>
+<div class="textblock"><p>Energy related data. </p>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Data Structures</h2></td></tr>
+<tr class="memitem:accumulator" id="r_accumulator"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_l_m_a___energy_1_1accumulator.html">accumulator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Running energy accumulators for counting energy between pulses - Ws (Watt second)  <a href="struct_l_m_a___energy_1_1accumulator.html#details">More...</a><br /></td></tr>
+<tr class="memitem:counter" id="r_counter"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_l_m_a___energy_1_1counter.html">counter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total energy measured by meter in units of energy (pulses or kwh/imp)  <a href="struct_l_m_a___energy_1_1counter.html#details">More...</a><br /></td></tr>
+<tr class="memitem:unit" id="r_unit"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_l_m_a___energy_1_1unit.html">unit</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Currently computed units of energy per ADC interval of whole system.  <a href="struct_l_m_a___energy_1_1unit.html#details">More...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Data Fields</h2></td></tr>
+<tr class="memitem:acc1ce8f09d0dfb4e06bc117dad4a2abe" id="r_acc1ce8f09d0dfb4e06bc117dad4a2abe"><td class="memItemLeft" align="right" valign="top"><a id="acc1ce8f09d0dfb4e06bc117dad4a2abe" name="acc1ce8f09d0dfb4e06bc117dad4a2abe"></a>
+struct LMA_Energy::unit&#160;</td><td class="memItemRight" valign="bottom"><b>unit</b></td></tr>
+<tr class="memdesc:acc1ce8f09d0dfb4e06bc117dad4a2abe"><td class="mdescLeft">&#160;</td><td class="mdescRight">structure containing energy units per ADC <br /></td></tr>
+<tr class="memitem:a88220d5468812c532c92e33dd63f76dc" id="r_a88220d5468812c532c92e33dd63f76dc"><td class="memItemLeft" align="right" valign="top"><a id="a88220d5468812c532c92e33dd63f76dc" name="a88220d5468812c532c92e33dd63f76dc"></a>
+struct LMA_Energy::accumulator&#160;</td><td class="memItemRight" valign="bottom"><b>accumulator</b></td></tr>
+<tr class="memdesc:a88220d5468812c532c92e33dd63f76dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">structure containing energy accumulators <br /></td></tr>
+<tr class="memitem:a4b2527b0bbe2194425f7b4b30fc3dca4" id="r_a4b2527b0bbe2194425f7b4b30fc3dca4"><td class="memItemLeft" align="right" valign="top"><a id="a4b2527b0bbe2194425f7b4b30fc3dca4" name="a4b2527b0bbe2194425f7b4b30fc3dca4"></a>
+struct LMA_Energy::counter&#160;</td><td class="memItemRight" valign="bottom"><b>counter</b></td></tr>
+<tr class="memdesc:a4b2527b0bbe2194425f7b4b30fc3dca4"><td class="mdescLeft">&#160;</td><td class="mdescRight">structure containing energy counters <br /></td></tr>
+</table>
 </div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
+    <li class="navelem"><a href="struct_l_m_a___energy.html">LMA_Energy</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
   </ul>
 </div>

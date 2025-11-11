@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.14.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>LMA: LMA_Signals Struct Reference</title>
+<title>LMA: LMA_Energy::accumulator Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -78,7 +78,7 @@ $(function() { codefold.init(); });
   </div>
 </div>
 <script type="text/javascript">
-$(function(){initNavTree('struct_l_m_a___signals.html','',''); });
+$(function(){initNavTree('struct_l_m_a___energy_1_1accumulator.html','',''); });
 </script>
 <div id="container">
 <div id="doc-content">
@@ -106,24 +106,38 @@ $(function(){initNavTree('struct_l_m_a___signals.html','',''); });
 <div class="header">
   <div class="summary">
 <a href="#pub-attribs">Data Fields</a>  </div>
-  <div class="headertitle"><div class="title">LMA_Signals Struct Reference<div class="ingroups"><a class="el" href="group___a_p_i.html">API</a> &raquo; <a class="el" href="group___types.html">Types</a></div></div></div>
+  <div class="headertitle"><div class="title">LMA_Energy::accumulator Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Description</h2>
-<div class="textblock"><p>Signal/flag data. </p>
-<p>Data structure containing signals/flags for indicating events between LMA components. </p>
+<div class="textblock"><p>Running energy accumulators for counting energy between pulses - Ws (Watt second) </p>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Data Fields</h2></td></tr>
-<tr class="memitem:a32143e3df8c4e6ebdd44000e9ec90e0b" id="r_a32143e3df8c4e6ebdd44000e9ec90e0b"><td class="memItemLeft" align="right" valign="top"><a id="a32143e3df8c4e6ebdd44000e9ec90e0b" name="a32143e3df8c4e6ebdd44000e9ec90e0b"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>accumulators_ready</b></td></tr>
-<tr class="memdesc:a32143e3df8c4e6ebdd44000e9ec90e0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to indicate our accumulators are ready for update. <br /></td></tr>
-<tr class="memitem:aae5e47753af8186703115c1eab867b1b" id="r_aae5e47753af8186703115c1eab867b1b"><td class="memItemLeft" align="right" valign="top"><a id="aae5e47753af8186703115c1eab867b1b" name="aae5e47753af8186703115c1eab867b1b"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>measurements_ready</b></td></tr>
-<tr class="memdesc:aae5e47753af8186703115c1eab867b1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to indicate a new measurement set is ready. <br /></td></tr>
-<tr class="memitem:a62151e2863a49b9f9c6e977b8c31560e" id="r_a62151e2863a49b9f9c6e977b8c31560e"><td class="memItemLeft" align="right" valign="top"><a id="a62151e2863a49b9f9c6e977b8c31560e" name="a62151e2863a49b9f9c6e977b8c31560e"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>calibrating</b></td></tr>
-<tr class="memdesc:a62151e2863a49b9f9c6e977b8c31560e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to indicate system is calibrating. <br /></td></tr>
+<tr class="memitem:aca4869cb39fa0fd9733082e280c1565d" id="r_aca4869cb39fa0fd9733082e280c1565d"><td class="memItemLeft" align="right" valign="top"><a id="aca4869cb39fa0fd9733082e280c1565d" name="aca4869cb39fa0fd9733082e280c1565d"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>act_imp_ws</b></td></tr>
+<tr class="memdesc:aca4869cb39fa0fd9733082e280c1565d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variable used to accumulate the active import (from grid) energy. <br /></td></tr>
+<tr class="memitem:ace6680d8ecb869288b6ca3dd8ee771d5" id="r_ace6680d8ecb869288b6ca3dd8ee771d5"><td class="memItemLeft" align="right" valign="top"><a id="ace6680d8ecb869288b6ca3dd8ee771d5" name="ace6680d8ecb869288b6ca3dd8ee771d5"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>act_exp_ws</b></td></tr>
+<tr class="memdesc:ace6680d8ecb869288b6ca3dd8ee771d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variable used to accumulate the active export (to grid) energy. <br /></td></tr>
+<tr class="memitem:a2aec1ba19062e5f2baa7890b738c51aa" id="r_a2aec1ba19062e5f2baa7890b738c51aa"><td class="memItemLeft" align="right" valign="top"><a id="a2aec1ba19062e5f2baa7890b738c51aa" name="a2aec1ba19062e5f2baa7890b738c51aa"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>app_imp_ws</b></td></tr>
+<tr class="memdesc:a2aec1ba19062e5f2baa7890b738c51aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variable used to accumulate the apparent import (from grid) energy. <br /></td></tr>
+<tr class="memitem:a007bf97308b2ddb19cf744616bb6bbf3" id="r_a007bf97308b2ddb19cf744616bb6bbf3"><td class="memItemLeft" align="right" valign="top"><a id="a007bf97308b2ddb19cf744616bb6bbf3" name="a007bf97308b2ddb19cf744616bb6bbf3"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>app_exp_ws</b></td></tr>
+<tr class="memdesc:a007bf97308b2ddb19cf744616bb6bbf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variable used to accumulate the apparent export (to grid) energy. <br /></td></tr>
+<tr class="memitem:a242283443fe4d5c029bf25bd682c05d5" id="r_a242283443fe4d5c029bf25bd682c05d5"><td class="memItemLeft" align="right" valign="top"><a id="a242283443fe4d5c029bf25bd682c05d5" name="a242283443fe4d5c029bf25bd682c05d5"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>c_react_imp_ws</b></td></tr>
+<tr class="memdesc:a242283443fe4d5c029bf25bd682c05d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variable used to accumulate the C reactive import (from grid) energy. <br /></td></tr>
+<tr class="memitem:aef20993bcd43acb6e2b635f9743e85a4" id="r_aef20993bcd43acb6e2b635f9743e85a4"><td class="memItemLeft" align="right" valign="top"><a id="aef20993bcd43acb6e2b635f9743e85a4" name="aef20993bcd43acb6e2b635f9743e85a4"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>c_react_exp_ws</b></td></tr>
+<tr class="memdesc:aef20993bcd43acb6e2b635f9743e85a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variable used to accumulate the C reactive export (to grid) energy. <br /></td></tr>
+<tr class="memitem:aa89250db660a0b2019c69b53ec4d82d3" id="r_aa89250db660a0b2019c69b53ec4d82d3"><td class="memItemLeft" align="right" valign="top"><a id="aa89250db660a0b2019c69b53ec4d82d3" name="aa89250db660a0b2019c69b53ec4d82d3"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>l_react_imp_ws</b></td></tr>
+<tr class="memdesc:aa89250db660a0b2019c69b53ec4d82d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variable used to accumulate the L reactive import (from grid) energy. <br /></td></tr>
+<tr class="memitem:ae3404f494d8e83fabf3a648d4ca58c10" id="r_ae3404f494d8e83fabf3a648d4ca58c10"><td class="memItemLeft" align="right" valign="top"><a id="ae3404f494d8e83fabf3a648d4ca58c10" name="ae3404f494d8e83fabf3a648d4ca58c10"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>l_react_exp_ws</b></td></tr>
+<tr class="memdesc:ae3404f494d8e83fabf3a648d4ca58c10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variable used to accumulate the L reactive export (to grid) energy. <br /></td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -131,7 +145,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calibrating</b></td><
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="struct_l_m_a___signals.html">LMA_Signals</a></li>
+    <li class="navelem"><a href="struct_l_m_a___energy.html">LMA_Energy</a></li><li class="navelem"><a href="struct_l_m_a___energy_1_1accumulator.html">accumulator</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
   </ul>
 </div>

@@ -170,6 +170,26 @@ Where:
     - \f$ V_\mathrm{adc_n} \f$ = voltage sample at index \f$ n \f$
     - \f$ I_\mathrm{adc_n-90^\circ} \f$ = current sample phase-shifted by 90°
 
+\subsubsection ReturnToPhaseShift Return to Phase Shift
+Using the relationship between active, reactive and apparent power we can start to exploit this for extracting more important information.
+Metering systems are far from ideal, they contain filters with components of varying tolerance, PCB's with mismatched traces and potential noise soruces non-uniformly
+impacting the signals. This leads to a common problem that even when monitoring a purely active load (UPF or Unity Power Factor) there may "look like"
+there is still a phase shift due to errors in our sampling chain.
+
+However we can calibrate this out - lets say we take our current voltage and votlage shifted samples and compute active and reactive powers.
+But if we know the load to be purely active, we know the reactive component is due entirely to erroneous phase shift.
+So we can use the relationship between active and reactive power in the power triangle to derive the phase error:
+\f[
+\theta = \tan^{-1}\left(\frac{Q}{P}\right) \cdot \frac{180}{\pi}
+\f]
+
+Where:
+    - \f$ \theta \f$ = Phase Error in degrees
+    - \f$ Q \f$ = Reactive power
+    - \f$ P \f$ = Active power
+
+We can use this to perform phase compensation in our signal chain to "realign" the signals - this is common practise and often a necessary requirement for achieving suitable accuracy standards.
+
 \subsection PowerFactor Power Factor (PF)
 The **Power Factor (PF)** expresses how efficiently power is used and is defined as:
 \f[

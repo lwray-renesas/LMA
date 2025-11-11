@@ -11,7 +11,9 @@ var index =
         [ "Phase Shift", "_mathematics.html#PhaseShift", null ],
         [ "Apparent Power", "_mathematics.html#ApparentPower", null ],
         [ "Active Power", "_mathematics.html#ActivePower", null ],
-        [ "Reactive Power", "_mathematics.html#ReactivePower", null ],
+        [ "Reactive Power", "_mathematics.html#ReactivePower", [
+          [ "Return to Phase Shift", "_mathematics.html#ReturnToPhaseShift", null ]
+        ] ],
         [ "Power Factor (PF)", "_mathematics.html#PowerFactor", null ]
       ] ],
       [ "Energy", "_mathematics.html#Energy", null ],

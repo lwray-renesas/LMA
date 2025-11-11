@@ -5,5 +5,5 @@ var searchData=
   ['sample_5fcounter_2',['sample_counter',['../struct_l_m_a___phase_angle_error.html#a7d6f47304549f2a68af206f2e60e5ed3',1,'LMA_PhaseAngleError']]],
   ['sigs_3',['sigs',['../struct_l_m_a___phase.html#a6e022fe1bf493dc9374b9513e6d4a97d',1,'LMA_Phase']]],
   ['snapshot_4',['snapshot',['../struct_l_m_a___phase_accs.html#a4fac31df8690732d6560ec27ab7a14c2',1,'LMA_PhaseAccs']]],
-  ['status_5',['status',['../struct_l_m_a___phase_angle_error.html#abef6622503e077b948aad14d9b74eedd',1,'LMA_PhaseAngleError::status'],['../struct_l_m_a___phase.html#a02a90f197eb1c7a061f6d191470923b0',1,'LMA_Phase::status']]]
+  ['status_5',['status',['../struct_l_m_a___phase.html#a02a90f197eb1c7a061f6d191470923b0',1,'LMA_Phase']]]
 ];

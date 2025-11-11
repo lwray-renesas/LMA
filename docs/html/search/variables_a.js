@@ -7,6 +7,5 @@ var searchData=
   ['p_5fneutral_4',['p_neutral',['../struct_l_m_a___phase.html#a8a312ad1af62908508cb5d4d69cf4dc4',1,'LMA_Phase']]],
   ['p_5fnext_5',['p_next',['../struct_l_m_a___phase.html#adc61b9c9349681d6ce2a1e04acd930c2',1,'LMA_Phase']]],
   ['p_5fphase_6',['p_phase',['../struct_l_m_a___phase_calib_args.html#ae09edcb4ed438899adffd6e218a97132',1,'LMA_PhaseCalibArgs']]],
-  ['pa_5ferror_7',['pa_error',['../struct_l_m_a___phase.html#a41ad9ab80f53d2e6d7888d59366407cb',1,'LMA_Phase']]],
-  ['phase_5fnumber_8',['phase_number',['../struct_l_m_a___phase.html#aac26d3dd27ddd60cc49254a07eafbdf8',1,'LMA_Phase']]]
+  ['phase_5fnumber_7',['phase_number',['../struct_l_m_a___phase.html#aac26d3dd27ddd60cc49254a07eafbdf8',1,'LMA_Phase']]]
 ];
