@@ -44,6 +44,7 @@ Pragma directive
 /* Start user code for pragma. Do not edit comment generated here */
 #include "LMA_Core.h"
 #include "Trap_integrator.h"
+#include <stdbool.h>
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -52,6 +53,10 @@ Global variables and functions
 /* Start user code for global. Do not edit comment generated here */
 extern LMA_Phase phase;
 extern LMA_Neutral neutral;
+
+#define PHASE_DELAY (7)
+spl_t spls[PHASE_DELAY] = {0,};
+uint8_t phase_delay_index = 0;
 
 /** @brief phase shifts voltage signal
  * @details
@@ -127,6 +132,21 @@ static void __near r_dsadc_interrupt(void)
 
 	/* Integrate*/
 	phase.inputs.i_sample = Trap_integrate(&rogowski_integrator, phase.inputs.i_sample);
+
+	/* Phase Delay*/
+	uint8_t next_phase_delay_index = phase_delay_index + 1;
+	spls[phase_delay_index] = phase.inputs.i_sample;
+
+	if(next_phase_delay_index > (PHASE_DELAY-1))
+	{
+		phase_delay_index = 0;
+	}
+	else
+	{
+		phase_delay_index = next_phase_delay_index;
+	}
+
+	phase.inputs.i_sample = spls[phase_delay_index];
 
     LMA_CB_ADC();
 

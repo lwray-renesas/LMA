@@ -77,13 +77,13 @@
       </Category>
     </Files>
     <Device Category="com.renesas.cdt.managedbuild.renesas.ccrl.common.option.cpu.s3" Series="RL78">R5F11TLG</Device>
-    <BuildOptions Name="CC-RL" Version="v1.15.00">
+    <BuildOptions Name="CC-RL" Version="v1.14.00">
       <BuildMode Active="True" Name="HardwareDebug">
         <GeneralOptions/>
         <CompileOptions>
           <Option>-cpu=S3</Option>
           <Option>-c</Option>
-          <Option>-dev="C:/Users/a5126135/.eclipse/com.renesas.platform_1802838654/DebugComp/RL78/RL78/Common/DR5F11TLG.DVF"</Option>
+          <Option>-dev="C:/Users/ree-svc-mte-pc/.eclipse/com.renesas.platform_1931921373/DebugComp/RL78/RL78/Common/DR5F11TLG.DVF"</Option>
           <Option>-I "${ProjDirPath}\generate"</Option>
           <Option>-I "${ProjDirPath}\src\Integrator"</Option>
           <Option>-I "${ProjDirPath}\src\Storage"</Option>
@@ -100,19 +100,18 @@
         <AssembleOptions>
           <Option>-cpu=S3</Option>
           <Option>-c</Option>
-          <Option>-dev="C:/Users/a5126135/.eclipse/com.renesas.platform_1802838654/DebugComp/RL78/RL78/Common/DR5F11TLG.DVF"</Option>
+          <Option>-dev="C:/Users/ree-svc-mte-pc/.eclipse/com.renesas.platform_1931921373/DebugComp/RL78/RL78/Common/DR5F11TLG.DVF"</Option>
           <Option>-character_set=utf8</Option>
           <Option>-g</Option>
           <Option>-o "${ProjDirPath}\${ConfigName}"</Option>
         </AssembleOptions>
         <LinkOptions>
-          <Option>-device="C:/Users/a5126135/.eclipse/com.renesas.platform_1802838654/DebugComp/RL78/RL78/Common/DR5F11TLG.DVF"</Option>
+          <Option>-device="C:/Users/ree-svc-mte-pc/.eclipse/com.renesas.platform_1931921373/DebugComp/RL78/RL78/Common/DR5F11TLG.DVF"</Option>
           <Option>-list</Option>
           <Option>-show=symbol</Option>
           <Option>-nooptimize</Option>
           <Option>-entry=_start</Option>
           <Option>-auto_section_layout</Option>
-          <Option>-start=FDL_CODE*,EEL_CODE*/0D8,FDL_CNST*,EEL_CNST*/02000,.sdataR,.sbss,FDL_SDAT*,EEL_SDAT*/0FFE20</Option>
           <Option>-security_id=0</Option>
           <Option>-debug_monitor=1FE00-1FFFF</Option>
           <Option>-user_opt_byte=EFFFE0</Option>

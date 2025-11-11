@@ -16,7 +16,7 @@ FSP_CPP_FOOTER
 #define ENERGY_LOG_ID (4U)
 
 /* Configuration required for configuring the library 4500 ws/imp = 800 imp/kwh (3,600,000 = [ws/imp] * [kwh/imp])*/
-static LMA_Config config = {.gcalib = {.fs = 0.0f, .fline_coeff = 0.0f, .deg_per_sample = 0.0f},
+static LMA_Config config = {.gcalib = {.fs = 0.0f, .deg_per_sample = 0.0f},
                             .update_interval = 25,
                             .fline_tol_low = 25.00f,
                             .fline_tol_high = 75.00f,
@@ -27,7 +27,7 @@ static LMA_Config config = {.gcalib = {.fs = 0.0f, .fline_coeff = 0.0f, .deg_per
                             .v_swell = 280.00f};
 
 /* Calibration data to load at startup*/
-static LMA_GlobalCalibration default_global_calib = {.fs = 3906.25f, .fline_coeff = 97650.0000f, .deg_per_sample = 4.608f};
+static LMA_GlobalCalibration default_global_calib = {.fs = 3906.25f, .deg_per_sample = 4.608f};
 
 /* Calibration data to load at startup*/
 static LMA_PhaseCalibration default_phase_calib = {
@@ -82,6 +82,8 @@ static benchmark_t benchmark;
  * Must be called after loading calibration data to phases.
  */
 static void Calibrate_adc_phase(void);
+/** @brief reset adc phase correction registers before calibration*/
+static void Reset_adc_phase(void);
 
 /** @brief Stores calibration data of all phases and global system*/
 static void Store_calibration_data(void);
@@ -115,7 +117,8 @@ Menu_option calib_option = {.p_cmd = "calib",
                                       "\t\t\t - irms = Target RMS Current\r\n"
                                       "\t\t\t - fline = Target Operating Frequency\r\n"
                                       "\t\t\t - line_cycles = Number of line cycles to calibrate over\r\n"
-                                      "\t\t\t e.g., calib 230 5 50 25",
+                                      "\t\t\t - line_cycles_stab = Number of line cycles to stabilise over\r\n"
+                                      "\t\t\t e.g., calib 230 5 50 100 100",
                             .option_type = ACTION,
                             .option.action = &Calibrate};
 
@@ -295,11 +298,11 @@ void R_BSP_WarmStart(bsp_warm_start_event_t event)
 static void Calibrate_adc_phase(void)
 {
   /* Adjust phase correction for SDADC on RA2A2*/
-  if (phase1.calib.vi_phase_correction >= 0)
+  if (phase1.calib.vi_phase_correction < 0)
   {
     /* I leads V, so I (SDADC0) needs to be delayed*/
     /* 0.012 comes from HW UM 31.1.5 - sampling frequency of 3906.25Hz and target AC line frequency of 50Hz*/
-    R_SDADC_B->SDADPHCR0 = (uint16_t)(phase1.calib.vi_phase_correction / 0.012f);
+    R_SDADC_B->SDADPHCR0 = (uint16_t)(phase1.calib.vi_phase_correction / -0.012f);
     R_SDADC_B->SDADPHCR4 = 0;
   }
   else
@@ -307,14 +310,14 @@ static void Calibrate_adc_phase(void)
     /* I lags V, so V (SDADC4) needs to be delayed*/
     /* 0.012 comes from HW UM 31.1.5 - sampling frequency of 3906.25Hz and target AC line frequency of 50Hz*/
     R_SDADC_B->SDADPHCR0 = 0;
-    R_SDADC_B->SDADPHCR4 = (uint16_t)(phase1.calib.vi_phase_correction / -0.012f);
+    R_SDADC_B->SDADPHCR4 = (uint16_t)(phase1.calib.vi_phase_correction / 0.012f);
   }
 
-  if (phase2.calib.vi_phase_correction >= 0)
+  if (phase2.calib.vi_phase_correction < 0)
   {
     /* I leads V, so I (SDADC0) needs to be delayed*/
     /* 0.012 comes from HW UM 31.1.5 - sampling frequency of 3906.25Hz and target AC line frequency of 50Hz*/
-    R_SDADC_B->SDADPHCR1 = (uint16_t)(phase2.calib.vi_phase_correction / 0.012f);
+    R_SDADC_B->SDADPHCR1 = (uint16_t)(phase2.calib.vi_phase_correction / -0.012f);
     R_SDADC_B->SDADPHCR5 = 0;
   }
   else
@@ -322,14 +325,14 @@ static void Calibrate_adc_phase(void)
     /* I lags V, so V (SDADC4) needs to be delayed*/
     /* 0.012 comes from HW UM 31.1.5 - sampling frequency of 3906.25Hz and target AC line frequency of 50Hz*/
     R_SDADC_B->SDADPHCR1 = 0;
-    R_SDADC_B->SDADPHCR5 = (uint16_t)(phase2.calib.vi_phase_correction / -0.012f);
+    R_SDADC_B->SDADPHCR5 = (uint16_t)(phase2.calib.vi_phase_correction / 0.012f);
   }
 
-  if (phase3.calib.vi_phase_correction >= 0)
+  if (phase3.calib.vi_phase_correction < 0)
   {
     /* I leads V, so I (SDADC0) needs to be delayed*/
     /* 0.012 comes from HW UM 31.1.5 - sampling frequency of 3906.25Hz and target AC line frequency of 50Hz*/
-    R_SDADC_B->SDADPHCR2 = (uint16_t)(phase3.calib.vi_phase_correction / 0.012f);
+    R_SDADC_B->SDADPHCR2 = (uint16_t)(phase3.calib.vi_phase_correction / -0.012f);
     R_SDADC_B->SDADPHCR6 = 0;
   }
   else
@@ -337,8 +340,18 @@ static void Calibrate_adc_phase(void)
     /* I lags V, so V (SDADC4) needs to be delayed*/
     /* 0.012 comes from HW UM 31.1.5 - sampling frequency of 3906.25Hz and target AC line frequency of 50Hz*/
     R_SDADC_B->SDADPHCR2 = 0;
-    R_SDADC_B->SDADPHCR6 = (uint16_t)(phase3.calib.vi_phase_correction / -0.012f);
+    R_SDADC_B->SDADPHCR6 = (uint16_t)(phase3.calib.vi_phase_correction / 0.012f);
   }
+}
+
+static void Reset_adc_phase(void)
+{
+  R_SDADC_B->SDADPHCR0 = 0;
+  R_SDADC_B->SDADPHCR1 = 0;
+  R_SDADC_B->SDADPHCR2 = 0;
+  R_SDADC_B->SDADPHCR4 = 0;
+  R_SDADC_B->SDADPHCR5 = 0;
+  R_SDADC_B->SDADPHCR6 = 0;
 }
 
 static void Store_calibration_data(void)
@@ -367,14 +380,19 @@ static void Cpu_load(char *p_args)
 static void Calibrate(char *p_args)
 {
   float l_vrms, l_irms, l_fline = 0.0f;
-  uint32_t l_line_cycles = 0;
+  uint32_t l_line_cycles, l_line_cycles_stability = 0;
 
-  sscanf(p_args, "%f %f %f %lu", &l_vrms, &l_irms, &l_fline, &l_line_cycles);
+  sscanf(p_args, "%f %f %f %lu %lu", &l_vrms, &l_irms, &l_fline, &l_line_cycles, &l_line_cycles_stability);
 
   Menu_printf("\r\nVRMS Target: %.4f", l_vrms);
   Menu_printf("\r\nIRMS Target: %.4f", l_irms);
   Menu_printf("\r\nFline Target: %.4f", l_fline);
   Menu_printf("\r\nLine Cycles Target: %d", l_line_cycles);
+  Menu_printf("\r\nLine Cycles Stabilisation: %d", l_line_cycles_stability);
+
+  Menu_printf("\r\nResetting ADC Phase Correction Circuit...");
+  Reset_adc_phase();
+  Menu_printf("Done!\r\n");
 
   LMA_PhaseCalibArgs ca;
   LMA_GlobalCalibArgs gca;
@@ -384,6 +402,7 @@ static void Calibrate(char *p_args)
   ca.vrms_tgt = l_vrms;
   ca.irms_tgt = l_irms;
   ca.line_cycles = l_line_cycles;
+  ca.line_cycles_stability = l_line_cycles_stability;
   LMA_PhaseCalibrate(&ca);
   Menu_printf("Done!\r\n");
   Menu_printf("Irms Coefficient: %.4f\r\n", phase1.calib.irms_coeff);
@@ -416,7 +435,6 @@ static void Calibrate(char *p_args)
   LMA_GlobalCalibrate(&gca);
   Menu_printf("Done!\r\n");
   Menu_printf("Sampling Frequency: %.4f\r\n", config.gcalib.fs);
-  Menu_printf("Line Frequency Coefficient: %.4f\r\n", config.gcalib.fline_coeff);
   Menu_printf("Degrees per ADC sample: %.4f\r\n\r\n", config.gcalib.deg_per_sample);
 
   Menu_printf("Backing up calibration data in veeprom...");
@@ -438,6 +456,9 @@ static void Restore_default_calibration(char *p_args)
   LMA_PhaseLoadCalibration(&phase3, &default_phase_calib);
   LMA_GlobalLoadCalibration(&default_global_calib);
   Menu_printf("Done!\r\n");
+
+  /* Adjust the phase correction circuitry with newly calibrated data*/
+  Calibrate_adc_phase();
 
   Menu_printf("Backing up calibration data in veeprom...");
   Store_calibration_data();

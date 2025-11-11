@@ -39,7 +39,7 @@ void R_DSADC_Create(void)
     DSADMR = _0000_DSAD_SAMPLING_FREQUENCY_0 | _0000_DSAD_RESOLUTION_24BIT;
     DSADGCR0 = _00_DSAD_CH1_PGAGAIN_1 | _00_DSAD_CH0_PGAGAIN_1;
     DSADGCR1 = _00_DSAD_CH3_PGAGAIN_1;
-    DSADHPFCR = _C0_DSAD_CUTOFF_FREQUENCY_3 | _00_DSAD_CH3_HIGHPASS_FILTER_ENABLE | 
+    DSADHPFCR = _80_DSAD_CUTOFF_FREQUENCY_2 | _00_DSAD_CH3_HIGHPASS_FILTER_ENABLE |
                 _00_DSAD_CH1_HIGHPASS_FILTER_ENABLE | _00_DSAD_CH0_HIGHPASS_FILTER_ENABLE;
     DSADPHCR0 = _0000_DSAD_PHCR0_VALUE;
     DSADPHCR1 = _0000_DSAD_PHCR1_VALUE;
@@ -53,9 +53,22 @@ void R_DSADC_Create(void)
 ***********************************************************************************************************************/
 void R_DSADC_Start(void)
 {
+	uint8_t delay = 50U;
+
+    DSAMK = 1U;     /* disable INTDSAD interrupt */
+    DSAIF = 0U;     /* clear INTDSAD interrupt flag */
+
+    DSADMR &= (uint16_t)~(_0008_DSAD_CH3_OPERATION | _0002_DSAD_CH1_OPERATION | _0001_DSAD_CH0_OPERATION);
+    while(delay > 0U)
+    {
+    	--delay;
+    	__nop();
+    }
+
+    DSADMR |= _0008_DSAD_CH3_OPERATION | _0002_DSAD_CH1_OPERATION | _0001_DSAD_CH0_OPERATION;
+
     DSAIF = 0U;     /* clear INTDSAD interrupt flag */
     DSAMK = 0U;     /* enable INTDSAD interrupt */
-    DSADMR |= _0008_DSAD_CH3_OPERATION | _0002_DSAD_CH1_OPERATION | _0001_DSAD_CH0_OPERATION;
 }
 /***********************************************************************************************************************
 * Function Name: R_DSADC_Stop
@@ -65,9 +78,17 @@ void R_DSADC_Start(void)
 ***********************************************************************************************************************/
 void R_DSADC_Stop(void)
 {
-    DSADMR &= (uint16_t)~(_0008_DSAD_CH3_OPERATION | _0002_DSAD_CH1_OPERATION | _0001_DSAD_CH0_OPERATION);
+	uint8_t delay = 50U;
+
     DSAMK = 1U;     /* disable INTDSAD interrupt */
     DSAIF = 0U;     /* clear INTDSAD interrupt flag */
+    DSADMR &= (uint16_t)~(_0008_DSAD_CH3_OPERATION | _0002_DSAD_CH1_OPERATION | _0001_DSAD_CH0_OPERATION);
+
+    while(delay > 0U)
+    {
+    	--delay;
+    	__nop();
+    }
 }
 /***********************************************************************************************************************
 * Function Name: R_DSADC_Set_OperationOn

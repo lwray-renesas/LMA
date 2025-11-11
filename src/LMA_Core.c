@@ -20,6 +20,7 @@ typedef struct LMA_CalibFs_str
   bool start;           /**< flag to indicate starting fs calibration routine */
   bool running;         /**< flag to indicate we are running */
   bool finished;        /**< flag to indicate calibration is finished */
+  bool active;          /**< flag to indicate calibration of global params is active*/
   uint32_t rtc_counter; /**< counter to count rtc cycles for accumulation */
   uint32_t adc_counter; /**< counter to count number of ADC cycles have accumulated. */
   LMA_Phase *p_phase;   /**< pinter to phase to work on */
@@ -37,8 +38,9 @@ typedef struct LMA_PhaseList_str
 
 /* Static/Local Variable Declarations*/
 static LMA_Config *p_config = NULL; /**< Internal copy of the meter configuration */
-static LMA_CalibFs calib_fs = {false, false, false, (uint32_t)0, (uint32_t)0, NULL}; /**< Instance of the fs calibration data */
-static LMA_PhaseList phase_list = {NULL, (uint32_t)0};                               /**< Internal phase list*/
+static LMA_CalibFs calib_fs = {false,       false,       false, false,
+                               (uint32_t)0, (uint32_t)0, NULL}; /**< Instance of the fs calibration data */
+static LMA_PhaseList phase_list = {NULL, (uint32_t)0};          /**< Internal phase list*/
 
 static LMA_SystemEnergy sys_energy = /**< System Energy*/
     {
@@ -93,32 +95,24 @@ static bool Zero_cross_detect(LMA_ZeroCross *const p_zc, const spl_t new_spl)
 {
   spl_t filtered_new_sample = (spl_t)0;
 
-  /* If we are synched (detected our first zero cross) then filter the incoming values*/
-  if (p_zc->first_event)
+  /* If we have running for the first time*/
+  if (p_zc->already_run)
   {
     filtered_new_sample = (new_spl >> 1) + (p_zc->last_sample >> 1);
   }
   else
   {
-    /* Otherwise prime the inital value*/
+    /* Otherwise prime the initial value*/
     filtered_new_sample = new_spl;
+    p_zc->last_sample = new_spl;
+    p_zc->already_run = true;
   }
 
-  if ((!p_zc->debounce) && (p_zc->last_sample <= (spl_t)0) && (filtered_new_sample > (spl_t)0))
+  if ((!p_zc->debounce) && (p_zc->last_sample < (spl_t)0) && (filtered_new_sample >= (spl_t)0))
   {
+    ++p_zc->count;
     p_zc->debounce = true;
-
-    if (p_zc->first_event)
-    {
-      /* Only increment the counter if we are synch'd (already detected our first zero cross)*/
-      ++p_zc->count;
-    }
-    else
-    {
-      /* Otherwise synch us up and reset the counter*/
-      p_zc->count = (uint32_t)0;
-      p_zc->first_event = true;
-    }
+    p_zc->first_event = true;
   }
   else
   {
@@ -140,6 +134,7 @@ static void Zero_cross_hard_reset(LMA_ZeroCross *const p_zc)
   p_zc->count = (uint32_t)0;
   p_zc->debounce = false;
   p_zc->first_event = false;
+  p_zc->already_run = false;
 }
 
 /** @brief Complete hard reset on a phase
@@ -149,7 +144,7 @@ static void Zero_cross_hard_reset(LMA_ZeroCross *const p_zc)
  */
 static void Phase_hard_reset(LMA_Phase *const p_phase)
 {
-  Zero_cross_hard_reset(&(p_phase->zero_cross));
+  Zero_cross_hard_reset(&(p_phase->zero_cross_v));
 
   p_phase->inputs.v_sample = (spl_t)0;
   p_phase->inputs.v90_sample = (spl_t)0;
@@ -179,81 +174,13 @@ static void Phase_hard_reset(LMA_Phase *const p_phase)
   p_phase->energy_units.react = 0.0f;
   p_phase->energy_units.app = 0.0f;
 
-  p_phase->pa_error.i_fraction = 0.0f;
-  p_phase->pa_error.v_fraction = 0.0f;
-  p_phase->pa_error.status = LMA_CALIB_OK;
-  p_phase->pa_error.sample_counter = (uint32_t)0;
-  Zero_cross_hard_reset(&(p_phase->pa_error.v_zero_cross));
-  Zero_cross_hard_reset(&(p_phase->pa_error.i_zero_cross));
-
   LMA_AccPhaseReset(p_phase);
+
+  LMA_PhaseResetHook(p_phase);
 
   p_phase->sigs.accumulators_ready = false;
   p_phase->sigs.measurements_ready = false;
-}
-/* END OF FUNCTION*/
-
-/** @brief Processes phase angle error calibration
- * @param[inout] p_phase - pointer to the phase block to work on
- */
-static void Phase_calibrate_angle_error(LMA_Phase *const p_phase)
-{
-  /* Store previous values*/
-  spl_t i_last_sample = p_phase->pa_error.i_zero_cross.last_sample;
-  spl_t v_last_sample = p_phase->pa_error.v_zero_cross.last_sample;
-
-  /* Run zero cross*/
-  bool izc = Zero_cross_detect(&(p_phase->pa_error.i_zero_cross), p_phase->inputs.i_sample);
-  bool vzc = Zero_cross_detect(&(p_phase->pa_error.v_zero_cross), p_phase->inputs.v_sample);
-
-  if (izc && vzc)
-  {
-    /* Get new values */
-    spl_t i_current_sample = p_phase->pa_error.i_zero_cross.last_sample;
-    spl_t v_current_sample = p_phase->pa_error.v_zero_cross.last_sample;
-
-    /* Edge case*/
-    if ((spl_t)0 == i_last_sample)
-    {
-      p_phase->pa_error.i_fraction += 0.0f;
-    }
-    else
-    {
-      p_phase->pa_error.i_fraction += (float)(i_current_sample) / (float)(i_current_sample - i_last_sample);
-    }
-
-    /* Edge case*/
-    if ((spl_t)0 == v_last_sample)
-    {
-      p_phase->pa_error.v_fraction += 0.0f;
-    }
-    else
-    {
-      p_phase->pa_error.v_fraction += (float)(v_current_sample) / (float)(v_current_sample - v_last_sample);
-    }
-
-    ++p_phase->pa_error.sample_counter;
-
-    if (p_phase->pa_error.sample_counter > p_config->update_interval)
-    {
-      p_phase->pa_error.status = LMA_CALIB_OK;
-      p_phase->sigs.calibrate_angle_error = false;
-    }
-  }
-  else if (izc)
-  {
-    /* Error - phase angle too large*/
-    p_phase->pa_error.status = LMA_CALIB_PHASE_ANGLE_ERROR;
-  }
-  else if (vzc)
-  {
-    /* Error - phase angle too large*/
-    p_phase->pa_error.status = LMA_CALIB_PHASE_ANGLE_ERROR;
-  }
-  else
-  {
-    /* Do Nothing - no zero cross detected*/
-  }
+  p_phase->sigs.calibrating = false;
 }
 /* END OF FUNCTION*/
 
@@ -282,7 +209,7 @@ void LMA_Deinit(void)
     /* Update tmp to next entry*/
     tmp = tmp->p_next;
 
-    /* Delete the link in the prvious phase before updating*/
+    /* Delete the link in the previous phase before updating*/
     del->p_next = NULL;
     del->phase_number = (uint32_t)0;
     del = tmp;
@@ -347,6 +274,7 @@ void LMA_NeutralLoadCalibration(LMA_Neutral *const p_neutral, const LMA_NeutralC
 void LMA_Start(void)
 {
   LMA_Phase *tmp = phase_list.p_first_phase;
+  LMA_CRITICAL_SECTION_PREPARE();
 
   /* Reset phases before starting LMA*/
   while (NULL != tmp->p_next)
@@ -356,7 +284,26 @@ void LMA_Start(void)
   }
   Phase_hard_reset(tmp);
 
+  /* Start the ADC*/
   LMA_ADC_Start();
+
+  /* Slow start - for each phase stabilise for the first update period (discard)*/
+  tmp = phase_list.p_first_phase;
+  while (NULL != tmp)
+  {
+    while (!tmp->sigs.accumulators_ready)
+    {
+      /* Wait until the accumulation has stopped*/
+    }
+
+    LMA_CRITICAL_SECTION_ENTER();
+    tmp->sigs.accumulators_ready = false;
+    LMA_CRITICAL_SECTION_EXIT();
+
+    tmp = tmp->p_next;
+  }
+
+  /* Now start the RTC and TMR, knowing the ADC signal chain is stable*/
   LMA_TMR_Start();
   LMA_RTC_Start();
 }
@@ -372,15 +319,30 @@ void LMA_PhaseCalibrate(LMA_PhaseCalibArgs *const calib_args)
 {
   uint32_t backup_update_interval = p_config->update_interval;
   float sample_count_fp;
+  double q, p = 0.0;
+  LMA_CRITICAL_SECTION_PREPARE();
 
   LMA_ADC_Stop();
   LMA_TMR_Stop();
 
-  p_config->update_interval = calib_args->line_cycles;
   Phase_hard_reset(calib_args->p_phase);
+
+  calib_args->p_phase->sigs.calibrating = true;
+  p_config->update_interval = calib_args->line_cycles_stability;
 
   LMA_ADC_Start();
 
+  /* Stabilise Signal*/
+  while (!calib_args->p_phase->sigs.accumulators_ready)
+  {
+    /* Wait until the accumulation has stopped*/
+  }
+
+  /* Accumulate Signal*/
+  LMA_CRITICAL_SECTION_ENTER();
+  calib_args->p_phase->sigs.accumulators_ready = false;
+  p_config->update_interval = calib_args->line_cycles;
+  LMA_CRITICAL_SECTION_EXIT();
   while (!calib_args->p_phase->sigs.accumulators_ready)
   {
     /* Wait until the accumulation has stopped*/
@@ -403,34 +365,13 @@ void LMA_PhaseCalibrate(LMA_PhaseCalibArgs *const calib_args)
         sqrtf((float)((double)calib_args->p_phase->p_neutral->accs.i_acc_snapshot) / sample_count_fp) / calib_args->irms_tgt;
   }
 
+  /* Phase Correction*/
+  q = (double)calib_args->p_phase->accs.snapshot.q_acc / calib_args->p_phase->calib.p_coeff;
+  p = (double)calib_args->p_phase->accs.snapshot.p_acc / calib_args->p_phase->calib.p_coeff;
+  calib_args->p_phase->calib.vi_phase_correction = atanf((float)q / p) * (180.0f / 3.14159265359f);
+
   /* Restore operation*/
   p_config->update_interval = backup_update_interval;
-  Phase_hard_reset(calib_args->p_phase);
-
-  /* Start on the phase angle error*/
-  calib_args->p_phase->sigs.calibrate_angle_error = true;
-
-  LMA_ADC_Start();
-
-  while (calib_args->p_phase->sigs.calibrate_angle_error)
-  {
-    /* Wait until the accumulation has stopped*/
-  }
-
-  LMA_ADC_Stop();
-
-  sample_count_fp = (float)calib_args->p_phase->pa_error.sample_counter;
-
-  calib_args->p_phase->pa_error.i_fraction /= sample_count_fp;
-  calib_args->p_phase->pa_error.v_fraction /= sample_count_fp;
-
-  /* Compute from Q32.32 to float*/
-  calib_args->p_phase->calib.vi_phase_correction =
-      calib_args->p_phase->pa_error.i_fraction - calib_args->p_phase->pa_error.v_fraction;
-
-  /* Convert to degrees*/
-  calib_args->p_phase->calib.vi_phase_correction *= p_config->gcalib.deg_per_sample;
-
   Phase_hard_reset(calib_args->p_phase);
 
   LMA_TMR_Start();
@@ -439,6 +380,7 @@ void LMA_PhaseCalibrate(LMA_PhaseCalibArgs *const calib_args)
 
 void LMA_GlobalCalibrate(LMA_GlobalCalibArgs *const calib_args)
 {
+  LMA_Phase *tmp = phase_list.p_first_phase;
   LMA_CRITICAL_SECTION_PREPARE();
 
   LMA_ADC_Stop();
@@ -450,6 +392,7 @@ void LMA_GlobalCalibrate(LMA_GlobalCalibArgs *const calib_args)
   calib_fs.running = false;
   calib_fs.rtc_counter = calib_args->rtc_cycles;
   calib_fs.adc_counter = (uint32_t)0;
+  calib_fs.active = true;
   calib_fs.start = true;
 
   LMA_CRITICAL_SECTION_EXIT();
@@ -463,14 +406,31 @@ void LMA_GlobalCalibrate(LMA_GlobalCalibArgs *const calib_args)
   }
 
   calib_fs.finished = false;
+  calib_fs.active = false;
 
-  /* Care more about accuracy here than speed*/
+  /* Compute system timing parameters*/
   p_config->gcalib.fs = (float)calib_fs.adc_counter / ((float)calib_args->rtc_period * (float)calib_args->rtc_cycles);
-  p_config->gcalib.fline_coeff = p_config->gcalib.fs * (float)p_config->update_interval;
   p_config->gcalib.deg_per_sample = (360.00f * calib_args->fline_target) / p_config->gcalib.fs;
 
-  LMA_TMR_Start();
   LMA_ADC_Start();
+
+  /* Slow start - for each phase stabilise for the first update period (discard)*/
+  tmp = phase_list.p_first_phase;
+  while (NULL != tmp)
+  {
+    while (!tmp->sigs.accumulators_ready)
+    {
+      /* Wait until the accumulation has stopped*/
+    }
+
+    LMA_CRITICAL_SECTION_ENTER();
+    tmp->sigs.accumulators_ready = false;
+    LMA_CRITICAL_SECTION_EXIT();
+
+    tmp = tmp->p_next;
+  }
+
+  LMA_TMR_Start();
 }
 
 void LMA_EnergySet(LMA_SystemEnergy *const p_energy)
@@ -575,44 +535,37 @@ void LMA_CB_ADC(void)
   bool process_energy = true;
 
   /* If we are running fs calibration - increment the counter*/
-  if (calib_fs.running)
-  {
-    ++calib_fs.adc_counter;
-  }
-  else
+  if (!calib_fs.active)
   {
     while (NULL != p_phase)
     {
-      if (p_phase->sigs.calibrate_angle_error)
+      if (p_phase->sigs.calibrating)
       {
         process_energy = false;
-        Phase_calibrate_angle_error(p_phase);
       }
-      else
+
+      /* Zero cross - voltage*/
+      (void)Zero_cross_detect(&(p_phase->zero_cross_v), p_phase->inputs.v_sample);
+
+      /* Handle active & apparent component once synched with zero cross and accumulation is enabled */
+      if (p_phase->zero_cross_v.first_event)
       {
-        /* Zero cross - voltage*/
-        (void)Zero_cross_detect(&(p_phase->zero_cross), p_phase->inputs.v_sample);
+        LMA_AccPhaseRun(p_phase);
 
-        /* Handle active & apparent component once synched with zero cross and accumulation is enabled */
-        if (p_phase->zero_cross.first_event)
+        /* If appropriate number of line cycles have passed - process results*/
+        if (p_phase->zero_cross_v.count >= p_config->update_interval)
         {
-          LMA_AccPhaseRun(p_phase);
+          /* Get snapshot of accumulators*/
+          LMA_AccPhaseLoad(p_phase);
 
-          /* If appropriate number of line cycles have passed - process results*/
-          if (p_phase->zero_cross.count >= p_config->update_interval)
-          {
-            /* Get snapshot of accumulators*/
-            LMA_AccPhaseLoad(p_phase);
+          /* Signal Accumulators are ready*/
+          p_phase->sigs.accumulators_ready = true;
 
-            /* Signal Accumulators are ready*/
-            p_phase->sigs.accumulators_ready = true;
+          /* Reset*/
+          LMA_AccPhaseReset(p_phase);
 
-            /* Reset*/
-            LMA_AccPhaseReset(p_phase);
-
-            /* Reset Zerocross counter to continue*/
-            p_phase->zero_cross.count = (uint32_t)0;
-          }
+          /* Reset Zerocross counter to continue*/
+          p_phase->zero_cross_v.count = (uint32_t)0;
         }
       }
 
@@ -771,6 +724,14 @@ void LMA_CB_ADC(void)
       }
     }
   }
+  else if (calib_fs.running)
+  {
+    ++calib_fs.adc_counter;
+  }
+  else
+  {
+    /* Do Nothing*/
+  }
 }
 
 /** @details The TMR Callback computes and updates:
@@ -803,7 +764,7 @@ void LMA_CB_TMR(void)
       p_phase->sigs.accumulators_ready = false;
 
       /* Frequency*/
-      p_phase->measurements.fline = p_config->gcalib.fline_coeff / sample_count_fp;
+      p_phase->measurements.fline = (p_config->gcalib.fs * (float)p_config->update_interval) / sample_count_fp;
 
       /* Check for valid frequency input*/
       if (p_phase->measurements.fline < p_config->fline_tol_high && p_phase->measurements.fline > p_config->fline_tol_low)

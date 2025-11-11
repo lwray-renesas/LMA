@@ -65,6 +65,9 @@ volatile uint32_t g_rtc_binary_rtcic2;
 static void __near r_rtc_periodicinterrupt(void)
 {
     volatile uint8_t tmp;
+    EI();
+
+    VRTCEN = 1U;
 
     if (_04_RTC_PERIODIC_INTERRUPT == (RSR & _04_RTC_PERIODIC_INTERRUPT))
     {

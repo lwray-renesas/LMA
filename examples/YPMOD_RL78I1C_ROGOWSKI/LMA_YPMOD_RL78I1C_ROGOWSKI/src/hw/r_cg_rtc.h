@@ -34,6 +34,134 @@
 Macro definitions (Register bit)
 ***********************************************************************************************************************/
 /*
+    Format of Alarm Second register 0 (RSECAR0)
+*/
+/* ENB (ENB) */
+#define _00_RTC_CALENDER_RSECCNT_SEC_NOTCOMPARE0            (0x00U) /* not compared with the RSECCNT counter value */
+#define _80_RTC_CALENDER_RSECCNT_SEC_COMPARE0               (0x80U) /* compared with the RSECCNT counter value */
+
+/*
+    Format of Alarm Second register 1 (RSECAR1)
+*/
+/* ENB (ENB) */
+#define _00_RTC_CALENDER_RSECCNT_SEC_NOTCOMPARE1            (0x00U) /* not compared with the RSECCNT counter value */
+#define _80_RTC_CALENDER_RSECCNT_SEC_COMPARE1               (0x80U) /* compared with the RSECCNT counter value */
+
+/*
+    Format of Alarm Minute register 0 (RMINAR0)
+*/
+/* ENB (ENB) */
+#define _00_RTC_CALENDER_RMINCNT_MIN_NOTCOMPARE0            (0x00U) /* not compared with the RMINCNT counter value */
+#define _80_RTC_CALENDER_RMINCNT_MIN_COMPARE0               (0x80U) /* compared with the RMINCNT counter value */
+
+/*
+    Format of Alarm Minute register 1 (RMINAR1)
+*/
+/* ENB (ENB) */
+#define _00_RTC_CALENDER_RMINCNT_MIN_NOTCOMPARE1            (0x00U) /* not compared with the RMINCNT counter value */
+#define _80_RTC_CALENDER_RMINCNT_MIN_COMPARE1               (0x80U) /* compared with the RMINCNT counter value */
+
+/*
+    Format of Alarm Hour register 0 (RHRAR0)
+*/
+/* ENB (ENB) */
+#define _00_RTC_CALENDER_RHRCNT_HOUR_NOTCOMPARE0            (0x00U) /* not compared with the RHRCNT counter value */
+#define _80_RTC_CALENDER_RHRCNT_HOUR_COMPARE0               (0x80U) /* compared with the RHRCNT counter value */
+/* PM (PM) */
+#define _00_RTC_CALENDER_ALARM0_AM                          (0x00U) /* a.m */
+#define _40_RTC_CALENDER_ALARM0_PM                          (0x40U) /* p.m */
+
+/*
+    Format of Alarm Hour register 1 (RHRAR1)
+*/
+/* ENB (ENB) */
+#define _00_RTC_CALENDER_RHRCNT_HOUR_NOTCOMPARE1            (0x00U) /* not compared with the RHRCNT counter value */
+#define _80_RTC_CALENDER_RHRCNT_HOUR_COMPARE1               (0x80U) /* compared with the RHRCNT counter value */
+/* PM (PM) */
+#define _00_RTC_CALENDER_ALARM1_AM                          (0x00U) /* a.m */
+#define _40_RTC_CALENDER_ALARM1_PM                          (0x40U) /* p.m */
+
+/*
+    Format of Alarm Day-of-Week register m (RWKAR0)
+*/
+/* ENB (ENB) */
+#define _00_RTC_CALENDER_RWKCNT_WEEK_NOTCOMPARE0            (0x00U) /* not compared with the RWKCNT counter value */
+#define _80_RTC_CALENDER_RWKCNT_WEEK_COMPARE0               (0x80U) /* compared with the RWKCNT counter value */
+/* Day-of-Week Counting (DAYW) */
+#define _00_RTC_CALENDER_ALARM0_SUNWEEK                     (0x00U) /* sunday */
+#define _01_RTC_CALENDER_ALARM0_MONWEEK                     (0x01U) /* monday */
+#define _02_RTC_CALENDER_ALARM0_TUESWEEK                    (0x02U) /* tuesday */
+#define _03_RTC_CALENDER_ALARM0_WEDWEEK                     (0x03U) /* wednesday */
+#define _04_RTC_CALENDER_ALARM0_THURWEEK                    (0x04U) /* thursday */
+#define _05_RTC_CALENDER_ALARM0_FRIWEEK                     (0x05U) /* friday */
+#define _06_RTC_CALENDER_ALARM0_SATURWEEK                   (0x06U) /* saturday */
+
+/*
+    Format of Alarm Day-of-Week register m (RWKAR1)
+*/
+/* ENB (ENB) */
+#define _00_RTC_CALENDER_RWKCNT_WEEK_NOTCOMPARE1            (0x00U) /* not compared with the RWKCNT counter value */
+#define _80_RTC_CALENDER_RWKCNT_WEEK_COMPARE1               (0x80U) /* compared with the RWKCNT counter value */
+/* Day-of-Week Counting (DAYW) */
+#define _00_RTC_CALENDER_ALARM1_SUNWEEK                     (0x00U) /* sunday */
+#define _01_RTC_CALENDER_ALARM1_MONWEEK                     (0x01U) /* monday */
+#define _02_RTC_CALENDER_ALARM1_TUESWEEK                    (0x02U) /* tuesday */
+#define _03_RTC_CALENDER_ALARM1_WEDWEEK                     (0x03U) /* wednesday */
+#define _04_RTC_CALENDER_ALARM1_THURWEEK                    (0x04U) /* thursday */
+#define _05_RTC_CALENDER_ALARM1_FRIWEEK                     (0x05U) /* friday */
+#define _06_RTC_CALENDER_ALARM1_SATURWEEK                   (0x06U) /* saturday */
+
+/*
+    Format of Alarm Date register 0 (RDAYAR0)
+*/
+/* ENB (ENB) */
+#define _00_RTC_CALENDER_RDAYCNT_DAY_NOTCOMPARE0            (0x00U) /* not compared with the RDAYCNT counter value */
+#define _80_RTC_CALENDER_RDAYCNT_DAY_COMPARE0               (0x80U) /* compared with the RDAYCNT counter value */
+
+/*
+    Format of Alarm Date register 1 (RDAYAR1)
+*/
+/* ENB (ENB) */
+#define _00_RTC_CALENDER_RDAYCNT_DAY_NOTCOMPARE1            (0x00U) /* not compared with the RDAYCNT counter value */
+#define _80_RTC_CALENDER_RDAYCNT_DAY_COMPARE1               (0x80U) /* compared with the RDAYCNT counter value */
+
+/*
+    Format of Alarm Month register 0 (RMONAR0)
+*/
+/* ENB (ENB) */
+#define _00_RTC_CALENDER_RMONCNT_MONTH_NOTCOMPARE0          (0x00U) /* not compared with the RMONCNT counter value */
+#define _80_RTC_CALENDER_RMONCNT_MONTH_COMPARE0             (0x80U) /* compared with the RMONCNT counter value */
+/* 10 Months (MON10) */
+#define _00_RTC_CALENDER_ALARM0_NOTHAVE_10MON               (0x00U)
+#define _10_RTC_CALENDER_ALARM0_10MON                       (0x10U)
+
+/*
+    Format of Alarm Month register 1 (RMONAR1)
+*/
+/* ENB (ENB) */
+#define _00_RTC_CALENDER_RMONCNT_MONTH_NOTCOMPARE1          (0x00U) /* not compared with the RMONCNT counter value */
+#define _80_RTC_CALENDER_RMONCNT_MONTH_COMPARE1             (0x80U) /* compared with the RMONCNT counter value */
+/* 10 Months (MON10) */
+#define _00_RTC_CALENDER_ALARM1_NOTHAVE_10MON               (0x00U)
+#define _10_RTC_CALENDER_ALARM1_10MON                       (0x10U)
+
+/*
+    Format of Year Alarm Enable Register 0 (RYRAREN0)
+*/
+/* ENB (ENB) */
+#define _00_RTC_CALENDER_RYRCNT_YEAR_NOTCOMPARE0            (0x00U) /* not compared with the RYRCNT counter value */
+#define _80_RTC_CALENDER_RYRCNT_YEAR_COMPARE0               (0x80U) /* compared with the RYRCNT counter value */
+
+/*
+    Format of Year Alarm Enable Register 1 (RYRAREN1)
+*/
+/* ENB (ENB) */
+#define _00_RTC_CALENDER_RYRCNT_YEAR_NOTCOMPARE1            (0x00U) /* not compared with the RYRCNT counter value */
+#define _80_RTC_CALENDER_RYRCNT_YEAR_COMPARE1               (0x80U) /* compared with the RYRCNT counter value */
+
+
+
+/*
     Format of RTC Control Register 1 (RCR1) 
 */
 /* Periodic Interrupt Select (PES) */
@@ -298,6 +426,38 @@ Macro definitions (Register bit)
 Macro definitions
 ***********************************************************************************************************************/
 #define _00_RTC_GUARD_VALUE                                (0x00U) /* control of guard function for RTC control register 5 */
+#define _00_RTC_CALENDER_ALARM0_10SEC                       (0x00U) /* 10-Seconds  */
+
+#define _00_RTC_CALENDER_ALARM0_1SEC                        (0x00U) /* 1-Seconds  */
+#define _00_RTC_CALENDER_ALARM1_10SEC                       (0x00U) /* 10-Seconds  */
+
+#define _00_RTC_CALENDER_ALARM1_1SEC                        (0x00U) /* 1-Seconds  */
+#define _00_RTC_CALENDER_ALARM0_10MIN                       (0x00U) /* 10 Minutes */
+
+#define _00_RTC_CALENDER_ALARM0_1MIN                        (0x00U) /* 1 Minutes */
+#define _00_RTC_CALENDER_ALARM1_10MIN                       (0x00U) /* 10 Minutes */
+
+#define _00_RTC_CALENDER_ALARM1_1MIN                        (0x00U) /* 1 Minutes */
+#define _00_RTC_CALENDER_ALARM0_10HOUR                      (0x00U) /* 10 Hours */
+
+#define _00_RTC_CALENDER_ALARM0_1HOUR                       (0x00U) /* 1 Hours */
+#define _00_RTC_CALENDER_ALARM1_10HOUR                      (0x00U) /* 10 Hours */
+
+#define _00_RTC_CALENDER_ALARM1_1HOUR                       (0x00U) /* 1 Hours */
+#define _00_RTC_CALENDER_ALARM0_10DAY                       (0x00U) /* 10 Days */
+
+#define _01_RTC_CALENDER_ALARM0_1DAY                        (0x01U) /* 1 Days */
+#define _00_RTC_CALENDER_ALARM1_10DAY                       (0x00U) /* 10 Days */
+
+#define _01_RTC_CALENDER_ALARM1_1DAY                        (0x01U) /* 1 Days */
+#define _01_RTC_CALENDER_ALARM0_1MON                        (0x01U) /* 1 Months */
+#define _01_RTC_CALENDER_ALARM1_1MON                        (0x01U) /* 1 Months */
+#define _0000_RTC_CALENDER_ALARM0_10YEAR                    (0x0000U) /* 10 Years */
+
+#define _0000_RTC_CALENDER_ALARM0_1YEAR                     (0x0000U) /* 1 Years */
+#define _0000_RTC_CALENDER_ALARM1_10YEAR                    (0x0000U) /* 10 Years */
+
+#define _0000_RTC_CALENDER_ALARM1_1YEAR                     (0x0000U) /* 1 Years */
 #define _00_RTC_CALENDER_COUNTER_10SEC                     (0x00U) /* 10-Second Count  */
 
 #define _00_RTC_CALENDER_COUNTER_1SEC                      (0x00U) /* 1-Second Count  */
@@ -413,7 +573,6 @@ void R_RTC_Set_CalendarAlarmOn(int8_t enb_set);
 MD_STATUS R_RTC_Set_AlarmOff(void);
 void R_RTC_Set_CalendarAlarmValue(rtc_alarm_value_t alarm_val);
 void R_RTC_Get_CalendarAlarmValue(rtc_alarm_value_t * const alarm_val);
-MD_STATUS R_RTC_Set_ConstPeriodInterruptOn(rtc_int_period_t period);
 void R_RTC_Set_ConstPeriodInterruptOff(void);
 static void r_rtc_callback_periodic(void);
 /* Start user code for function. Do not edit comment generated here */

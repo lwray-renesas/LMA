@@ -60,6 +60,11 @@ void LMA_AccPhaseLoad(LMA_Phase *const p_phase)
   }
 }
 
+void LMA_PhaseResetHook(LMA_Phase *const p_phase)
+{
+  /* TODO: Populate*/
+}
+
 void LMA_ADC_Init(void)
 {
 }

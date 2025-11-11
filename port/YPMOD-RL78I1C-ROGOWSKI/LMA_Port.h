@@ -84,6 +84,12 @@ void LMA_AccPhaseReset(LMA_Phase *const p_phase);
  */
 void LMA_AccPhaseLoad(LMA_Phase *const p_phase);
 
+/** @brief Hook called when resetting a phase.
+ * @details Provides mechanism for tidy up.
+ * @param[inout] p_phase - pointer to the phase we are working with.
+ */
+void LMA_PhaseResetHook(LMA_Phase *const p_phase);
+
 /******************
  * DRIVERS
  ******************/

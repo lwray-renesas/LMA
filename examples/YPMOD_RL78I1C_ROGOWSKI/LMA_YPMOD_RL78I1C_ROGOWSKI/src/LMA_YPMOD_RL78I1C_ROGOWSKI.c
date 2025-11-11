@@ -22,8 +22,8 @@
 #define ENERGY_LOG_ID (4U)
 
 /* Configuration required for configuring the library 4500 ws/imp = 800 imp/kwh (3,600,000 = [ws/imp] * [kwh/imp])*/
-static LMA_Config config = {.gcalib = {.fs = 0.0f, .fline_coeff = 0.0f, .deg_per_sample = 0.0f},
-                            .update_interval = 25,
+static LMA_Config config = {.gcalib = {.fs = 0.0f, .deg_per_sample = 0.0f},
+                            .update_interval = 30,
                             .fline_tol_low = 25.00f,
                             .fline_tol_high = 75.00f,
                             .meter_constant = 4500.00f,
@@ -33,14 +33,14 @@ static LMA_Config config = {.gcalib = {.fs = 0.0f, .fline_coeff = 0.0f, .deg_per
                             .v_swell = 280.00f};
 
 /* Calibration data to load at startup*/
-static LMA_GlobalCalibration default_global_calib = {.fs = 3906.25f, .fline_coeff = 97650.0000f, .deg_per_sample = 4.608f};
+static LMA_GlobalCalibration default_global_calib = {.fs = 3901.8000f, .deg_per_sample = 4.6133f};
 
 /* Calibration data to load at startup*/
 static LMA_PhaseCalibration default_phase_calib = {
-    .vrms_coeff = 21177.2051f, .irms_coeff = 53685.3828f, .vi_phase_correction = 0.0f, .p_coeff = 1136906368.0000f};
+    .vrms_coeff = 13009.7330f, .irms_coeff = 344214.3800f, .vi_phase_correction = -0.4733f, .p_coeff = 4478137300.0000f};
 
 /* Calibration data to load at startup*/
-static LMA_NeutralCalibration default_neutral_calib = {.irms_coeff = 53685.3828f};
+static LMA_NeutralCalibration default_neutral_calib = {.irms_coeff = 33115.1950f};
 
 /* Define our system energy struct*/
 static LMA_SystemEnergy system_energy = {
@@ -87,6 +87,8 @@ LMA_Neutral neutral;
  * Must be called after loading calibration data to phases.
  */
 static void Calibrate_adc_phase(void);
+/** @brief reset adc phase correction registers before calibration*/
+static void Reset_adc_phase(void);
 
 /** @brief Stores calibration data of all phases and global system*/
 static void Store_calibration_data(void);
@@ -120,7 +122,8 @@ Menu_option calib_option = {.p_cmd = "calib",
                                       "\t\t\t - irms = Target RMS Current\r\n"
                                       "\t\t\t - fline = Target Operating Frequency\r\n"
                                       "\t\t\t - line_cycles = Number of line cycles to calibrate over\r\n"
-                                      "\t\t\t e.g., calib 230 5 50 25",
+                                      "\t\t\t - line_cycles_stab = Number of line cycles to stabilise over\r\n"
+                                      "\t\t\t e.g., calib 230 5 50 100 100",
                             .option_type = ACTION,
                             .option.action = &Calibrate};
 
@@ -224,7 +227,7 @@ void main(void)
     LMA_PhaseLoadCalibration(&phase, &default_phase_calib);
   }
 
-  if (Storage_read(NEUTRAL_CALIB_ID, (__near uint8_t *)&veeprom_phase_calib))
+  if (Storage_read(NEUTRAL_CALIB_ID, (__near uint8_t *)&veeprom_neutral_calib))
   {
     Menu_printf("Neutral Calibration Found in VEEPROM!\r\n");
     LMA_NeutralLoadCalibration(&neutral, &veeprom_neutral_calib);
@@ -257,11 +260,11 @@ void main(void)
 
 static void Calibrate_adc_phase(void)
 {
-  if (phase.calib.vi_phase_correction >= 0)
+  if (phase.calib.vi_phase_correction < 0)
   {
     /* I leads V, so I (SDADC1) needs to be delayed*/
     /* 0.012 comes from HW UM 31.1.5 - sampling frequency of 3906.25Hz and target AC line frequency of 50Hz*/
-    DSADPHCR1 = (uint16_t)(phase.calib.vi_phase_correction / 0.012f);
+    DSADPHCR1 = (uint16_t)(phase.calib.vi_phase_correction / -0.012f);
     DSADPHCR3 = 0;
   }
   else
@@ -269,8 +272,14 @@ static void Calibrate_adc_phase(void)
     /* I lags V, so V (SDADC4) needs to be delayed*/
     /* 0.012 comes from HW UM 31.1.5 - sampling frequency of 3906.25Hz and target AC line frequency of 50Hz*/
     DSADPHCR1 = 0;
-    DSADPHCR3 = (uint16_t)(phase.calib.vi_phase_correction / -0.012f);
+    DSADPHCR3 = (uint16_t)(phase.calib.vi_phase_correction / 0.012f);
   }
+}
+
+static void Reset_adc_phase(void)
+{
+  DSADPHCR1 = 0;
+  DSADPHCR3 = 0;
 }
 
 static void Store_calibration_data(void)
@@ -295,23 +304,29 @@ static void Cpu_load(char *p_args)
 static void Calibrate(char *p_args)
 {
   float l_vrms, l_irms, l_fline = 0.0f;
-  uint32_t l_line_cycles = 0;
+  uint32_t l_line_cycles, l_line_cycles_stability = 0;
 
-  sscanf(p_args, "%f %f %f %lu", &l_vrms, &l_irms, &l_fline, &l_line_cycles);
+  sscanf(p_args, "%f %f %f %lu %lu", &l_vrms, &l_irms, &l_fline, &l_line_cycles, &l_line_cycles_stability);
 
   Menu_printf("\r\nVRMS Target: %.4f", l_vrms);
   Menu_printf("\r\nIRMS Target: %.4f", l_irms);
   Menu_printf("\r\nFline Target: %.4f", l_fline);
   Menu_printf("\r\nLine Cycles Target: %d", l_line_cycles);
+  Menu_printf("\r\nLine Cycles Stabilisation: %d", l_line_cycles_stability);
 
   LMA_PhaseCalibArgs ca;
   LMA_GlobalCalibArgs gca;
+
+  Menu_printf("\r\nResetting ADC Phase Correction Circuit...");
+  Reset_adc_phase();
+  Menu_printf("Done!\r\n");
 
   Menu_printf("\r\nCalibrating Phase & neutral...");
   ca.p_phase = &phase;
   ca.vrms_tgt = l_vrms;
   ca.irms_tgt = l_irms;
   ca.line_cycles = l_line_cycles;
+  ca.line_cycles_stability = l_line_cycles_stability;
   LMA_PhaseCalibrate(&ca);
   Menu_printf("Done!\r\n");
   Menu_printf("Irms Coefficient: %.4f\r\n", phase.calib.irms_coeff);
@@ -320,14 +335,16 @@ static void Calibrate(char *p_args)
   Menu_printf("V-I Phase Error: %.4f\r\n", phase.calib.vi_phase_correction);
   Menu_printf("Irms Neutral Coefficient: %.4f\r\n", neutral.calib.irms_coeff);
 
+  /* Adjust the phase correction circuitry with newly calibrated data*/
+  Calibrate_adc_phase();
+
   Menu_printf("\r\nCalibrating Global Parameters (fs)...");
   gca.rtc_period = 1.0f;
-  gca.rtc_cycles = 3;
+  gca.rtc_cycles = 5;
   gca.fline_target = l_fline;
   LMA_GlobalCalibrate(&gca);
   Menu_printf("Done!\r\n");
   Menu_printf("Sampling Frequency: %.4f\r\n", config.gcalib.fs);
-  Menu_printf("Line Frequency Coefficient: %.4f\r\n", config.gcalib.fline_coeff);
   Menu_printf("Degrees per ADC sample: %.4f\r\n\r\n", config.gcalib.deg_per_sample);
 
   Menu_printf("Backing up calibration data in veeprom...");
@@ -347,6 +364,10 @@ static void Restore_default_calibration(char *p_args)
   LMA_PhaseLoadCalibration(&phase, &default_phase_calib);
   LMA_NeutralLoadCalibration(&neutral, &default_neutral_calib);
   LMA_GlobalLoadCalibration(&default_global_calib);
+
+  /* Adjust the phase correction circuitry with newly calibrated data*/
+  Calibrate_adc_phase();
+
   Menu_printf("Done!\r\n");
 
   Menu_printf("Backing up calibration data in veeprom...");
@@ -388,7 +409,13 @@ static void Energy_clear(char *p_args)
   Menu_printf("Done!\r\n");
 
   Menu_printf("\r\nClearing energy log...");
-  memset(&system_energy, 0, sizeof(LMA_SystemEnergy));
+  memset(&(system_energy.energy), 0, sizeof(LMA_Energy));
+  system_energy.impulse.active_on = false;
+  system_energy.impulse.reactive_on = false;
+  system_energy.impulse.apparent_on = false;
+  system_energy.impulse.active_counter = 0UL;
+  system_energy.impulse.reactive_counter = 0UL;
+  system_energy.impulse.apparent_counter = 0UL;
   LMA_EnergySet(&system_energy);
   Menu_printf("Done!\r\n");
 
@@ -421,13 +448,13 @@ static void Display_measurements(char *p_args)
   LMA_MeasurementsGet(&phase, &measurements);
 
   Menu_printf("\r\n- Phase\r\n");
-  Menu_printf("\tIrms: %.2f [A]\r\n", measurements.irms);
-  Menu_printf("\tIrms Neutral: %.2f [A]\r\n", measurements.irms_neutral);
+  Menu_printf("\tIrms: %.3f [A]\r\n", measurements.irms);
+  Menu_printf("\tIrms Neutral: %.3f [A]\r\n", measurements.irms_neutral);
   Menu_printf("\tVrms: %.2f [V]\r\n", measurements.vrms);
-  Menu_printf("\tP: %.2f [W]\r\n", measurements.p);
-  Menu_printf("\tQ: %.2f [VAR]\r\n", measurements.q);
-  Menu_printf("\tS: %.2f [VA]\r\n", measurements.s);
-  Menu_printf("\tF: %.2f [Hz]\r\n", measurements.fline);
+  Menu_printf("\tP: %.3f [W]\r\n", measurements.p);
+  Menu_printf("\tQ: %.3f [VAR]\r\n", measurements.q);
+  Menu_printf("\tS: %.3f [VA]\r\n", measurements.s);
+  Menu_printf("\tF: %.3f [Hz]\r\n", measurements.fline);
 
   /* Get current snapshot of system energy*/
   LMA_EnergyGet(&system_energy);

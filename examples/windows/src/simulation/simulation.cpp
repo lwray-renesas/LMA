@@ -167,7 +167,6 @@ std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params
   // Config
   auto p_config = std::make_unique<LMA_Config>();
   p_config->gcalib.fs = sim_params->fs;
-  p_config->gcalib.fline_coeff = 97650.0f;
   p_config->gcalib.deg_per_sample = 4.608f;
   p_config->update_interval = 25;
   p_config->fline_tol_low = sim_params->fline - (sim_params->fline / 2);
@@ -224,6 +223,7 @@ std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params
   ca.vrms_tgt = static_cast<float>(sim_params->vrms);
   ca.irms_tgt = static_cast<float>(sim_params->irms);
   ca.line_cycles = 25;
+  ca.line_cycles_stability = 25;
 
   gca.rtc_period = 1.0f;
   gca.rtc_cycles = 3;
@@ -247,7 +247,6 @@ std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params
               << "\t\tPhase Correction:     " << drv_params->p_phase->calib.vi_phase_correction << "\n"
               << "\t\tSampling Frequency:   " << p_config->gcalib.fs << "\n"
               << "\t\tDegrees Per Sample:   " << p_config->gcalib.deg_per_sample << "\n"
-              << "\t\tFline Coefficient:    " << p_config->gcalib.fline_coeff << "\n"
               << std::endl;
   }
 

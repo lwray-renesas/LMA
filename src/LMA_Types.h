@@ -61,16 +61,6 @@ typedef enum LMA_Status_e
 } LMA_Status;
 
 /**
- * @brief Calibration status
- * @details Enumerated type to indicate calibration status.
- */
-typedef enum LMA_CalibrationStatus_e
-{
-  LMA_CALIB_OK = 0,            /**< Calibration ended sucessfully*/
-  LMA_CALIB_PHASE_ANGLE_ERROR, /**< The phase difference between the current and voltage is too large. Suspect non UPF load*/
-} LMA_CalibrationStatus;
-
-/**
  * @brief Structure for defining the inputs to a phase object in terms of samples.
  * @details Use this structure to load samples in a phase object before calling LMA_CB_ADC
  */
@@ -133,6 +123,7 @@ typedef struct LMA_ZeroCross_str
   spl_t last_sample; /**< Tracked/filtered voltage */
   bool debounce;     /**< zerocross debounce flag*/
   bool first_event;  /**< flag indicating we have already detected a zero cross (synch'd) */
+  bool already_run;  /**< flag indicating we need to prime the filter */
 } LMA_ZeroCross;
 
 /**
@@ -198,7 +189,6 @@ typedef struct LMA_EnergyUnit_str
 typedef struct LMA_GlobalCalibration_str
 {
   float fs;             /**< Sampling frequency*/
-  float fline_coeff;    /**< Line Frequency Coefficient*/
   float deg_per_sample; /**< degrees per sample*/
 } LMA_GlobalCalibration;
 
@@ -233,12 +223,9 @@ typedef struct LMA_NeutralCalibration_str
  */
 typedef struct LMA_PhaseAngleError_str
 {
-  LMA_CalibrationStatus status; /**< Status of the phase angle computation*/
-  LMA_ZeroCross v_zero_cross;   /**< Zero cross structure for voltage signal*/
-  LMA_ZeroCross i_zero_cross;   /**< Zero cross structure for current signal*/
-  uint32_t sample_counter;      /**< counter to track the number of phase angle computations taken for averaging*/
-  float v_fraction;             /**< the fractional component of the zero cross on the voltage */
-  float i_fraction;             /**< the fractional component of the zero cross on the current */
+  uint32_t sample_counter; /**< counter to track the number of phase angle computations taken for averaging*/
+  float v_fraction;        /**< the fractional component of the zero cross on the voltage */
+  float i_fraction;        /**< the fractional component of the zero cross on the current */
 } LMA_PhaseAngleError;
 
 /**
@@ -247,9 +234,9 @@ typedef struct LMA_PhaseAngleError_str
  */
 typedef struct LMA_Signals_str
 {
-  bool accumulators_ready;    /**< Flag to indicate our accumulators are ready for update */
-  bool measurements_ready;    /**< Flag to indicate a new measurement set is ready */
-  bool calibrate_angle_error; /**< Flag to indicate we are calibrating the phase angle error*/
+  bool accumulators_ready; /**< Flag to indicate our accumulators are ready for update */
+  bool measurements_ready; /**< Flag to indicate a new measurement set is ready */
+  bool calibrating;        /**< Flag to indicate system is calibrating*/
 } LMA_Signals;
 
 /**
@@ -272,9 +259,8 @@ typedef struct LMA_Phase_str
   struct LMA_Phase_str *p_next;  /**< Forms singly linked list of phases (null terminated) */
   LMA_PhaseInputs inputs;        /**< Area to load inputs (ADC Samples) for processing */
   LMA_PhaseAccs accs;            /**< Object holding accumulator data*/
-  LMA_ZeroCross zero_cross;      /**< Zero cross tracking variables for voltage */
+  LMA_ZeroCross zero_cross_v;    /**< Zero cross tracking variables for voltage */
   LMA_PhaseCalibration calib;    /**< Instance of the phases calibration data block */
-  LMA_PhaseAngleError pa_error;  /**< phase angle error data*/
   LMA_Measurements measurements; /**< Object holding measurements from last computation window update*/
   LMA_EnergyUnit energy_units;   /**< Energy processing block */
   LMA_Status status;             /**< Phase status */
@@ -296,69 +282,72 @@ typedef struct LMA_Phase_str
  *  @{
  */
 
+/** @brief Energy related data */
+typedef struct LMA_Energy_str
+{
+  /** @brief Currently computed units of energy per ADC interval of whole system*/
+  struct unit
+  {
+    float act;   /**< Currently computed unit of active energy per ADC interval*/
+    float app;   /**< Currently computed unit of apparent energy per ADC interval*/
+    float react; /**< Currently computed unit of reactive energy per ADC interval*/
+  } unit;        /**< structure containing energy units per ADC*/
+
+  /** @brief Running energy accumulators for counting energy between pulses - Ws (Watt second)*/
+  struct accumulator
+  {
+    float act_imp_ws;     /**< Variable used to accumulate the active import (from grid) energy*/
+    float act_exp_ws;     /**< Variable used to accumulate the active export (to grid) energy*/
+    float app_imp_ws;     /**< Variable used to accumulate the apparent import (from grid) energy*/
+    float app_exp_ws;     /**< Variable used to accumulate the apparent export (to grid) energy*/
+    float c_react_imp_ws; /**< Variable used to accumulate the C reactive import (from grid) energy*/
+    float c_react_exp_ws; /**< Variable used to accumulate the C reactive export (to grid) energy*/
+    float l_react_imp_ws; /**< Variable used to accumulate the L reactive import (from grid) energy*/
+    float l_react_exp_ws; /**< Variable used to accumulate the L reactive export (to grid) energy*/
+  } accumulator;          /**< structure containing energy accumulators*/
+
+  /** @brief Total energy measured by meter in units of energy (pulses or kwh/imp)*/
+  struct counter
+  {
+    uint64_t act_imp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (active import ... from
+                         grid) */
+    uint64_t
+        act_exp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (active export ... to grid) */
+    uint64_t app_imp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (apparent import ... from
+                         grid) */
+    uint64_t app_exp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (apparent export ... to
+                         grid) */
+    uint64_t c_react_imp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (C reactive import ...
+                             from grid) */
+    uint64_t c_react_exp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (C reactive export ...
+                             to grid) */
+    uint64_t l_react_imp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (L reactive import ...
+                             from grid) */
+    uint64_t l_react_exp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (L reactive export ...
+                             to grid) */
+  } counter;              /**< structure containing energy counters*/
+} LMA_Energy;             /**< structure containing system energy data*/
+
+/** @brief Data related to impulse controls */
+typedef struct LMA_Impulse_str
+{
+  uint32_t led_on_count;     /**< Number of ADC intervals for the LED on count */
+  uint32_t active_counter;   /**< Counter used to track on time of the active LED. */
+  uint32_t apparent_counter; /**< Counter used to track on time of the apparent LED. */
+  uint32_t reactive_counter; /**< Counter used to track on time of the reactive LED. */
+  bool active_on;            /**< Flag indicating the active led is on */
+  bool apparent_on;          /**< Flag indicating the apparent led is on */
+  bool reactive_on;          /**< Flag indicating the reactive led is on */
+} LMA_Impulse;               /**< structure containing energy impulse controls*/
+
 /**
  * @brief Energy data
  * @details Data structure containing system energy computations and impulse control parameters.
  */
 typedef struct LMA_SystemEnergy_str
 {
-  /** @brief Energy related data */
-  struct energy
-  {
-    /** @brief Currently computed units of energy per ADC interval of whole system*/
-    struct unit
-    {
-      float act;   /**< Currently computed unit of active energy per ADC interval*/
-      float app;   /**< Currently computed unit of apparent energy per ADC interval*/
-      float react; /**< Currently computed unit of reactive energy per ADC interval*/
-    } unit;        /**< structure containing energy units per ADC*/
-
-    /** @brief Running energy accumulators for counting energy between pulses - Ws (Watt second)*/
-    struct accumulator
-    {
-      float act_imp_ws;     /**< Variable used to accumulate the active import (from grid) energy*/
-      float act_exp_ws;     /**< Variable used to accumulate the active export (to grid) energy*/
-      float app_imp_ws;     /**< Variable used to accumulate the apparent import (from grid) energy*/
-      float app_exp_ws;     /**< Variable used to accumulate the apparent export (to grid) energy*/
-      float c_react_imp_ws; /**< Variable used to accumulate the C reactive import (from grid) energy*/
-      float c_react_exp_ws; /**< Variable used to accumulate the C reactive export (to grid) energy*/
-      float l_react_imp_ws; /**< Variable used to accumulate the L reactive import (from grid) energy*/
-      float l_react_exp_ws; /**< Variable used to accumulate the L reactive export (to grid) energy*/
-    } accumulator;          /**< structure containing energy accumulators*/
-
-    /** @brief Total energy measured by meter in units of energy (pulses or kwh/imp)*/
-    struct counter
-    {
-      uint64_t act_imp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (active import ... from
-                           grid) */
-      uint64_t
-          act_exp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (active export ... to grid) */
-      uint64_t app_imp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (apparent import ... from
-                           grid) */
-      uint64_t app_exp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (apparent export ... to
-                           grid) */
-      uint64_t c_react_imp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (C reactive import ...
-                               from grid) */
-      uint64_t c_react_exp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (C reactive export ...
-                               to grid) */
-      uint64_t l_react_imp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (L reactive import ...
-                               from grid) */
-      uint64_t l_react_exp; /**< Variable used to accumulate units of energy (pulses) over meter lifetime (L reactive export ...
-                               to grid) */
-    } counter;              /**< structure containing energy counters*/
-  } energy;                 /**< structure containing system energy data*/
-
-  /** @brief Data related to impulse controls */
-  struct impulse
-  {
-    uint32_t led_on_count;     /**< Number of ADC intervals for the LED on count */
-    uint32_t active_counter;   /**< Counter used to track on time of the active LED. */
-    uint32_t apparent_counter; /**< Counter used to track on time of the apparent LED. */
-    uint32_t reactive_counter; /**< Counter used to track on time of the reactive LED. */
-    bool active_on;            /**< Flag indicating the active led is on */
-    bool apparent_on;          /**< Flag indicating the apparent led is on */
-    bool reactive_on;          /**< Flag indicating the reactive led is on */
-  } impulse;                   /**< structure containing energy impulse controls*/
+  LMA_Energy energy;
+  LMA_Impulse impulse;
 } LMA_SystemEnergy;
 
 /** @} */
@@ -371,10 +360,11 @@ typedef struct LMA_SystemEnergy_str
  */
 typedef struct LMA_PhaseCalibArgs_str
 {
-  LMA_Phase *p_phase;   /**< Pointer to a phases targetting calibration */
-  float vrms_tgt;       /**< Vrms target calibration voltage */
-  float irms_tgt;       /**< Irms target calibration current */
-  uint32_t line_cycles; /**< Line cycles to stabilise readings over */
+  LMA_Phase *p_phase;             /**< Pointer to a phases targetting calibration */
+  float vrms_tgt;                 /**< Vrms target calibration voltage */
+  float irms_tgt;                 /**< Irms target calibration current */
+  uint32_t line_cycles;           /**< Line cycles to stabilise readings over */
+  uint32_t line_cycles_stability; /**< Line cycles to delay for allowing signal stability - typically about 5-10*/
 } LMA_PhaseCalibArgs;
 
 /**
