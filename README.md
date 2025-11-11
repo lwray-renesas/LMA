@@ -24,17 +24,18 @@ LMA stands for light-weight metering for AC applications and it is a middleware 
   - RL78/I1C
   - PC (CMake + Qt).
 - **Examples**
-  - YPMOD-RA2A2-3PH
-  - YPMOD-RL78I1C-ROGOWSKI
-  - PC (Simulation with CMake & Qt).
+  - YPMOD-RA2A2-3PH - [visit page](examples/YPMOD_RA2A2_3PH/RUNME.md)
+  - YPMOD-RL78I1C-ROGOWSKI - [visit page](examples/YPMOD_RL78I1C_ROGOWSKI/RUNME.md)
+  - PC (Simulation with CMake & Qt) - [visit page](examples/windows/RUNME.md)
 - **Documenation**
   - Generated using Doxygen to provide both AC metering training & API documentation.
+  [https://lwray-renesas.github.io/LMA/](https://lwray-renesas.github.io/LMA/)
 
 ---
 
 ## Getting Started
 
-To get started with LMA, download the latest release from the release page and ...
+To get started with LMA, check out one of the linked eamples above (stored in this repo) or jump to the documentation linked above!
 
 ---
 
@@ -49,12 +50,6 @@ To get started with LMA, download the latest release from the release page and .
 ## License
 
 This project is licensed under the following [terms](https://www.renesas.com/en/document/oth/disclaimer015?srsltid=AfmBOorceqdmsAs42rxoYYHQwnXI3aHFoXRORrRm2e6OUmqg12zxtsEM).
-
----
-
-## Support
-
-Raise an issue through ...
 
 ---
 
