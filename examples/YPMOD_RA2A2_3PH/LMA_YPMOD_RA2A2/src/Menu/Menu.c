@@ -328,7 +328,8 @@ void Menu_handler(void)
 
         for (uint16_t i = 0; i < p_current_menu->count; ++i)
         {
-          if ((index > 2) && 0 == strcmp(p_current_menu->p_options[i]->p_cmd, line_buffer))
+          if ((index > 2) &&
+              0 == memcmp(p_current_menu->p_options[i]->p_cmd, line_buffer, strlen(p_current_menu->p_options[i]->p_cmd)))
           {
             if (ACTION == p_current_menu->p_options[i]->option_type)
             {

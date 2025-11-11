@@ -500,7 +500,7 @@ static void Energy_clear(char *p_args)
   Menu_printf("Done!\r\n");
 
   Menu_printf("\r\nClearing energy log...");
-  memset(&system_energy, 0, sizeof(LMA_SystemEnergy));
+  memset(&(system_energy.energy), 0, sizeof(LMA_Energy));
   LMA_EnergySet(&system_energy);
   Menu_printf("Done!\r\n");
 
