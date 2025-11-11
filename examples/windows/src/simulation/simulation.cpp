@@ -205,7 +205,6 @@ std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params
   LMA_NeutralRegister(drv_params->p_phase.get(), drv_params->p_neutral.get());
   LMA_PhaseLoadCalibration(drv_params->p_phase.get(), p_default_phase_calib.get());
   LMA_NeutralLoadCalibration(drv_params->p_neutral.get(), p_default_neutral_calib.get());
-  LMA_Start();
 
   drv_params->driver_thread_running = false;
   drv_params->stop_driver_thread = false;
@@ -215,6 +214,8 @@ std::shared_ptr<SimulationResults> Simulation(const SimulationParams *sim_params
   while (!drv_params->driver_thread_running)
   {
   }
+
+  LMA_Start();
 
   LMA_PhaseCalibArgs ca;
   LMA_GlobalCalibArgs gca;
