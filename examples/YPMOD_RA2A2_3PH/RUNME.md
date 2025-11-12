@@ -1,7 +1,11 @@
-# 🛠️ RUNME.md — YPMOD-RA2A2-3PH
+# 🛠️ YPMOD-RA2A2-3PH
+
+---
 
 ## 📦 Project Overview
 This project contains firmware written in C for evaluating LMA in an example application - it makes use of a serial terminal to interact with the project and uses onboard impulse LED's for energy accumulation.
+
+---
 
 ## 🧰 Requirements
 
@@ -16,12 +20,16 @@ This project contains firmware written in C for evaluating LMA in an example app
 - Flashing utility: `Renesas Flash Programmer 3.14+`
 - Serial terminal: `TeraTerm or PuTTY (9600 baud, 8-N-1)`
 
+---
+
 ## 📁 Project Structure
 ```
 ├── LMA_YPMOD_RA2A2/        # e2 studio project
 ├── imgs/                   # images for this RUNME.md
 └── RUNME.md                # This file
 ```
+
+---
 
 ## 🚀 Getting Started
 
@@ -51,6 +59,8 @@ This project contains firmware written in C for evaluating LMA in an example app
 Now to enable the evaluation, connect to the PMOD via USB-C on J16.
 
 ![Serial Connection](imgs/conn.jpg "Serial Connection")
+
+---
 
 ## 🧪 Testing
 
@@ -92,3 +102,4 @@ It also performs impulse LED control using D1 on the YPMOD-RA2A2-3PH to acumulat
 
 This PMOD can now be connected to a live supply and behaviour observed.
 
+---

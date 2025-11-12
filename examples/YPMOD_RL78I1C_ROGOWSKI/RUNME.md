@@ -1,7 +1,11 @@
-# 🛠️ RUNME.md — YPMOD-RL78I1C-ROGOWSKI
+# 🛠️ YPMOD-RL78I1C-ROGOWSKI
+
+---
 
 ## 📦 Project Overview
 This project contains firmware written in C for evaluating LMA in an example application - it makes use of a serial terminal to interact with the project and uses onboard impulse LED's for energy accumulation.
+
+---
 
 ## 🧰 Requirements
 
@@ -17,12 +21,16 @@ This project contains firmware written in C for evaluating LMA in an example app
 - Flashing utility: `Renesas Flash Programmer 3.14+`
 - Serial terminal: `TeraTerm or PuTTY (9600 baud, 8-N-1)`
 
+---
+
 ## 📁 Project Structure
 ```
 ├── LMA_YPMOD_RL78I1C_ROGOWSKI/     # e2 studio project
 ├── imgs/                           # images for this RUNME.md
 └── RUNME.md                        # This file
 ```
+
+---
 
 ## 🚀 Getting Started
 
@@ -52,6 +60,8 @@ This project contains firmware written in C for evaluating LMA in an example app
 Now to enable the evaluation, connect the YPMOD-USB-G10 to a PC via USB and then to the YPMOD-RL78I1C-ROGOWSKI on J3 (PMOD Connection), shown in the image below.
 
 ![Serial Connection](imgs/serial_conn.jpg "Serial Connection")
+
+---
 
 ## 🧪 Testing
 
@@ -96,6 +106,8 @@ It also performs impulse LED control using D1 on the YPMOD-RL78I1C-ROGOWSKI to a
 
 This PMOD can now be connected to a live supply and behaviour observed.
 
+---
+
 ### 🔌 Isolated Debug Adaptor
 One way to run this project and get the full benefit of application debugging is to use an isolated debugging adaptor, rated at 5kv, this allows a developer to safely interact with the project code in a realistic environment i.e., debugging the project whilst the PMOD is connected to live mains voltages with real loads.
 
@@ -124,3 +136,5 @@ It also performs impulse LED control using D1 on the YPMOD-RL78I1C-ROGOWSKI to a
 
 This PMOD can now be connected to a live supply and behaviour observed.
 
+
+---

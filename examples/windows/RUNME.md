@@ -1,7 +1,11 @@
-# 🛠️ RUNME.md — Qt6 CMake Application
+# 🛠️ PC Application
+
+---
 
 ## 📦 Project Overview
 This project contains a Qt6-based desktop application built using CMake. It demonstrates LMA running on a PC environment and allows simulation of the mathematics and functions.
+
+---
 
 ## 🧰 Requirements
 
@@ -13,6 +17,8 @@ This project contains a Qt6-based desktop application built using CMake. It demo
   - Qt::Concurrent
   - Qt::Charts
 - Build Environment: Visual Studio 17 2022 (or equivalent CMake-compatible IDE)
+
+---
 
 ## 🚀 Getting Started
 
@@ -48,4 +54,6 @@ This project contains a Qt6-based desktop application built using CMake. It demo
 This application allows basic simulation of waveforms, measurement and calibration, shown below.
 
 ![Application](imgs/app.png "Application")
+
+---
 
